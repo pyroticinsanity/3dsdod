@@ -1,0 +1,107 @@
+pspdod - "Daggorath PC-Port" PSP Port
+Version 0.7
+By darkweb
+http://darkweb.retroemu.com
+December 12, 2008
+
+Thanks to retroemu.com for hosting my site! Come here for a nice community!
+
+--------------------------------------------------------------------------
+Based off of Daggorath PC-Port
+Version 0.3
+By Richard Hunerlach
+May 16, 2003
+
+Other contributors:
+Dan Gendreau: Graphics, sound, and cheat enhancements
+Tim Lindner: WAV files
+Michael Spencer: Discussion Forum Host
+Louis Jordan: Inspirer of the 'Adventure Survivors'
+Sputnik: Additional enhancements & bug fixes
+
+==========
+
+The copyright for Dungeons of Daggorath is still held by the original author, Douglas J. Morgan.
+(c) 1982, DynaMicro
+
+==========
+
+---------------------------------------------------------------------
+
+Alright so this is my project which I would consider to be in Beta format.  
+I was going to submit it to the Winter coding competition for retroemu.com but 
+sadly that was cancelled.
+
+For those of you that don't know, Dungeons of Daggorath is a wicked "3D" dungeon 
+crawler from 1982 for the TRS-80.  It was fun to play and I still can't believe 
+that the PSP struggles trying to emulate this computer with a 0.89MHz processor 
+and 16K of RAM.
+
+So how do you play a game that was originally text based? With an awesome UI created 
+by yours truly! At the moment, every command is executable so there should be no problems
+beating the game (Although I haven't done this yet....).
+
+Here's the current button mapping:
+
+PSP		TRS-80
+----------------------
+UP: 		MOVE
+DOWN: 		MOVE BACKWARD
+LEFT:		TURN LEFT
+RIGHT:		TURN RIGHT
+X:		ATTACK RIGHT
+SQUARE:		ATTACK LEFT
+CIRCLE:		Brings up the keyboard
+TRIANGLE:	EXAMINE / LOOK (depending on what mode you're in)
+L TRIGGER:	Brings up the command creator menu
+R TRIGGER:	TURN AROUND
+START:		Brings up the game menu
+SELECT:		Executes P L T, U L, P R SW (only good for getting started)
+
+The command creator allows you to create all combinations of commands you will ever 
+need (I hope I haven't missed any).  
+ZSAVE and ZLOAD will use the default save file game.dod.
+In the Command Creator Menu, X is select and CIRCLE is cancel.  If choosing an item, you can
+press TRIANGLE to specify the type of item.
+
+The keyboard lets you type in whatever command you want.
+
+The game menu has a few extras in it just for the psp (and hopefully a few others to come).
+You can now Save and Load the game from 10 different slots to give some variety for those 
+that don't feel like typing in a save command.
+In the Configure menu:
+FULL SCREEN - does nothing
+VIDEO MODE - allows you to change the resolution from the original size, to fit to height, 
+or stretch to screen.
+The rest has the regular functionality of the original game.
+
+Currently the game is a bit slow using the original graphics mode.  I would recommend using 
+the Vector mode.
+
+Also I've only tested this on the PSP slim. If you find any bugs or suggestions, give me a 
+message at darkwebcrypt at hotmail dot com or visit me at retroemu.com.
+
+Hopefully you guys enjoy this wonderful game!
+Darkweb
+
+----------------------
+To Do List:
+-Implement cancel partial command from command creator menu
+-Add in customizable macros for each button
+-add manual as how to play
+-Try to increase the speed for plotting dots
+-Remove PC specific code
+
+----------------------
+Bugs:
+-Commands don't always get input correctly
+-PSP locked up while cancelling incant menu?
+
+----------------------
+Change Log:
+Version 0.7
+-Works for the psp slim
+-Implemented Command Creator
+-Implemented Keyboard
+-Added screen resolution changes
+-Added save menu
