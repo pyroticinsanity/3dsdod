@@ -19,17 +19,10 @@ is held by Douglas J. Morgan.
 #ifndef DOD_COMMON_HEADER
 #define DOD_COMMON_HEADER
 
-// PSP Headers
-#include <pspkernel.h>
-#include <pspdebug.h>
-#include <pspsdk.h>
-#include <pspctrl.h>
-#include <psppower.h>
-
 // SDL Headers
 #include <SDL/SDL_main.h>
 #include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
+#include <GL/gl3ds.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_image.h>

@@ -50,14 +50,14 @@ CFLAGS	:=	-g -Wall -O2 -mword-relocations \
 			-fomit-frame-pointer -ffunction-sections \
 			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS
+CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS -I/opt/devkitpro/portlibs/3ds/include -I/home/darkweb/projects/gl3ds-master/include
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lctru -lm
+LIBS	:= -lctru -lm -lSDL_mixer -lstdc++ -lGL -lvorbisidec -lSDL_image -lSDL -lpng -lz -ljpeg -lgl3ds
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

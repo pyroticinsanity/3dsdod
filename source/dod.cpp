@@ -23,6 +23,8 @@ is held by Douglas J. Morgan.
 // resolve to the declarations below.  This can
 // probably be simplified with some common mechanism.
 
+#include <3ds.h>
+
 #include "dod.h"
 
 #include "dodgame.h"
@@ -35,8 +37,6 @@ is held by Douglas J. Morgan.
 #include "oslink.h"
 #include "parser.h"
 
-#define printf pspDebugScreenPrintf
-
 dodGame		game;
 Coordinate	crd;
 RNG			rng;
@@ -48,10 +48,6 @@ Scheduler	scheduler;
 Viewer		viewer;
 OS_Link		oslink;
 Parser		parser;
-
-PSP_MODULE_INFO("psp-dod", 0, 1, 0);
-PSP_HEAP_SIZE_KB(6*1024);
-PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER|PSP_THREAD_ATTR_VFPU);
 
 // Could include some command line arguments for
 // various purposes (like configurations) if desired later.
@@ -69,50 +65,32 @@ void quitGame()
 	{
 		fclose(oslink.outputFile);
 	}
-  sceKernelExitGame();
+  gfxExit();
 }
-
-int exitCallback(int arg1, int arg2, void* common)
-{
-  quitGame();
-  return 0;
-}
-
-int callbackThread(SceSize args, void* argp)
-{
-  int cbid;
-  cbid = sceKernelCreateCallback("Exit Callback", exitCallback, NULL);
-  sceKernelRegisterExitCallback(cbid);
-  sceKernelSleepThreadCB();
-
-  return 0;
-}
-
-int setupCallbacks(void)
-{
-  int thid;
-  thid = sceKernelCreateThread("update_thread", callbackThread, 0x11, 0xFA0, 0, 0);
-
-  if (thid >= 0)
-  {
-    sceKernelStartThread(thid, 0, 0);
-  }
-  return thid;
-}
-
-
 
 extern "C" int main(int argc, char * argv[])
 {
-  setupCallbacks();
 	//printvls();
 	//exit(0);
 
-	scePowerSetClockFrequency(333, 333, 166);
+	gfxInitDefault();
+	consoleInit(GFX_TOP, NULL);
 
 	oslink.init();
+	// Main loop
+	while (aptMainLoop())
+	{
+		gspWaitForVBlank();
+		gfxSwapBuffers();
+		hidScanInput();
 
-	sceKernelSleepThread();
+		// Your code goes here
+		u32 kDown = hidKeysDown();
+		if (kDown & KEY_START)
+			break; // break in order to return to hbmenu
+	}
+
+	quitGame();
 	return 0;
 }
 /*

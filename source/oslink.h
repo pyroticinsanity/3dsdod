@@ -20,8 +20,8 @@ is held by Douglas J. Morgan.
 #ifndef OS_LINK_HEADER
 #define OS_LINK_HEADER
 
-#include <SDL.h>
-#include <SDL_opengl.h>
+#include <SDL/SDL.h>
+#include <GL/gl3ds.h>
 
 #include "dod.h"
 

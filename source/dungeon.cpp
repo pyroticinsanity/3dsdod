@@ -18,7 +18,6 @@ is held by Douglas J. Morgan.
 #include "dodgame.h"
 #include "player.h"
 #include "sched.h"
-#include <psprtc.h>
 
 extern Scheduler	scheduler;
 extern Player		player;
@@ -571,12 +570,8 @@ void Dungeon::SetVFTTABRandomMap()
 //Override seeds with true random numbers.
 void Dungeon::SetLEVTABRandomMap()
 {
-	//srand(GetTickCount());
+	srand(GetTickCount());
 
-	u64 tick;
-	sceRtcGetCurrentTick(&tick);
-	tick = tick / 1000;
-	srand(tick);
 	LEVTAB[0] = rand() & 255;
 	LEVTAB[1] = rand() & 255;
 	LEVTAB[2] = rand() & 255;
