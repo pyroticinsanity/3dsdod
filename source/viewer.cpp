@@ -394,7 +394,7 @@ void Viewer::setVidInv(bool inv)
 		fgColor[1] = 0.0;
 		fgColor[2] = 0.0;
 	}
-	glClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
+	_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
 }
 
 // This is the main renderer routine.  It draws either
@@ -408,9 +408,9 @@ void Viewer::draw_game()
 	if (display_mode == MODE_MAP)
 	{
 		// Draw Map
-		glClearColor(1.0, 1.0, 1.0, 0.0);
+		_renderer->setClearColor(1.0, 1.0, 1.0, 0.0);
 		_renderer->clearBuffer();
-		glClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
+		_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
 		glLoadIdentity();
 		MAPPER();
 		SDL_GL_SwapBuffers();
