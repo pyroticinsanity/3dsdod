@@ -75,7 +75,6 @@ public:
 	void		MAPPER();
 	void		setVidInv(bool inv);
 	void		drawVectorList(int VLA[]);
-	void		drawVector(float X0, float Y0, float X1, float Y1);
 	void		Reset();
 	bool		ShowFade(int fadeMode);
 	void		drawKeyboard(struct kbdKey);
@@ -172,8 +171,10 @@ private:
 	void drawCharacter(char c);
 	void drawString(int x, int y, char * str, int len);
 	void drawString_internal(int x, int y, dodBYTE * str, int len);
-	void plotPoint(double X, double Y);
+	
 	char dod_to_ascii(dodBYTE c);
+
+	Renderer* _renderer;
 
 	// Data Fields
 	dodSHORT	VCNTRX;
