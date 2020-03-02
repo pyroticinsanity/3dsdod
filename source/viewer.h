@@ -24,6 +24,7 @@ is held by Douglas J. Morgan.
 
 #include "dod.h"
 #include "dodgame.h"
+#include "renderer_factory.h"
 
 extern dodGame	game;
 

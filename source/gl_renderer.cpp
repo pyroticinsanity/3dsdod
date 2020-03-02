@@ -5,6 +5,11 @@
 
 #include "gl_renderer.h"
 
+void GlRenderer::clearBuffer(bool includeDepthBuffer)
+{
+	glClear(GL_COLOR_BUFFER_BIT | (includeDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
+}
+
 // Draws a line
 void GlRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 {

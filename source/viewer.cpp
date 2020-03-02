@@ -348,8 +348,8 @@ void Viewer::setup_opengl()
 {
 //	glEnable(GL_LINE_SMOOTH);
 	//glDisable(GL_LINE_SMOOTH);
-	glClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2]);
+	_renderer->setClearColor(0.0f, 0.0f, 0.0f);
 	glViewport(0, 20, oslink.width, oslink.height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -409,7 +409,7 @@ void Viewer::draw_game()
 	{
 		// Draw Map
 		glClearColor(1.0, 1.0, 1.0, 0.0);
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 		glClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
 		glLoadIdentity();
 		MAPPER();
@@ -426,7 +426,7 @@ void Viewer::draw_game()
 	else
 	{
 		// Draw View Port (3D or Examine or Prepare!)
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 
 		glLoadIdentity();
 		glColor3fv(fgColor);
@@ -516,7 +516,7 @@ bool Viewer::ShowFade(int fadeMode)
 		// Set volume of buzz
 		Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		drawArea(&TXTSTS);
@@ -557,7 +557,7 @@ bool Viewer::ShowFade(int fadeMode)
 	}
 
 	// show message
-	glClear(GL_COLOR_BUFFER_BIT);
+	_renderer->clearBuffer();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	drawArea(&TXTSTS);
@@ -575,7 +575,7 @@ bool Viewer::ShowFade(int fadeMode)
 		{
 			ticks2 = SDL_GetTicks();
 
-			glClear(GL_COLOR_BUFFER_BIT);
+			_renderer->clearBuffer();
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			drawArea(&TXTSTS);
@@ -594,7 +594,7 @@ bool Viewer::ShowFade(int fadeMode)
 		} while (ticks2 < ticks1 + midPause);
 
 		// erase message
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		drawArea(&TXTSTS);
@@ -625,7 +625,7 @@ bool Viewer::ShowFade(int fadeMode)
 			// Set volume of buzz
 			Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
-			glClear(GL_COLOR_BUFFER_BIT);
+			_renderer->clearBuffer();
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			drawArea(&TXTSTS);
@@ -661,7 +661,7 @@ bool Viewer::ShowFade(int fadeMode)
 	{
 		while (!scheduler.keyCheck()) // Wait for a key
 		  {
-			glClear(GL_COLOR_BUFFER_BIT);
+			_renderer->clearBuffer();
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			drawArea(&TXTSTS);
@@ -687,7 +687,7 @@ bool Viewer::draw_fade()
 
 	if ((!done && delay1 > delay + buzzStep) && fadeVal != 0)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 	}
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -765,7 +765,7 @@ void Viewer::enough_fade()
 
 	if ((!done && delay1 > delay + buzzStep) && fadeVal != 0)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 	}
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -850,7 +850,7 @@ void Viewer::death_fade(int WIZ[])
 		// Set volume of buzz
 		Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		_renderer->clearBuffer();
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		drawArea(&TXTSTS);
@@ -1980,7 +1980,7 @@ void Viewer::drawKeyboard(struct kbdKey key)
 	glEnable(GL_TEXTURE_2D);
 	// Clear screen
 	glColor3fv(bgColor);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_renderer->clearBuffer(true);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
   	glLoadIdentity();
@@ -2042,7 +2042,7 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
 
  // Clear screen
  glColor3fv(bgColor);
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ _renderer->clearBuffer(true);
 
   // Draw Boxes for menu
  glColor3fv(fgColor);
@@ -2097,7 +2097,7 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
 
  // Clear screen
  glColor3fv(bgColor);
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ _renderer->clearBuffer(true);
 
   // Draw Boxes for menu
  glColor3fv(fgColor);
@@ -2152,7 +2152,7 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
 
   // Clear screen
  glColor3fv(bgColor);
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ _renderer->clearBuffer(true);
  glColor3fv(fgColor);
 
  drawString(x, y, title, strlen(title));
@@ -2199,7 +2199,7 @@ void Viewer::drawMenuScrollbar(char *title, int current)
 
 	// Clear screen
  glColor4fv(bgColor);
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ _renderer->clearBuffer(true);
  glColor4fv(fgColor);
 
  drawString(0, 0, title, strlen(title));
@@ -2236,7 +2236,7 @@ void Viewer::drawMenuStringTitle(char *title)
  {
   // Clear screen
  glColor4fv(bgColor);
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ _renderer->clearBuffer(true);
  glColor4fv(fgColor);
 
  drawString(0, 0, title, strlen(title));
@@ -2270,7 +2270,7 @@ void Viewer::aboutBox(void)
  {
   // Clear screen
  glColor4fv(bgColor);
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ _renderer->clearBuffer(true);
  glColor4fv(fgColor);
 
  int i = 3;
