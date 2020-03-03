@@ -21,7 +21,6 @@ is held by Douglas J. Morgan.
 #define OS_LINK_HEADER
 
 #include <SDL/SDL.h>
-#include <GL/gl3ds.h>
 
 #include "dod.h"
 
@@ -40,6 +39,7 @@ public:
 
 	// Public Interface
 	void init();			// main entry point for dod application
+	void execute();
 	void quitSDL(int code);	// shuts down SDL before exiting
 	void process_events();	// used mainly to retrieve keystrokes
 	bool main_menu();       // used to implement the meta-menu

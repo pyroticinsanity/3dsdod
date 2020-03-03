@@ -1,8 +1,14 @@
 
 #include "dod.h"
 #include "enhanced.h"
+#include "viewer.h" // TODO Figure out how to decouple this
+#include "oslink.h" // TODO Figure out how to decouple this
 
 #include "citro_renderer.h"
+
+extern OS_Link                oslink;
+extern Viewer		viewer;
+extern Coordinate     crd;
 
 void CitroRenderer::clearBuffer(bool includeDepthBuffer)
 {
@@ -40,29 +46,29 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
     	if (g_options&OPT_VECTOR) { // draw using GL vectors
 		float		clrLine[3];
 
-		if (VCTFAD == 0xff) return; // do not draw lines with VCTFAD=255
+		if (viewer.VCTFAD == 0xff) return; // do not draw lines with VCTFAD=255
 
 		// calculate line color from VCTFAD
-		float flBirghtness=1.0f/(VCTFAD/2.0f + 1.0f);
+		float flBirghtness=1.0f/(viewer.VCTFAD/2.0f + 1.0f);
 		// calculate color between FG and BG
-		clrLine[0]=fgColor[0]*flBirghtness+bgColor[0]*(1.0f-flBirghtness);
-		clrLine[1]=fgColor[1]*flBirghtness+bgColor[1]*(1.0f-flBirghtness);
-		clrLine[2]=fgColor[2]*flBirghtness+bgColor[2]*(1.0f-flBirghtness);
+		clrLine[0]=viewer.fgColor[0]*flBirghtness+viewer.bgColor[0]*(1.0f-flBirghtness);
+		clrLine[1]=viewer.fgColor[1]*flBirghtness+viewer.bgColor[1]*(1.0f-flBirghtness);
+		clrLine[2]=viewer.fgColor[2]*flBirghtness+viewer.bgColor[2]*(1.0f-flBirghtness);
 
         setColor(clrLine[0], clrLine[1], clrLine[2], 1.0);
 		drawLine(X0, Y0, X1, Y1);
-		setColor(fgColor);
+		setColor(viewer.fgColor);
 	}
 	else {
 		float XL, YL, L;
 		int FADCNT;
 		double DX, DY, XX, YY;
 
-		if (VCTFAD == 0xFF)
+		if (viewer.VCTFAD == 0xFF)
 		{
 			return;
 		}
-		FADCNT = VCTFAD + 1;
+		FADCNT = viewer.VCTFAD + 1;
 		XL = (X1 > X0) ? (X1 - X0) : (X0 - X1);
 		YL = (Y1 > Y0) ? (Y1 - Y0) : (Y0 - Y1);
 		L = (XL > YL) ? XL : YL;
@@ -86,7 +92,7 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 		{
 			if (--FADCNT == 0)
 			{
-				FADCNT = VCTFAD + 1;
+				FADCNT = viewer.VCTFAD + 1;
 				if (XX >= 0.0 && XX < 256.0 &&
 					YY >= 0.0 && YY < 152.0)
 				{
@@ -102,6 +108,11 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 			--L;
 		} while (L > 0);
 	}
+}
+
+void CitroRenderer::initialize()
+{
+	// TODO
 }
 
 void CitroRenderer::plotPoint(double X, double Y)
@@ -122,6 +133,11 @@ void CitroRenderer::resetMatrix()
 void CitroRenderer::setClearColor(float red, float green, float blue, float alpha)
 {
     _clearColor = C2D_Color32f(red, green, blue, alpha);
+}
+
+void CitroRenderer::setColor(float color[3])
+{
+	setColor(color[0], color[1], color[2]);
 }
 
 void CitroRenderer::setColor(float red, float green, float blue, float alpha)

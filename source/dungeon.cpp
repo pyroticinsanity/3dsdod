@@ -14,6 +14,8 @@ is held by Douglas J. Morgan.
 //
 // Implementation of Dungeon class
 
+#include <time.h>
+
 #include "dungeon.h"
 #include "dodgame.h"
 #include "player.h"
@@ -570,7 +572,7 @@ void Dungeon::SetVFTTABRandomMap()
 //Override seeds with true random numbers.
 void Dungeon::SetLEVTABRandomMap()
 {
-	srand(GetTickCount());
+	srand(time(NULL));
 
 	LEVTAB[0] = rand() & 255;
 	LEVTAB[1] = rand() & 255;

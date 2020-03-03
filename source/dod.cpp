@@ -88,6 +88,8 @@ extern "C" int main(int argc, char * argv[])
 		u32 kDown = hidKeysDown();
 		if (kDown & KEY_START)
 			break; // break in order to return to hbmenu
+
+		oslink.execute();
 	}
 
 	quitGame();

@@ -14,7 +14,7 @@ is held by Douglas J. Morgan.
 //
 // Implementation of RNG class
 
-#include "rng.h"
+/* TODO This exists in more detail in dod.h. Not sure why.
 // Constructor
 RNG::RNG() : carry(0)
 {
@@ -47,3 +47,4 @@ dodBYTE RNG::RANDOM()
 	}
 	return SEED[0];
 }
+*/

@@ -75,7 +75,7 @@ void OS_Link::init()
 	loadOptFile();
 
 	Uint32 ticks1, ticks2;
-	const SDL_VideoInfo * info = '\0';
+	const SDL_VideoInfo * info = SDL_GetVideoInfo();
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 	{
 		fprintf(stderr, "Video initialization failed: %s\n", SDL_GetError());
@@ -201,8 +201,10 @@ void OS_Link::init()
 		ticks2 = SDL_GetTicks();
 	} while (ticks2 < ticks1 + 2500);
 	game.COMINI();
- 	while (true)
-	{
+}
+
+void OS_Link::execute()
+{
 		scheduler.SCHED();
 		if (scheduler.ZFLAG == 0xFF)
 		{
@@ -239,7 +241,6 @@ void OS_Link::init()
 				game.Restart();
 			}
 		}
-	}
 }
 
 // Used to check for keystrokes and application termination
@@ -1278,11 +1279,12 @@ switch(menu_id)
 		}
 	}
 
-   switch(menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 10))
-    {
 	memset(gamefile, 0, gamefileLen);
 	strcpy(gamefile, savedDir);
 	strcat(gamefile, pathSep);
+	
+   switch(menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 10))
+    {
 	case 0:
 		strcat(gamefile, "game.dod");
 		break;

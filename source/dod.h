@@ -175,27 +175,27 @@ public:
 	}
 
 	// Calculates absolute screen X-coordinate based on DoD X-coordinate
-	GLfloat newX(double orgX)
+	float newX(double orgX)
 	{
-		return ((GLfloat) ((orgX) / orgWidth * curWidth) + (GLfloat) offX);
+		return ((float) ((orgX) / orgWidth * curWidth) + (float) offX);
 	}
 
 	// Calculates relative screen X-coordinate based on DoD X-coordinate
-	GLfloat newXa(double orgX)
+	float newXa(double orgX)
 	{
-		return ((GLfloat) ((orgX) / orgWidth * curWidth));
+		return ((float) ((orgX) / orgWidth * curWidth));
 	}
 
 	// Calculates absolute screen Y-coordinate based on DoD Y-coordinate
-	GLfloat newY(double orgY)
+	float newY(double orgY)
 	{
-		return ((GLfloat)  ((orgHeight - (orgY)) / orgHeight * curHeight) + (GLfloat) offY);
+		return ((float)  ((orgHeight - (orgY)) / orgHeight * curHeight) + (float) offY);
 	}
 
 	// Calculates relative screen Y-coordinate based on DoD Y-coordinate
-	GLfloat newYa(double orgY)
+	float newYa(double orgY)
 	{
-		return ((GLfloat)  ((orgY) / orgHeight * curHeight));
+		return ((float)  ((orgY) / orgHeight * curHeight));
 	}
 
 private:

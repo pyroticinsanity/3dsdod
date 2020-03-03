@@ -1759,7 +1759,9 @@ void Viewer::drawVectorList(int VLA[])
 				y0 = ScaleYf((float)VLA[ctr+1]) + (float)VCNTRY;
 				x1 = ScaleXf((float)VLA[ctr+2]) + (float)VCNTRX;
 				y1 = ScaleYf((float)VLA[ctr+3]) + (float)VCNTRY;
+
 				_renderer->drawVector((float)(int)x0, (float)(int)y0, (float)(int)x1, (float)(int)y1);
+
 //				dodSHORT x0, y0, x1, y1;
 //				x0 = ScaleX(VLA[ctr]) + VCNTRX;
 //				y0 = ScaleY(VLA[ctr+1]) + VCNTRY;

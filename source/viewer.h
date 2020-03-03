@@ -116,8 +116,8 @@ public:
 	TXB			TXTEXA;
 	TXB			TXTSTS;
 
-	GLfloat		bgColor[3];
-	GLfloat		fgColor[3];
+	float		bgColor[3];
+	float		fgColor[3];
 	dodBYTE		RLIGHT;
 	dodBYTE		MLIGHT;
 	dodBYTE		OLIGHT;
@@ -187,7 +187,7 @@ private:
 	int			HLFSCL;
 	int			BAKSCL;
 	int			NORSCL;
-	GLuint		keyboardTexture;
+	//GLuint		keyboardTexture; TODO Figure out what to do with the keyboard.
 public:
 	int A_VLA[33];
 	int B_VLA[49];
