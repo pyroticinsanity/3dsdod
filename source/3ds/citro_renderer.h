@@ -2,12 +2,14 @@
 #define DOD_CITRO_RENDERER_HEADER
 
 #include <citro2d.h>
-#include "renderer.h"
+#include "../renderer.h"
 
 class CitroRenderer: public Renderer
 {
 public:
    CitroRenderer() : Renderer() {}
+
+   virtual ~CitroRenderer() {}
 
     virtual void clearBuffer(bool includeDepthBuffer = false);
     virtual void drawLine(float x0, float y0, float x1, float y1);

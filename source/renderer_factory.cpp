@@ -1,6 +1,6 @@
 #include "renderer_factory.h"
 
-#include "citro_renderer.h"
+#include "3ds/citro_renderer.h"
 
 Renderer* RendererFactory::_renderer = NULL;
 RendererFactory::RendererFactory()

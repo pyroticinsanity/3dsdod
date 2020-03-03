@@ -1,8 +1,9 @@
+#include <3ds.h>
 
-#include "dod.h"
-#include "enhanced.h"
-#include "viewer.h" // TODO Figure out how to decouple this
-#include "oslink.h" // TODO Figure out how to decouple this
+#include "../dod.h"
+#include "../enhanced.h"
+#include "../viewer.h" // TODO Figure out how to decouple this
+#include "../oslink.h" // TODO Figure out how to decouple this
 
 #include "citro_renderer.h"
 
@@ -80,7 +81,7 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 		DY = ((double) YL / (double) L) * ((Y0 < Y1) ? 1 : -1);
 		if (g_options&OPT_HIRES) { // prepare to draw a HIRES line
 			// in hires mode, all we need to do is increase the # pixels per line.
-			// we are scaling up accoring to the screen width
+			// we are scaling up according to the screen width
 			int scale=oslink.width>>8;
 			DX/=(double)scale;
 			DY/=(double)scale;
@@ -158,5 +159,5 @@ void CitroRenderer::setTranslation(float xOffset, float yOffset)
 
 void CitroRenderer::swapBuffers()
 {
-	// TODO
+	gfxSwapBuffers();
 }
