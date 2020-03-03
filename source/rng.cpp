@@ -14,6 +14,7 @@ is held by Douglas J. Morgan.
 //
 // Implementation of RNG class
 
+#include "rng.h"
 // Constructor
 RNG::RNG() : carry(0)
 {

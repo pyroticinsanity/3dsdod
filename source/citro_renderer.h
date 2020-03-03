@@ -1,6 +1,7 @@
 #ifndef DOD_CITRO_RENDERER_HEADER
 #define DOD_CITRO_RENDERER_HEADER
 
+#include <citro2d.h>
 #include "renderer.h"
 
 class CitroRenderer: public Renderer

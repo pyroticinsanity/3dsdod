@@ -18,12 +18,12 @@ public:
 
     virtual void resetMatrix() = 0;
 
-    virtual void setClearColor(float red, float green, float blue, float alpha) = 0;
+    virtual void setClearColor(float red, float green, float blue, float alpha = 0) = 0;
 
     virtual void setColor(float color[3]) = 0;
     virtual void setColor(float red, float green, float blue, float alpha = 0.0f) = 0;
     virtual void setTranslation(float xOffset, float yOffset) = 0;
-    virtual void setViewport(float x, float y, float width, float height) = 0;
+    virtual void setViewport(int x, int y, int width, int height) = 0;
 
     virtual void swapBuffers() = 0;
 };

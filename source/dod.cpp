@@ -184,7 +184,7 @@ void printvls()
 */
 //}
 
-Mix_Chunk *Utils::LoadSound(char *snd)
+Mix_Chunk *Utils::LoadSound(const char *snd)
 {
 	char fn[256];
 	sprintf(fn, "%s%s%s", oslink.soundDir, oslink.pathSep, snd);

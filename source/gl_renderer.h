@@ -1,6 +1,7 @@
 #ifndef DOD_GL_RENDERER_HEADER
 #define DOD_GL_RENDERER_HEADER
 
+#ifdef PSP
 #include "renderer.h"
 
 class GlRenderer: public Renderer
@@ -30,4 +31,6 @@ public:
 
     virtual void swapBuffers();
 };
+
+#endif //PSP
 #endif //DOD_GL_RENDERER_HEADER

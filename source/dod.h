@@ -22,7 +22,6 @@ is held by Douglas J. Morgan.
 // SDL Headers
 #include <SDL/SDL_main.h>
 #include <SDL/SDL.h>
-#include <GL/gl3ds.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_image.h>
@@ -566,7 +565,7 @@ class Utils
 {
 public:
 	// This could be made into a template someday
-	static void LoadFromHex(dodBYTE * b, char * h)
+	static void LoadFromHex(dodBYTE * b, const char * h)
 	{
 		char hexbuf[3];
 		char * end;
@@ -584,7 +583,7 @@ public:
 	}
 
 	// This could be made into a template someday
-	static void LoadFromHex(int * b, char * h)
+	static void LoadFromHex(int * b, const char * h)
 	{
 		char hexbuf[3];
 		char * end;
@@ -601,7 +600,7 @@ public:
 		}
 	}
 
-	static void LoadFromDecDigit(dodBYTE * b, char * dd)
+	static void LoadFromDecDigit(dodBYTE * b, const char * dd)
 	{
 		while (*dd)
 		{
@@ -609,7 +608,7 @@ public:
 		}
 	}
 
-	static void LoadFromDecDigit(int * b, char * dd)
+	static void LoadFromDecDigit(int * b, const char * dd)
 	{
 		while (*dd)
 		{
@@ -617,7 +616,7 @@ public:
 		}
 	}
 
-	static Mix_Chunk *LoadSound(char *snd);
+	static Mix_Chunk *LoadSound(const char *snd);
 };
 
 // Command creator menu class

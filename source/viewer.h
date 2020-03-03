@@ -170,7 +170,7 @@ private:
 	// Internal Implementation
 	void drawVectorListAQ(int VLA[]);
 	void drawCharacter(char c);
-	void drawString(int x, int y, char * str, int len);
+	void drawString(int x, int y, const char * str, int len);
 	void drawString_internal(int x, int y, dodBYTE * str, int len);
 	
 	char dod_to_ascii(dodBYTE c);

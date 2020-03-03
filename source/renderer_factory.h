@@ -10,7 +10,7 @@ public:
 private:
     RendererFactory();
     
-    Renderer* _renderer;
+    static Renderer* _renderer;
 };
 
 #endif // DOD_RENDERER_FACTORY_HEADER

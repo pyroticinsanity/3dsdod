@@ -18,6 +18,7 @@ is held by Douglas J. Morgan.
 #define DOD_PLAYER_HEADER
 
 #include "dod.h"
+#include "renderer.h"
 
 class Player
 {

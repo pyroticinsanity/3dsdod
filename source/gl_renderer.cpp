@@ -1,3 +1,4 @@
+#ifdef PSP
 #include <SDL/SDL_opengl.h>
 
 #include "dod.h"
@@ -180,3 +181,4 @@ void GlRenderer::swapBuffers()
 {
 	SDL_GL_SwapBuffers();
 }
+#endif //PSP

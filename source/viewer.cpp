@@ -146,26 +146,26 @@ Viewer::Viewer() : VCNTRX(128), VCNTRY(76),
 	AZ_VLA[49] = DSH_VLA;
 
 	Utils::LoadFromHex(SP_VLA,
-		"020BA07CA474A878B074B878B07CA878B078B878BC74C07C07A87CAA74AC78B07AB478"
+		(const char*)"020BA07CA474A878B074B878B07CA878B078B878BC74C07C07A87CAA74AC78B07AB478"
 		"B674B87C");
 
 	Utils::LoadFromHex(WR_VLA,
-		"0303443E58446438095A4A4A46504C5A4A644866405A4A5E565A56075064565A645C6C"
+		(const char*)"0303443E58446438095A4A4A46504C5A4A644866405A4A5E565A56075064565A645C6C"
 		"62625E565E5064");
 
 	Utils::LoadFromHex(SC_VLA,
-		"020D4A704A6C46683E6C42744A765278527C4A7C427446783E78427C065A7C5A785278"
+		(const char*)"020D4A704A6C46683E6C42744A765278527C4A7C427446783E78427C065A7C5A785278"
 		"4A7C4A805280");
 	Utils::LoadFromHex(BL_VLA,
-		"0314825272566C646A6E6A7860826A806884727E80808E82948098849A80A2829C7C9A"
+		(const char*)"0314825272566C646A6E6A7860826A806884727E80808E82948098849A80A2829C7C9A"
 		"6C945C8A568252088256885C8A6280648256785C7666806403746C76729078");
 	Utils::LoadFromHex(GL_VLA,
-		"04157C50725E786E70844E6830844844205458167234805C8E34A816E058B844D084B2"
+		(const char*)"04157C50725E786E70844E6830844844205458167234805C8E34A816E058B844D084B2"
 		"709084886E8E5E84500970847A7C7E6E7A64805C8664826E867C90840B7A526A605C5C"
 		"564C4E48544E4C4E54525860666874641BA816A21AA612A018A01E96268C2E862A8A20"
 		"8412862080267A207C1276207A2A8036862A802E7A2A742E6A26601E60185A125E1A5816");
 	Utils::LoadFromHex(VI_VLA,
-		"020F82847A707C5C7E5E825E845C82708C80888472846C78766A7078747C7E7C107864"
+		(const char*)"020F82847A707C5C7E5E825E845C82708C80888472846C78766A7078747C7E7C107864"
 		"78607C5C785878547A527E567A5286528256865288548858845C88608864");
 	Utils::LoadFromHex(S1_VLA,
 		"050A62687062785C805E846084667E6878687266646A0C846688669470A07AAE7CAA78"
@@ -349,7 +349,7 @@ void Viewer::initialize()
 	_renderer = RendererFactory::GetRenderer();
 	_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2]);
 	_renderer->setClearColor(0.0f, 0.0f, 0.0f);
-	_renderer->setViewPort(0, 20, oslink.width, oslink.height);
+	_renderer->setViewport(0, 20, oslink.width, oslink.height);
 	_renderer->initialize();	
 }
 
@@ -915,8 +915,8 @@ void Viewer::drawTorchHighlite()
 	_renderer->setColor(fgColor);
 	_renderer->drawQuad(
 		crd.newX(x1*8), crd.newY(y1*8),
-		crd.newX(x2*8), crd.newY(y1*8)
-		crd.newX(x2*8), crd.newY(y2*8)
+		crd.newX(x2*8), crd.newY(y1*8),
+		crd.newX(x2*8), crd.newY(y2*8),
 		crd.newX(x1*8), crd.newY(y2*8));
 	_renderer->setColor(bgColor);
 	object.OBJNAM(player.PTORCH);
@@ -1751,7 +1751,7 @@ void Viewer::drawVectorList(int VLA[])
 				y0 = ScaleYf((float)VLA[ctr+1]) + (float)VCNTRY;
 				x1 = ScaleXf((float)VLA[ctr+2]) + (float)VCNTRX;
 				y1 = ScaleYf((float)VLA[ctr+3]) + (float)VCNTRY;
-				drawVector(x0, y0, x1, y1);
+				_renderer->drawVector(x0, y0, x1, y1);
 			}
 			else {
 				float x0, y0, x1, y1;
@@ -1759,7 +1759,7 @@ void Viewer::drawVectorList(int VLA[])
 				y0 = ScaleYf((float)VLA[ctr+1]) + (float)VCNTRY;
 				x1 = ScaleXf((float)VLA[ctr+2]) + (float)VCNTRX;
 				y1 = ScaleYf((float)VLA[ctr+3]) + (float)VCNTRY;
-				drawVector((float)(int)x0, (float)(int)y0, (float)(int)x1, (float)(int)y1);
+				_renderer->drawVector((float)(int)x0, (float)(int)y0, (float)(int)x1, (float)(int)y1);
 //				dodSHORT x0, y0, x1, y1;
 //				x0 = ScaleX(VLA[ctr]) + VCNTRX;
 //				y0 = ScaleY(VLA[ctr+1]) + VCNTRY;
@@ -1906,7 +1906,7 @@ char Viewer::dod_to_ascii(dodBYTE c)
 }
 
 // Draws a string
-void Viewer::drawString(int x, int y, char * str, int len)
+void Viewer::drawString(int x, int y, const char * str, int len)
 {
 	int ctr;
 	_renderer->resetMatrix();

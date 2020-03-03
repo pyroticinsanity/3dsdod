@@ -2,8 +2,8 @@
 
 #include "citro_renderer.h"
 
+Renderer* RendererFactory::_renderer = NULL;
 RendererFactory::RendererFactory()
-: _renderer(NULL)
 {}
 
 Renderer* RendererFactory::GetRenderer()

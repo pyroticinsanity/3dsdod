@@ -1625,6 +1625,9 @@ void Player::ShowTurn(dodBYTE A)
 		times = 2;
 		break;
 	default:
+		dir = 0;
+		offset = 0;
+		times = 0;
 		break;
 	}
 
@@ -1660,7 +1663,7 @@ void Player::ShowTurn(dodBYTE A)
 					_renderer->clearBuffer();
 					_renderer->resetMatrix();
 					viewer.drawVectorList(viewer.LINES);
-					viewer.drawVector((x*inc*dir)+offset,y0,(x*inc*dir)+offset,y1);
+					_renderer->drawVector((x*inc*dir)+offset,y0,(x*inc*dir)+offset,y1);
 					viewer.drawArea(&viewer.TXTSTS);
 					viewer.drawArea(&viewer.TXTPRI);
 					_renderer->swapBuffers();
