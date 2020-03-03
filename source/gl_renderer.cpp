@@ -20,6 +20,16 @@ void GlRenderer::drawLine(float x0, float y0, float x1, float y1)
 	glEnd();
 }
 
+void GlRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3)
+{
+	glBegin(GL_QUADS);
+		glVertex2f(x0, y0);
+		glVertex2f(x1, y1);
+		glVertex2f(x2, y2);
+		glVertex2f(x3, y3);
+	glEnd();
+}
+
 // Draws a line
 void GlRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 {
@@ -127,12 +137,11 @@ void GlRenderer::plotPoint(double X, double Y)
 		glEnd();
 	}
 	else { // draw a COCO pixel (square)
-		glBegin(GL_QUADS);
-		glVertex2f(crd.newX(X),	crd.newY(Y));
-		glVertex2f(crd.newX(X+1),	crd.newY(Y));
-		glVertex2f(crd.newX(X+1),	crd.newY(Y+1));
-		glVertex2f(crd.newX(X),		crd.newY(Y+1));
-		glEnd();
+		drawQuad(
+			crd.newX(X),	crd.newY(Y),
+			crd.newX(X+1),	crd.newY(Y),
+			crd.newX(X+1),	crd.newY(Y+1),
+			crd.newX(X),	crd.newY(Y+1));
 	}
 }
 
@@ -155,6 +164,11 @@ void GlRenderer::setColor(float color[3])
 void GlRenderer::setColor(float red, float green, float blue, float alpha = 0.0f)
 {
 	glColor4f(red, green, blue, alpha);
+}
+
+void GlRenderer::setTranslation(float xOffset, float yOffset)
+{
+	glTranslatef(xOffset, yOffset, 0.0);
 }
 
 void GlRenderer::setViewport(int x, int y, int width, int height)

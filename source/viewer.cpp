@@ -912,12 +912,11 @@ void Viewer::drawTorchHighlite()
 	y2 = y1 + 1;
 	_renderer->resetMatrix();
 	_renderer->setColor(fgColor);
-	glBegin(GL_QUADS);
-	glVertex2f(crd.newX(x1*8), crd.newY(y1*8));
-	glVertex2f(crd.newX(x2*8), crd.newY(y1*8));
-	glVertex2f(crd.newX(x2*8), crd.newY(y2*8));
-	glVertex2f(crd.newX(x1*8), crd.newY(y2*8));
-	glEnd();
+	_renderer->drawQuad(
+		crd.newX(x1*8), crd.newY(y1*8),
+		crd.newX(x2*8), crd.newY(y1*8)
+		crd.newX(x2*8), crd.newY(y2*8)
+		crd.newX(x1*8), crd.newY(y2*8));
 	_renderer->setColor(bgColor);
 	object.OBJNAM(player.PTORCH);
 	drawString_internal(x1, y1, parser.TOKEN, tlen);
@@ -931,24 +930,22 @@ void Viewer::drawArea(TXB * a)
 	{
 		_renderer->resetMatrix();
 		_renderer->setColor(fgColor);
-		glBegin(GL_QUADS);
-		glVertex2f(crd.newX(0*8), crd.newY(19*8));
-		glVertex2f(crd.newX(32*8), crd.newY(19*8));
-		glVertex2f(crd.newX(32*8), crd.newY((20*8)));
-		glVertex2f(crd.newX(0*8), crd.newY((20*8)));
-		glEnd();
+		_renderer->drawQuad(
+			crd.newX(0*8), crd.newY(19*8),
+			crd.newX(32*8), crd.newY(19*8),
+			crd.newX(32*8), crd.newY(20*8),
+			crd.newX(0*8), crd.newY(20*8));
 		_renderer->setColor(bgColor);
 	}
 	else
 	{
 		_renderer->resetMatrix();
 		_renderer->setColor(bgColor);
-		glBegin(GL_QUADS);
-		glVertex2f(crd.newX(0*8), crd.newY(20*8));
-		glVertex2f(crd.newX(33*8), crd.newY(20*8));
-		glVertex2f(crd.newX(33*8), crd.newY((24*8)));
-		glVertex2f(crd.newX(0*8), crd.newY((24*8)));
-		glEnd();
+		_renderer->drawQuad(
+			crd.newX(0*8), crd.newY(20*8),
+			crd.newX(33*8), crd.newY(20*8),
+			crd.newX(33*8), crd.newY(24*8),
+			crd.newX(0*8), crd.newY(24*8));
 		_renderer->setColor(fgColor);
 	}
 
@@ -1475,12 +1472,12 @@ void Viewer::MAPPER()
 		mazIdx = dungeon.RC2IDX(dungeon.DROW.row, dungeon.DROW.col);
 		if (dungeon.MAZLND[mazIdx] != 0xFF)
 		{
-			glBegin(GL_QUADS);
-			glVertex2f(crd.newX(dungeon.DROW.col * 8), crd.newY(dungeon.DROW.row * 6));
-			glVertex2f(crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6));
-			glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6));
-			glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8), crd.newY(dungeon.DROW.row * 6));
-			glEnd();
+			_renderer->drawQuad(
+				crd.newX(dungeon.DROW.col * 8), crd.newY(dungeon.DROW.row * 6),
+				crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6),
+				crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6),
+				crd.newX((dungeon.DROW.col + 1) * 8), crd.newY(dungeon.DROW.row * 6));
+
 			if (game.MarkDoorsOnScrollMaps) {  //Do we need to mark the doors on the scroll maps?
 				if ((dungeon.MAZLND[mazIdx] & 0x0c) == (0x01 << 2) ||
 					(dungeon.MAZLND[mazIdx] & 0x0c) == (0x02 << 2))
@@ -1607,12 +1604,11 @@ void Viewer::MAPPER()
 				continue;
 			rc.row = object.OCBLND[objIdx].P_OCROW;
 			rc.col = object.OCBLND[objIdx].P_OCCOL;
-			glBegin(GL_QUADS);
-			glVertex2f(crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 2));
-			glVertex2f(crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 4));
-			glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
-			glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
-			glEnd();
+			_renderer->drawQuad(
+				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 2),
+				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 4),
+				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
+				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
 		} while (true);
 
 		// Mark Creatures
@@ -1626,54 +1622,58 @@ void Viewer::MAPPER()
 				continue;
 			rc.row = creature.CCBLND[creIdx].P_CCROW;
 			rc.col = creature.CCBLND[creIdx].P_CCCOL;
-			glBegin(GL_QUADS);
-			glVertex2f(crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 2));
-			glVertex2f(crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 4));
-			glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4));
-			glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2));
+			_renderer->drawQuad(
+				crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 2),
+				crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 4),
+				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4),
+				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2));
 
-			glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
-			glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
-			glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4));
-			glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2));
+			_renderer->drawQuad(
+				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
+				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
+				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4),
+				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2));
 
-			glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
-			glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5));
-			glVertex2f(crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 5));
-			glVertex2f(crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 1));
-			glEnd();
+			_renderer->drawQuad(
+				crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1),
+				crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
+				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 5),
+				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 1));
 		} while (true);
 	}
 
 	// Mark Player
 	rc.row = player.PROW;
 	rc.col = player.PCOL;
-	glBegin(GL_QUADS);
-	glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1));
-	glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2));
-	glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2));
-	glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
+	_renderer->drawQuad(
+		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1),
+		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2),
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
 
-	glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1));
-	glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
-	glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2));
-	glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1));
+	_renderer->drawQuad(
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1),
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2),
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1));
 
-	glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2));
-	glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4));
-	glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
-	glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
+	_renderer->drawQuad(
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4),
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
 
-	glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4));
-	glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5));
-	glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5));
-	glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4));
+	_renderer->drawQuad(
+		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4),
+		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5),
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4));
 
-	glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
-	glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5));
-	glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5));
-	glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4));
-	glEnd();
+	_renderer->drawQuad(
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5),
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4));
 
 	// Mark Vertical Features
 	vftIdx = dungeon.VFTPTR;
@@ -1696,27 +1696,29 @@ void Viewer::MAPPER()
 		rc.row = dungeon.VFTTAB[vftIdx++];
 		rc.col = dungeon.VFTTAB[vftIdx++];
 
-		glBegin(GL_QUADS);
-		glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1));
-		glVertex2f(crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5));
-		glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5));
-		glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
+		_renderer->drawQuad(
+			crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1),
+			crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5),
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
 
-		glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1));
-		glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5));
-		glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5));
-		glVertex2f(crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1));
+		_renderer->drawQuad(
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1),
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
+			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5),
+			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1));
 
-		glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
-		glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2));
-		glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
-		glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1));
+		_renderer->drawQuad(
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1),
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1));
 
-		glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4));
-		glVertex2f(crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5));
-		glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5));
-		glVertex2f(crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
-		glEnd();
+		_renderer->drawQuad(
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4),
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
 
 	} while (true);
 }
@@ -1802,17 +1804,16 @@ void Viewer::drawVectorListAQ(int VLA[])
 	int curQuad = 0;
 	int	ctr = 1;
 
-	glBegin(GL_QUADS);
 	while (curQuad < numQuads)
 	{
-		glVertex2f(crd.newXa((double) VLA[ctr]),crd.newYa((double) VLA[ctr+1]));
-		glVertex2f(crd.newXa((double) VLA[ctr+2]),crd.newYa((double) VLA[ctr+3]));
-		glVertex2f(crd.newXa((double) VLA[ctr+4]),crd.newYa((double) VLA[ctr+5]));
-		glVertex2f(crd.newXa((double) VLA[ctr+6]),crd.newYa((double) VLA[ctr+7]));
+		_renderer->drawQuad(
+			crd.newXa((double) VLA[ctr]),crd.newYa((double) VLA[ctr+1]),
+			crd.newXa((double) VLA[ctr+2]),crd.newYa((double) VLA[ctr+3]),
+			crd.newXa((double) VLA[ctr+4]),crd.newYa((double) VLA[ctr+5]),
+			crd.newXa((double) VLA[ctr+6]),crd.newYa((double) VLA[ctr+7]));
 		ctr += 8;
 		++curQuad;
 	}
-	glEnd();
 }
 
 // Draws a character
@@ -2012,12 +2013,11 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
      {
      _renderer->setColor(fgColor);
      _renderer->resetMatrix();
-     glBegin(GL_QUADS);
-     glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
-     glVertex2f(crd.newX((x + length) * 8), crd.newY(y * 8));
-     glVertex2f(crd.newX((x + length) * 8), crd.newY((y + 1) * 8));
-     glVertex2f(crd.newX(x * 8), crd.newY((y + 1) * 8));
-     glEnd();
+     _renderer->drawQuad(
+     	crd.newX(x * 8), crd.newY(y * 8),
+    	crd.newX((x + length) * 8), crd.newY(y * 8),
+     	crd.newX((x + length) * 8), crd.newY((y + 1) * 8),
+     	crd.newX(x * 8), crd.newY((y + 1) * 8));
      _renderer->setColor(bgColor);
      }
 
@@ -2064,12 +2064,11 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
      {
      _renderer->setColor(fgColor);
      _renderer->resetMatrix();
-     glBegin(GL_QUADS);
-     glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
-     glVertex2f(crd.newX((x + length) * 8), crd.newY(y * 8));
-     glVertex2f(crd.newX((x + length) * 8), crd.newY((y + 1) * 8));
-     glVertex2f(crd.newX(x * 8), crd.newY((y + 1) * 8));
-     glEnd();
+     _renderer->drawQuad(
+     	crd.newX(x * 8), crd.newY(y * 8),
+     	crd.newX((x + length) * 8), crd.newY(y * 8),
+     	crd.newX((x + length) * 8), crd.newY((y + 1) * 8),
+     	crd.newX(x * 8), crd.newY((y + 1) * 8));
      _renderer->setColor(bgColor);
      }
 
@@ -2114,12 +2113,11 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
      {
      _renderer->setColor(fgColor);
      _renderer->resetMatrix();
-     glBegin(GL_QUADS);
-     glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
-     glVertex2f(crd.newX((x + length) * 8), crd.newY(y * 8));
-     glVertex2f(crd.newX((x + length) * 8), crd.newY((y + 1) * 8));
-     glVertex2f(crd.newX(x * 8), crd.newY((y + 1) * 8));
-     glEnd();
+     _renderer->drawQuad(
+     	crd.newX(x * 8), crd.newY(y * 8),
+     	crd.newX((x + length) * 8), crd.newY(y * 8),
+     	crd.newX((x + length) * 8), crd.newY((y + 1) * 8),
+     	crd.newX(x * 8), crd.newY((y + 1) * 8));
      _renderer->setColor(bgColor);
      }
 

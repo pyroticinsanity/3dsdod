@@ -6,7 +6,7 @@
 
 void CitroRenderer::clearBuffer(bool includeDepthBuffer)
 {
-	// TODO
+	
 }
 
 void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
@@ -17,13 +17,22 @@ void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
 	double yMod = width * sin(atan(slope));
 	double xMod = width * cos(atan(slope));
 
-	C2D_DrawTriangle(x0 - xMod, y0 + yMod, clrLine, 
-		x0 + xMod, y0 - yMod, clrLine,
-		x1 - xMod, y1 + yMod, clrLine, 0);
+	C2D_DrawTriangle(_xOffset + x0 - xMod, _yOffset + y0 + yMod, _color, 
+		_xOffset + x0 + xMod, _yOffset + y0 - yMod, _color,
+		_xOffset + x1 - xMod, _yOffset + y1 + yMod, _color, 0);
 
-	C2D_DrawTriangle(x1 - xMod, y1 + yMod, clrLine, 
-		x0 + xMod, y0 - yMod, clrLine,
-		x1 + xMod, y1 - yMod, clrLine, 0);
+	C2D_DrawTriangle(_xOffset + x1 - xMod, _yOffset + y1 + yMod, _color, 
+		_xOffset + x0 + xMod, _yOffset + y0 - yMod, _color,
+		_xOffset + x1 + xMod, _yOffset + y1 - yMod, _color, 0);
+}
+
+void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3)
+{
+	//TODO Probably a better way to do this with less triangles.
+	drawLine(x0, y0, x1, y1);
+	drawLine(x1, y1, x2, y2);
+	drawLine(x2, y2, x3, y3);
+	drawLine(x3, y3, x0, y0);
 }
 
 void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
@@ -97,28 +106,17 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 
 void CitroRenderer::plotPoint(double X, double Y)
 {
-	if (g_options&OPT_HIRES)
-	{	// draw a single pixel
-		glBegin(GL_POINTS);
-		float x,y;
-		x=crd.newX(X);
-		y=crd.newY(Y);
-		glVertex2f(x,y);
-		glEnd();
-	}
-	else { // draw a COCO pixel (square)
-		glBegin(GL_QUADS);
-		glVertex2f(crd.newX(X),	crd.newY(Y));
-		glVertex2f(crd.newX(X+1),	crd.newY(Y));
-		glVertex2f(crd.newX(X+1),	crd.newY(Y+1));
-		glVertex2f(crd.newX(X),		crd.newY(Y+1));
-		glEnd();
-	}
+	drawQuad(
+			_xOffset + crd.newX(X),	_yOffset + crd.newY(Y),
+			_xOffset + crd.newX(X+1),	_yOffset + crd.newY(Y),
+			_xOffset + crd.newX(X+1),	_yOffset + crd.newY(Y+1),
+			_xOffset + crd.newX(X),	_yOffset + crd.newY(Y+1));
 }
 
 void CitroRenderer::resetMatrix()
 {
-	// TODO do nothing?
+	_xOffset = 0;
+	_yOffset = 0;
 }
 
 void CitroRenderer::setClearColor(float red, float green, float blue, float alpha)
@@ -133,7 +131,13 @@ void CitroRenderer::setColor(float red, float green, float blue, float alpha)
 
 void CitroRenderer::setViewport(int x, int y, int width, int height)
 {
-// TODO?
+	C3D_SetViewport(x, y, width, height);
+}
+
+void CitroRenderer::setTranslation(float xOffset, float yOffset)
+{
+	_xOffset = xOffset;
+	_yOffset = yOffset;
 }
 
 void CitroRenderer::swapBuffers()
