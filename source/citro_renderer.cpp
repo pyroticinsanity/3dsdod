@@ -9,6 +9,23 @@ void CitroRenderer::clearBuffer(bool includeDepthBuffer)
 	// TODO
 }
 
+void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
+{
+	double width = 1;
+
+	double slope = (x1 - x0) / (y1 - y0);
+	double yMod = width * sin(atan(slope));
+	double xMod = width * cos(atan(slope));
+
+	C2D_DrawTriangle(x0 - xMod, y0 + yMod, clrLine, 
+		x0 + xMod, y0 - yMod, clrLine,
+		x1 - xMod, y1 + yMod, clrLine, 0);
+
+	C2D_DrawTriangle(x1 - xMod, y1 + yMod, clrLine, 
+		x0 + xMod, y0 - yMod, clrLine,
+		x1 + xMod, y1 - yMod, clrLine, 0);
+}
+
 void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 {
     	if (g_options&OPT_VECTOR) { // draw using GL vectors
@@ -23,24 +40,9 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 		clrLine[1]=fgColor[1]*flBirghtness+bgColor[1]*(1.0f-flBirghtness);
 		clrLine[2]=fgColor[2]*flBirghtness+bgColor[2]*(1.0f-flBirghtness);
 
-		// draw the vector
-
-        u32 clrLine = C2D_Color32f(clrLine[0], clrLine[1], clrLine[2], 1.0);
-	    double width = 1;
-
-	    double slope = (X1 - X0) / (Y1 - Y0);
-	    double yMod = width * sin(atan(slope));
-	    double xMod = width * cos(atan(slope));
-
-		C2D_DrawTriangle(X0 - xMod, Y0 + yMod, clrLine, 
-			X0 + xMod, Y0 - yMod, clrLine,
-			X1 - xMod, Y1 + yMod, clrLine, 0);
-
-		C2D_DrawTriangle(X1 - xMod, Y1 + yMod, clrLine, 
-			X0 + xMod, Y0 - yMod, clrLine,
-			X1 + xMod, Y1 - yMod, clrLine, 0);
-        // TODO do we need to set a current color?
-		//glColor3fv(fgColor);
+        setColor(clrLine[0], clrLine[1], clrLine[2], 1.0);
+		drawLine(X0, Y0, X1, Y1);
+		setColor(fgColor);
 	}
 	else {
 		float XL, YL, L;

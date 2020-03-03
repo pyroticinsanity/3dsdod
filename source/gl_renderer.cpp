@@ -12,6 +12,14 @@ void GlRenderer::clearBuffer(bool includeDepthBuffer)
 	glClear(GL_COLOR_BUFFER_BIT | (includeDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
 }
 
+void GlRenderer::drawLine(float x0, float y0, float x1, float y1)
+{
+	glBegin(GL_LINES);
+		glVertex2f(x0, y0);
+		glVertex2f(x1, y1);
+	glEnd();
+}
+
 // Draws a line
 void GlRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 {
@@ -27,13 +35,11 @@ void GlRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 		clrLine[1]=fgColor[1]*flBirghtness+bgColor[1]*(1.0f-flBirghtness);
 		clrLine[2]=fgColor[2]*flBirghtness+bgColor[2]*(1.0f-flBirghtness);
 
-		// draw the vector
-		glBegin(GL_LINES);
-		glColor3fv(clrLine);
-		glVertex2f(crd.newX(X0),crd.newY(Y0));
-		glVertex2f(crd.newX(X1),crd.newY(Y1));
-		glColor3fv(fgColor);
-		glEnd();
+		setColor(clrLine);
+		drawLine(
+			crd.newX(X0),crd.newY(Y0),
+			crd.newX(X1),crd.newY(Y1));
+		setColor(fgColor);
 	}
 	else {
 		float XL, YL, L;

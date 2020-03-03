@@ -1516,59 +1516,47 @@ void Viewer::MAPPER()
 					DoorOffset = DoorOffset / 4;
 					_renderer->setColor(1.0,1.0,1.0);
 					if ((dungeon.MAZLND[mazIdx] & 0x0c) == (0x01 << 2)) {  //Is this a regular door?  Yes:
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
-						glEnd();
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6),
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4),
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5),
+							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5),
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4),
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4),
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
+						
 					} else {  //Is this a regular door?  No:
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 1.75));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.5));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25));
-						glEnd();
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6),
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 1.75));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.5),
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25),
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25),
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25),
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25),
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
+						_renderer->drawLine(
+							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25),
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25));
 					}  //Is this a regular door?
 					_renderer->setColor(0.0,0.0,0.0);
 				}  //Do we have a east door or secret door?
@@ -1579,60 +1567,46 @@ void Viewer::MAPPER()
 					DoorOffset = DoorOffset / 4;
 					_renderer->setColor(1.0,1.0,1.0);
 					if ((dungeon.MAZLND[mazIdx] & 0x30) == (0x01 << 4)) {  //Is this a regular door?  Yes:
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
-						glEnd();
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
+							crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
 					} else {  //Is this a regular door?  No:
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 2.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.25 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
-						glEnd();
-						glBegin(GL_LINES);
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 3), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset));
-						glVertex2f(crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset));
-						glEnd();
-
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 2.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
+							crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.25 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
+						_renderer->drawLine(
+							crd.newX(dungeon.DROW.col * 8 + 3), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset),
+							crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset));
 					}
 					_renderer->setColor(0.0,0.0,0.0);
 				}  //Do we have a south door or secret door?
