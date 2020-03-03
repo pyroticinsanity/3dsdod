@@ -33,8 +33,6 @@ is held by Douglas J. Morgan.
 #include <string.h>
 #include <sys/stat.h>
 
-#define glColor3fv(x) glColor3f(x[0], x[1], x[2])
-
 #define PSP_SCREEN_HEIGHT 	272
 #define PSP_SCREEN_WIDTH	480
 

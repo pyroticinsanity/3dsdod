@@ -429,7 +429,7 @@ void Viewer::draw_game()
 		_renderer->clearBuffer();
 
 		glLoadIdentity();
-		glColor3fv(fgColor);
+		_renderer->setColor(fgColor);
 		switch (display_mode)
 		{
 		case MODE_3D:
@@ -520,7 +520,7 @@ bool Viewer::ShowFade(int fadeMode)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		drawArea(&TXTSTS);
-		glColor3fv(fgColor);
+		_renderer->setColor(fgColor);
 		glLoadIdentity();
 		drawVectorList(wiz);
 		SDL_GL_SwapBuffers();
@@ -561,7 +561,7 @@ bool Viewer::ShowFade(int fadeMode)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	drawArea(&TXTSTS);
-	glColor3fv(fgColor);
+	_renderer->setColor(fgColor);
 	glLoadIdentity();
 	drawVectorList(wiz);
 	drawArea(&TXTPRI);
@@ -579,7 +579,7 @@ bool Viewer::ShowFade(int fadeMode)
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			drawArea(&TXTSTS);
-			glColor3fv(fgColor);
+			_renderer->setColor(fgColor);
 			glLoadIdentity();
 			drawVectorList(wiz);
 			drawArea(&TXTPRI);
@@ -598,7 +598,7 @@ bool Viewer::ShowFade(int fadeMode)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		drawArea(&TXTSTS);
-		glColor3fv(fgColor);
+		_renderer->setColor(fgColor);
 		glLoadIdentity();
 		drawVectorList(wiz);
 		SDL_GL_SwapBuffers();
@@ -629,7 +629,7 @@ bool Viewer::ShowFade(int fadeMode)
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			drawArea(&TXTSTS);
-			glColor3fv(fgColor);
+			_renderer->setColor(fgColor);
 			glLoadIdentity();
 			drawVectorList(wiz);
 			SDL_GL_SwapBuffers();
@@ -665,7 +665,7 @@ bool Viewer::ShowFade(int fadeMode)
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
 			drawArea(&TXTSTS);
-			glColor3fv(fgColor);
+			_renderer->setColor(fgColor);
 			glLoadIdentity();
 			drawVectorList(wiz);
 			drawArea(&TXTPRI);
@@ -694,7 +694,7 @@ bool Viewer::draw_fade()
 
 	drawArea(&TXTSTS);
 
-	glColor3fv(fgColor);
+	_renderer->setColor(fgColor);
 
 	if ((!done && delay1 > delay + buzzStep) && fadeVal != 0)
 	{
@@ -772,7 +772,7 @@ void Viewer::enough_fade()
 
 	drawArea(&TXTSTS);
 
-	glColor3fv(fgColor);
+	_renderer->setColor(fgColor);
 
 	if ((!done && delay1 > delay + buzzStep) && fadeVal != 0)
 	{
@@ -854,7 +854,7 @@ void Viewer::death_fade(int WIZ[])
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		drawArea(&TXTSTS);
-		glColor3fv(fgColor);
+		_renderer->setColor(fgColor);
 		glLoadIdentity();
 		drawVectorList(WIZ);
 		SDL_GL_SwapBuffers();
@@ -938,14 +938,14 @@ void Viewer::drawTorchHighlite()
 	x2 = x1 + tlen;
 	y2 = y1 + 1;
 	glLoadIdentity();
-	glColor3fv(fgColor);
+	_renderer->setColor(fgColor);
 	glBegin(GL_QUADS);
 	glVertex2f(crd.newX(x1*8), crd.newY(y1*8));
 	glVertex2f(crd.newX(x2*8), crd.newY(y1*8));
 	glVertex2f(crd.newX(x2*8), crd.newY(y2*8));
 	glVertex2f(crd.newX(x1*8), crd.newY(y2*8));
 	glEnd();
-	glColor3fv(bgColor);
+	_renderer->setColor(bgColor);
 	object.OBJNAM(player.PTORCH);
 	drawString_internal(x1, y1, parser.TOKEN, tlen);
 }
@@ -957,26 +957,26 @@ void Viewer::drawArea(TXB * a)
 	if (a->top == 19)
 	{
 		glLoadIdentity();
-		glColor3fv(fgColor);
+		_renderer->setColor(fgColor);
 		glBegin(GL_QUADS);
 		glVertex2f(crd.newX(0*8), crd.newY(19*8));
 		glVertex2f(crd.newX(32*8), crd.newY(19*8));
 		glVertex2f(crd.newX(32*8), crd.newY((20*8)));
 		glVertex2f(crd.newX(0*8), crd.newY((20*8)));
 		glEnd();
-		glColor3fv(bgColor);
+		_renderer->setColor(bgColor);
 	}
 	else
 	{
 		glLoadIdentity();
-		glColor3fv(bgColor);
+		_renderer->setColor(bgColor);
 		glBegin(GL_QUADS);
 		glVertex2f(crd.newX(0*8), crd.newY(20*8));
 		glVertex2f(crd.newX(33*8), crd.newY(20*8));
 		glVertex2f(crd.newX(33*8), crd.newY((24*8)));
 		glVertex2f(crd.newX(0*8), crd.newY((24*8)));
 		glEnd();
-		glColor3fv(fgColor);
+		_renderer->setColor(fgColor);
 	}
 
 	while (cnt < a->len)
@@ -1496,7 +1496,7 @@ void Viewer::MAPPER()
 
 	dungeon.DROW.row = 31;
 	dungeon.DROW.col = 31;
-	glColor3f(0.0,0.0,0.0);
+	_renderer->setColor(0.0,0.0,0.0);
 	do
 	{
 		mazIdx = dungeon.RC2IDX(dungeon.DROW.row, dungeon.DROW.col);
@@ -1514,7 +1514,7 @@ void Viewer::MAPPER()
 				{  //Do we have a east door or secret door?
 					DoorOffset = ((dungeon.MAZLND[mazIdx] | 0xcc) != 0xff);  //Move door line over one into next room if we don't have wall on either side.
 					DoorOffset = DoorOffset / 4;
-					glColor3f(1.0,1.0,1.0);
+					_renderer->setColor(1.0,1.0,1.0);
 					if ((dungeon.MAZLND[mazIdx] & 0x0c) == (0x01 << 2)) {  //Is this a regular door?  Yes:
 						glBegin(GL_LINES);
 						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6));
@@ -1570,14 +1570,14 @@ void Viewer::MAPPER()
 						glVertex2f(crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25));
 						glEnd();
 					}  //Is this a regular door?
-					glColor3f(0.0,0.0,0.0);
+					_renderer->setColor(0.0,0.0,0.0);
 				}  //Do we have a east door or secret door?
 				if ((dungeon.MAZLND[mazIdx] & 0x30) == (0x01 << 4) ||
 					(dungeon.MAZLND[mazIdx] & 0x30) == (0x02 << 4))
 				{  //Do we have a south door or secret door?
 					DoorOffset = ((dungeon.MAZLND[mazIdx] | 0x33) != 0xff);  //Move door line over one into next room if we don't have wall on either side.
 					DoorOffset = DoorOffset / 4;
-					glColor3f(1.0,1.0,1.0);
+					_renderer->setColor(1.0,1.0,1.0);
 					if ((dungeon.MAZLND[mazIdx] & 0x30) == (0x01 << 4)) {  //Is this a regular door?  Yes:
 						glBegin(GL_LINES);
 						glVertex2f(crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
@@ -1634,7 +1634,7 @@ void Viewer::MAPPER()
 						glEnd();
 
 					}
-					glColor3f(0.0,0.0,0.0);
+					_renderer->setColor(0.0,0.0,0.0);
 				}  //Do we have a south door or secret door?
 			}  //Do we need to mark the doors on the scroll maps?
 		}
@@ -1646,7 +1646,7 @@ void Viewer::MAPPER()
 		}
 	} while (dungeon.DROW.row != 0xFF);
 
-	glColor3f(1.0,1.0,1.0);
+	_renderer->setColor(1.0,1.0,1.0);
 	if (showSeerMap == true)
 	{
 		// Mark Objects
@@ -1970,7 +1970,7 @@ void Viewer::drawString(int x, int y, char * str, int len)
 }
 
 
-void Viewer::drawKeyboard(struct kbdKey key)
+/*void Viewer::drawKeyboard(struct kbdKey key)
 {
 	int squareWidth = key.width;
 	int squareHeight = key.height;
@@ -1979,7 +1979,7 @@ void Viewer::drawKeyboard(struct kbdKey key)
 
 	glEnable(GL_TEXTURE_2D);
 	// Clear screen
-	glColor3fv(bgColor);
+	_renderer->setColor(bgColor);
 	_renderer->clearBuffer(true);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
@@ -2002,31 +2002,31 @@ void Viewer::drawKeyboard(struct kbdKey key)
   	glDisable(GL_TEXTURE_2D);
 
 	glBegin(GL_LINE_STRIP);
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 		glVertex2f(highlightX, highlightY);
 
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 		glVertex2f(highlightX + squareWidth, highlightY);
 
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 		glVertex2f(highlightX + squareWidth, highlightY + squareHeight);
 
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 		glVertex2f(highlightX, highlightY + squareHeight);
 
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
 		glVertex2f(highlightX, highlightY);
 	glEnd();
 
  	// Draw Boxes for menu
- 	glColor3fv(fgColor);
+ 	_renderer->setColor(fgColor);
  	glLoadIdentity();
 
   	drawString(0, 0, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
 
   	SDL_GL_SwapBuffers();
 
-}
+}*/
 
 /****************************************************************
   Member: drawCommandMenu
@@ -2041,11 +2041,11 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
  int x, y, length;
 
  // Clear screen
- glColor3fv(bgColor);
+ _renderer->setColor(bgColor);
  _renderer->clearBuffer(true);
 
   // Draw Boxes for menu
- glColor3fv(fgColor);
+ _renderer->setColor(fgColor);
  glLoadIdentity();
 
   // Draw Menu Items
@@ -2063,7 +2063,7 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
 
    if(i == highlight)
      {
-     glColor3fv(fgColor);
+     _renderer->setColor(fgColor);
      glLoadIdentity();
      glBegin(GL_QUADS);
      glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
@@ -2071,11 +2071,11 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
      glVertex2f(crd.newX((x + length) * 8), crd.newY((y + 1) * 8));
      glVertex2f(crd.newX(x * 8), crd.newY((y + 1) * 8));
      glEnd();
-     glColor3fv(bgColor);
+     _renderer->setColor(bgColor);
      }
 
    drawString(x, y, commandMenu.getMenuItem(menu_id, i), length);
-   glColor3fv(fgColor);
+   _renderer->setColor(fgColor);
    }
 
   // Update the screen
@@ -2096,11 +2096,11 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
  int x, y, length;
 
  // Clear screen
- glColor3fv(bgColor);
+ _renderer->setColor(bgColor);
  _renderer->clearBuffer(true);
 
   // Draw Boxes for menu
- glColor3fv(fgColor);
+ _renderer->setColor(fgColor);
  glLoadIdentity();
 
   // Draw Menu Items
@@ -2115,7 +2115,7 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
 
    if(i == highlight)
      {
-     glColor3fv(fgColor);
+     _renderer->setColor(fgColor);
      glLoadIdentity();
      glBegin(GL_QUADS);
      glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
@@ -2123,11 +2123,11 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
      glVertex2f(crd.newX((x + length) * 8), crd.newY((y + 1) * 8));
      glVertex2f(crd.newX(x * 8), crd.newY((y + 1) * 8));
      glEnd();
-     glColor3fv(bgColor);
+     _renderer->setColor(bgColor);
      }
 
    drawString(x, y, mainMenu.getMenuItem(menu_id, i), length);
-   glColor3fv(fgColor);
+   _renderer->setColor(fgColor);
    }
 
   // Update the screen
@@ -2151,9 +2151,9 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
  int length;
 
   // Clear screen
- glColor3fv(bgColor);
+ _renderer->setColor(bgColor);
  _renderer->clearBuffer(true);
- glColor3fv(fgColor);
+ _renderer->setColor(fgColor);
 
  drawString(x, y, title, strlen(title));
  y += 2;
@@ -2165,7 +2165,7 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
 
    if(i == highlight)
      {
-     glColor3fv(fgColor);
+     _renderer->setColor(fgColor);
      glLoadIdentity();
      glBegin(GL_QUADS);
      glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
@@ -2173,11 +2173,11 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
      glVertex2f(crd.newX((x + length) * 8), crd.newY((y + 1) * 8));
      glVertex2f(crd.newX(x * 8), crd.newY((y + 1) * 8));
      glEnd();
-     glColor3fv(bgColor);
+     _renderer->setColor(bgColor);
      }
 
    drawString(x, y, list[i], length);
-   glColor3fv(fgColor);
+   _renderer->setColor(fgColor);
    }
 
   // Update the screen
@@ -2198,9 +2198,9 @@ void Viewer::drawMenuScrollbar(char *title, int current)
  int x;
 
 	// Clear screen
- glColor4fv(bgColor);
+ _renderer->setColor(bgColor);
  _renderer->clearBuffer(true);
- glColor4fv(fgColor);
+ _renderer->setColor(fgColor);
 
  drawString(0, 0, title, strlen(title));
  drawString(0, 2, "USE ARROW KEYS TO NAVIGATE", 26);
@@ -2235,9 +2235,9 @@ void Viewer::drawMenuScrollbar(char *title, int current)
 void Viewer::drawMenuStringTitle(char *title)
  {
   // Clear screen
- glColor4fv(bgColor);
+ _renderer->setColor(bgColor);
  _renderer->clearBuffer(true);
- glColor4fv(fgColor);
+ _renderer->setColor(fgColor);
 
  drawString(0, 0, title, strlen(title));
 
@@ -2269,9 +2269,9 @@ void Viewer::drawMenuString(char *currentString)
 void Viewer::aboutBox(void)
  {
   // Clear screen
- glColor4fv(bgColor);
+ _renderer->setColor(bgColor);
  _renderer->clearBuffer(true);
- glColor4fv(fgColor);
+ _renderer->setColor(fgColor);
 
  int i = 3;
 

@@ -5,6 +5,8 @@
 
 #include "gl_renderer.h"
 
+#define glColor3fv(x) glColor3f(x[0], x[1], x[2])
+
 void GlRenderer::clearBuffer(bool includeDepthBuffer)
 {
 	glClear(GL_COLOR_BUFFER_BIT | (includeDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
@@ -108,4 +110,14 @@ void GlRenderer::plotPoint(double X, double Y)
 void GlRenderer::setClearColor(float red, float green, float blue, float alpha)
 {
     glClearColor(red, green, blue, alpha);
+}
+
+void GlRenderer::setColor(float color[3])
+{
+	glColor3fv(color);
+}
+
+void GlRenderer::setColor(float red, float green, float blue, float alpha = 0.0f)
+{
+	glColor4f(red, green, blue, alpha);
 }

@@ -324,7 +324,8 @@ void OS_Link::handle_joybutton_down(int button)
 	}
 	else if (viewer.display_mode == Viewer::MODE_KEYBOARD)
 	{
-		bool end = false;
+		// TODO
+		/*bool end = false;
 		viewer.drawKeyboard(keyboardKeys[position]);
 		switch(button)
 		{
@@ -389,7 +390,7 @@ void OS_Link::handle_joybutton_down(int button)
 		else
 		{
 			viewer.drawKeyboard(keyboardKeys[position]);
-		}
+		}*/
 	}
 	else if (viewer.display_mode == Viewer::MODE_COMMAND_CREATOR)
 	{
@@ -467,9 +468,9 @@ void OS_Link::handle_joybutton_down(int button)
 				}
 				break;
 			case SDL_PSP_CIRCLE:
-				viewer.display_mode = Viewer::MODE_KEYBOARD;
-				memset(commandCreatorBuffer, 0, 256*sizeof(char));
-				viewer.drawKeyboard(keyboardKeys[position]);
+				//viewer.display_mode = Viewer::MODE_KEYBOARD;
+				//memset(commandCreatorBuffer, 0, 256*sizeof(char));
+				//viewer.drawKeyboard(keyboardKeys[position]);
 				break;
 			case SDL_PSP_CROSS:
 				type_command("ATTACK RIGHT");
@@ -659,9 +660,9 @@ bool OS_Link::command_menu_return(int *menu_id, int *item, int *prev_menu_id, in
 					strcat(commandCreatorBuffer, " ");
 					*prev_menu_id = *menu_id;
 					*prev_item = *item;
-					//*menu_id = INCANT_MENU_SWITCH;
-					viewer.display_mode = Viewer::MODE_KEYBOARD;
-					viewer.drawKeyboard(keyboardKeys[0]);
+					//*menu_id = INCANT_MENU_SWITCH; TODO
+					//viewer.display_mode = Viewer::MODE_KEYBOARD;
+					//viewer.drawKeyboard(keyboardKeys[0]);
 					*item = 0;
 					break;
 				case ACTION_MENU_MOVE:

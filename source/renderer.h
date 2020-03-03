@@ -14,6 +14,8 @@ public:
     virtual void plotPoint(double X, double Y) = 0;
 
     virtual void setClearColor(float red, float green, float blue, float alpha) = 0;
+
+    virtual void setColor(float color[3]) = 0;
 };
 
 #endif // DOD_RENDERER_HEADER

@@ -78,7 +78,7 @@ public:
 	void		drawVectorList(int VLA[]);
 	void		Reset();
 	bool		ShowFade(int fadeMode);
-	void		drawKeyboard(struct kbdKey);
+	//void		drawKeyboard(struct kbdKey);
 	void		drawCommandMenu(command_menu, int, int);
 	void        drawMenu(menu, int, int);
 	void		drawMenuList(int, int, char *, char *[], int, int);

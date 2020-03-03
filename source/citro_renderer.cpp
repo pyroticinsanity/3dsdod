@@ -118,3 +118,8 @@ void GlRenderer::setClearColor(float red, float green, float blue, float alpha)
 {
     _clearColor = C2D_Color32f(red, green, blue, alpha);
 }
+
+void GlRenderer::setColor(float red, float green, float blue, float alpha)
+{
+	_color = C2D_Color32f(red, green, blue, alpha);
+}
