@@ -344,30 +344,12 @@ void Viewer::Reset()
 }
 
 // Public Interface
-void Viewer::setup_opengl()
+void Viewer::initialize()
 {
-//	glEnable(GL_LINE_SMOOTH);
-	//glDisable(GL_LINE_SMOOTH);
 	_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2]);
 	_renderer->setClearColor(0.0f, 0.0f, 0.0f);
-	glViewport(0, 20, oslink.width, oslink.height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	//gluOrtho2D(0, oslink.width, 0, oslink.height);
-	glOrtho(0, oslink.width, 0, oslink.height, -1, 1);
-
-	SDL_Surface* surface = IMG_Load("images/keyboard.png");
-
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &keyboardTexture);
-	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h , 0, GL_RGB,
-	             GL_UNSIGNED_BYTE, surface->pixels);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	SDL_FreeSurface(surface);
-	glDisable(GL_TEXTURE_2D);
+	_renderer->setViewPort(0, 20, oslink.width, oslink.height);
+	_renderer->initialize();	
 }
 
 void Viewer::setVidInv(bool inv)
@@ -411,9 +393,9 @@ void Viewer::draw_game()
 		_renderer->setClearColor(1.0, 1.0, 1.0, 0.0);
 		_renderer->clearBuffer();
 		_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2], 0.0);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		MAPPER();
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 	}
 	else if(display_mode == MODE_COMMAND_CREATOR)
 	{
@@ -428,7 +410,7 @@ void Viewer::draw_game()
 		// Draw View Port (3D or Examine or Prepare!)
 		_renderer->clearBuffer();
 
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		_renderer->setColor(fgColor);
 		switch (display_mode)
 		{
@@ -457,7 +439,7 @@ void Viewer::draw_game()
 		// Draw Text Area
 		drawArea(&TXTPRI);
 
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 	}
 	UPDATE = 0;
 }
@@ -517,13 +499,12 @@ bool Viewer::ShowFade(int fadeMode)
 		Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
 		_renderer->clearBuffer();
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawArea(&TXTSTS);
 		_renderer->setColor(fgColor);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(wiz);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 
 		ticks1 = SDL_GetTicks();
 		do
@@ -558,14 +539,13 @@ bool Viewer::ShowFade(int fadeMode)
 
 	// show message
 	_renderer->clearBuffer();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	_renderer->resetMatrix();
 	drawArea(&TXTSTS);
 	_renderer->setColor(fgColor);
-	glLoadIdentity();
+	_renderer->resetMatrix();
 	drawVectorList(wiz);
 	drawArea(&TXTPRI);
-	SDL_GL_SwapBuffers();
+	_renderer->swapBuffers();
 
 	if (fadeMode < 3)
 	{
@@ -576,14 +556,13 @@ bool Viewer::ShowFade(int fadeMode)
 			ticks2 = SDL_GetTicks();
 
 			_renderer->clearBuffer();
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawArea(&TXTSTS);
 			_renderer->setColor(fgColor);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawVectorList(wiz);
 			drawArea(&TXTPRI);
-			SDL_GL_SwapBuffers();
+			_renderer->swapBuffers();
 
 			if (fadeMode != 2 && scheduler.keyCheck())
 			{
@@ -595,13 +574,12 @@ bool Viewer::ShowFade(int fadeMode)
 
 		// erase message
 		_renderer->clearBuffer();
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawArea(&TXTSTS);
 		_renderer->setColor(fgColor);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(wiz);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 
 		// do crash
 		Mix_PlayChannel(fadChannel, creature.kaboom, 0);
@@ -626,13 +604,12 @@ bool Viewer::ShowFade(int fadeMode)
 			Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
 			_renderer->clearBuffer();
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawArea(&TXTSTS);
 			_renderer->setColor(fgColor);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawVectorList(wiz);
-			SDL_GL_SwapBuffers();
+			_renderer->swapBuffers();
 
 			ticks1 = SDL_GetTicks();
 			do
@@ -662,14 +639,13 @@ bool Viewer::ShowFade(int fadeMode)
 		while (!scheduler.keyCheck()) // Wait for a key
 		  {
 			_renderer->clearBuffer();
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawArea(&TXTSTS);
 			_renderer->setColor(fgColor);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawVectorList(wiz);
 			drawArea(&TXTPRI);
-			SDL_GL_SwapBuffers();
+			_renderer->swapBuffers();
 		  }
 		clearArea(&TXTPRI);
 		while(SDL_PollEvent(&event)) ; // clear event buffer
@@ -689,8 +665,7 @@ bool Viewer::draw_fade()
 	{
 		_renderer->clearBuffer();
 	}
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	_renderer->resetMatrix();
 
 	drawArea(&TXTSTS);
 
@@ -701,9 +676,9 @@ bool Viewer::draw_fade()
 		// Set volume of buzz
 		Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(W1_VLA);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 		VCTFAD += fadeVal;
 		if ((VCTFAD & 0x80) != 0)
 		{
@@ -730,10 +705,10 @@ bool Viewer::draw_fade()
 
 	if (VCTFAD == 0 && fadeVal == 0)
 	{
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(W1_VLA);
 		drawArea(&TXTPRI);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 		delay2 = SDL_GetTicks();
 		if (delay2 > delay + midPause)
 		{
@@ -767,8 +742,7 @@ void Viewer::enough_fade()
 	{
 		_renderer->clearBuffer();
 	}
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	_renderer->resetMatrix();
 
 	drawArea(&TXTSTS);
 
@@ -779,15 +753,15 @@ void Viewer::enough_fade()
 		// Set volume of buzz
 		Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(W1_VLA);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 		VCTFAD += fadeVal;
 		if ((VCTFAD & 0x80) != 0)
 		{
 			displayEnough();
 			drawArea(&TXTPRI);
-			SDL_GL_SwapBuffers();
+			_renderer->swapBuffers();
 
 			// do sound crash
 			Mix_HaltChannel(fadChannel);
@@ -812,11 +786,11 @@ void Viewer::enough_fade()
 
 	if (VCTFAD == 0 && fadeVal == 0)
 	{
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(W1_VLA);
 		VCTFAD += fadeVal;
 		drawArea(&TXTPRI);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 		delay2 = SDL_GetTicks();
 		if (delay2 > delay + midPause)
 		{
@@ -851,22 +825,21 @@ void Viewer::death_fade(int WIZ[])
 		Mix_Volume(fadChannel, ((32 - VCTFAD) / 2) * (oslink.volumeLevel / 16) );
 
 		_renderer->clearBuffer();
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawArea(&TXTSTS);
 		_renderer->setColor(fgColor);
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(WIZ);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 		VCTFAD += fadeVal;
 		if ((VCTFAD & 0x80) != 0)
 		{
 			// do sound crash
 			Mix_HaltChannel(fadChannel);
 			Mix_Volume(fadChannel, oslink.volumeLevel);
-			glLoadIdentity();
+			_renderer->resetMatrix();
 			drawArea(&TXTPRI);
-			SDL_GL_SwapBuffers();
+			_renderer->swapBuffers();
 			Mix_PlayChannel(fadChannel, creature.kaboom, 0);
 			while (Mix_Playing(fadChannel) == 1)
 			{
@@ -882,10 +855,10 @@ void Viewer::death_fade(int WIZ[])
 
 	if (fadeVal == 0)
 	{
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		drawVectorList(WIZ);
 		drawArea(&TXTPRI);
-		SDL_GL_SwapBuffers();
+		_renderer->swapBuffers();
 	}
 }
 
@@ -937,7 +910,7 @@ void Viewer::drawTorchHighlite()
 	y1 = tcaret / 32;
 	x2 = x1 + tlen;
 	y2 = y1 + 1;
-	glLoadIdentity();
+	_renderer->resetMatrix();
 	_renderer->setColor(fgColor);
 	glBegin(GL_QUADS);
 	glVertex2f(crd.newX(x1*8), crd.newY(y1*8));
@@ -956,7 +929,7 @@ void Viewer::drawArea(TXB * a)
 
 	if (a->top == 19)
 	{
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		_renderer->setColor(fgColor);
 		glBegin(GL_QUADS);
 		glVertex2f(crd.newX(0*8), crd.newY(19*8));
@@ -968,7 +941,7 @@ void Viewer::drawArea(TXB * a)
 	}
 	else
 	{
-		glLoadIdentity();
+		_renderer->resetMatrix();
 		_renderer->setColor(bgColor);
 		glBegin(GL_QUADS);
 		glVertex2f(crd.newX(0*8), crd.newY(20*8));
@@ -1905,7 +1878,7 @@ void Viewer::drawString_internal(int x, int y, dodBYTE * str, int len)
 {
 	int ctr;
 	char c;
-	glLoadIdentity();
+	_renderer->resetMatrix();
 	glTranslatef(crd.newX(x*8), crd.newY(((y+1)*8)), 0.0);
 	for (ctr=0; ctr < len; ++ctr)
 	{
@@ -1934,7 +1907,7 @@ char Viewer::dod_to_ascii(dodBYTE c)
 void Viewer::drawString(int x, int y, char * str, int len)
 {
 	int ctr;
-	glLoadIdentity();
+	_renderer->resetMatrix();
 	glTranslatef(crd.newX(x*8), crd.newY(((y+1)*8)), 0.0);
 	for (ctr=0; ctr < len; ++ctr)
 	{
@@ -1957,7 +1930,7 @@ void Viewer::drawString(int x, int y, char * str, int len)
 	_renderer->clearBuffer(true);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
-  	glLoadIdentity();
+  	_renderer->resetMatrix();
 
  	glBegin(GL_QUADS);
     	glTexCoord2f(0,1);
@@ -1994,11 +1967,11 @@ void Viewer::drawString(int x, int y, char * str, int len)
 
  	// Draw Boxes for menu
  	_renderer->setColor(fgColor);
- 	glLoadIdentity();
+ 	_renderer->resetMatrix();
 
   	drawString(0, 0, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
 
-  	SDL_GL_SwapBuffers();
+  	_renderer->swapBuffers();
 
 }*/
 
@@ -2020,7 +1993,7 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
 
   // Draw Boxes for menu
  _renderer->setColor(fgColor);
- glLoadIdentity();
+ _renderer->resetMatrix();
 
   // Draw Menu Items
   drawString(0, 0, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
@@ -2038,7 +2011,7 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
    if(i == highlight)
      {
      _renderer->setColor(fgColor);
-     glLoadIdentity();
+     _renderer->resetMatrix();
      glBegin(GL_QUADS);
      glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
      glVertex2f(crd.newX((x + length) * 8), crd.newY(y * 8));
@@ -2053,7 +2026,7 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
    }
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }
 
 
@@ -2075,7 +2048,7 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
 
   // Draw Boxes for menu
  _renderer->setColor(fgColor);
- glLoadIdentity();
+ _renderer->resetMatrix();
 
   // Draw Menu Items
  drawString(menu_id * 5, 0, mainMenu.getMenuName(menu_id),
@@ -2090,7 +2063,7 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
    if(i == highlight)
      {
      _renderer->setColor(fgColor);
-     glLoadIdentity();
+     _renderer->resetMatrix();
      glBegin(GL_QUADS);
      glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
      glVertex2f(crd.newX((x + length) * 8), crd.newY(y * 8));
@@ -2105,7 +2078,7 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
    }
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }
 
 /****************************************************************
@@ -2140,7 +2113,7 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
    if(i == highlight)
      {
      _renderer->setColor(fgColor);
-     glLoadIdentity();
+     _renderer->resetMatrix();
      glBegin(GL_QUADS);
      glVertex2f(crd.newX(x * 8), crd.newY(y * 8));
      glVertex2f(crd.newX((x + length) * 8), crd.newY(y * 8));
@@ -2155,7 +2128,7 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
    }
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }
 
 
@@ -2196,7 +2169,7 @@ void Viewer::drawMenuScrollbar(char *title, int current)
   }
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }
 
 /****************************************************************
@@ -2216,7 +2189,7 @@ void Viewer::drawMenuStringTitle(char *title)
  drawString(0, 0, title, strlen(title));
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }
 
 /****************************************************************
@@ -2232,7 +2205,7 @@ void Viewer::drawMenuString(char *currentString)
  drawString(strlen(currentString), 2, "_", 1);
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }
 
 /****************************************************************
@@ -2268,5 +2241,5 @@ void Viewer::aboutBox(void)
  drawString(1, i++, "MANY OTHERS NOT MENTIONED HERE!", 31);
 
   // Update the screen
- SDL_GL_SwapBuffers();
+ _renderer->swapBuffers();
  }

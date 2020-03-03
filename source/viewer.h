@@ -35,7 +35,7 @@ public:
 	Viewer();
 
 	// Public Interface
-	void		setup_opengl();
+	void		initialize();
 	void		draw_game();
 	bool		draw_fade();
 	void		enough_fade();

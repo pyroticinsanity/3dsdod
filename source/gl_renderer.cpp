@@ -92,6 +92,29 @@ void GlRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 	}
 }
 
+void GlRenderer::initialize()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//gluOrtho2D(0, oslink.width, 0, oslink.height);
+	glOrtho(0, oslink.width, 0, oslink.height, -1, 1);
+
+	SDL_Surface* surface = IMG_Load("images/keyboard.png");
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &keyboardTexture);
+	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, surface->w, surface->h , 0, GL_RGB,
+	             GL_UNSIGNED_BYTE, surface->pixels);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	SDL_FreeSurface(surface);
+	glDisable(GL_TEXTURE_2D);
+
+	resetMatrix();
+}
+
 void GlRenderer::plotPoint(double X, double Y)
 {
 	if (g_options&OPT_HIRES)
@@ -113,6 +136,12 @@ void GlRenderer::plotPoint(double X, double Y)
 	}
 }
 
+void GlRenderer::resetMatrix()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
 void GlRenderer::setClearColor(float red, float green, float blue, float alpha)
 {
     glClearColor(red, green, blue, alpha);
@@ -126,4 +155,14 @@ void GlRenderer::setColor(float color[3])
 void GlRenderer::setColor(float red, float green, float blue, float alpha = 0.0f)
 {
 	glColor4f(red, green, blue, alpha);
+}
+
+void GlRenderer::setViewport(int x, int y, int width, int height)
+{
+	glViewport(x, y, width, height);
+}
+
+void GlRenderer::swapBuffers()
+{
+	SDL_GL_SwapBuffers();
 }

@@ -2159,7 +2159,5 @@ flags = SDL_OPENGL;
   crd.setDisplay(mode);
   }
 
- viewer.setup_opengl();
- glMatrixMode(GL_MODELVIEW);
- glLoadIdentity();
+ viewer.initialize();
  }

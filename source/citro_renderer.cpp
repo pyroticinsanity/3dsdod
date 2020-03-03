@@ -116,12 +116,27 @@ void CitroRenderer::plotPoint(double X, double Y)
 	}
 }
 
-void GlRenderer::setClearColor(float red, float green, float blue, float alpha)
+void CitroRenderer::resetMatrix()
+{
+	// TODO do nothing?
+}
+
+void CitroRenderer::setClearColor(float red, float green, float blue, float alpha)
 {
     _clearColor = C2D_Color32f(red, green, blue, alpha);
 }
 
-void GlRenderer::setColor(float red, float green, float blue, float alpha)
+void CitroRenderer::setColor(float red, float green, float blue, float alpha)
 {
 	_color = C2D_Color32f(red, green, blue, alpha);
+}
+
+void CitroRenderer::setViewport(int x, int y, int width, int height)
+{
+// TODO?
+}
+
+void CitroRenderer::swapBuffers()
+{
+	// TODO
 }
