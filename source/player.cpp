@@ -47,6 +47,7 @@ Player::Player() : PPOW(PLRBLK.P_ATPOW),
 				   wizDelay(500)
 {
 	Reset();
+	_renderer = RendererFactory::GetRenderer();
 }
 
 void Player::Reset()
@@ -1633,7 +1634,7 @@ void Player::ShowTurn(dodBYTE A)
 	viewer.VYSCALf = 128.0f;
 	viewer.RANGE = 0;
 	viewer.SETFAD();
-	glColor3fv(viewer.fgColor);
+	_renderer->setColor(viewer.fgColor);
 	turning = true;
 	for (ctr = 0; ctr < times; ++ctr)
 	{
@@ -1656,13 +1657,13 @@ void Player::ShowTurn(dodBYTE A)
 
 				if (redraw)
 				{
-					glClear(GL_COLOR_BUFFER_BIT);
-					glLoadIdentity();
+					_renderer->clearBuffer();
+					_renderer->resetMatrix();
 					viewer.drawVectorList(viewer.LINES);
 					viewer.drawVector((x*inc*dir)+offset,y0,(x*inc*dir)+offset,y1);
 					viewer.drawArea(&viewer.TXTSTS);
 					viewer.drawArea(&viewer.TXTPRI);
-					SDL_GL_SwapBuffers();
+					_renderer->swapBuffers();
 					redraw = false;
 				}
 			} while (scheduler.curTime < ticks1 + turnDelay);

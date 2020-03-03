@@ -346,6 +346,7 @@ void Viewer::Reset()
 // Public Interface
 void Viewer::initialize()
 {
+	_renderer = RendererFactory::GetRenderer();
 	_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2]);
 	_renderer->setClearColor(0.0f, 0.0f, 0.0f);
 	_renderer->setViewPort(0, 20, oslink.width, oslink.height);
@@ -1880,12 +1881,12 @@ void Viewer::drawString_internal(int x, int y, dodBYTE * str, int len)
 	int ctr;
 	char c;
 	_renderer->resetMatrix();
-	glTranslatef(crd.newX(x*8), crd.newY(((y+1)*8)), 0.0);
+	_renderer->setTranslation(crd.newX(x*8), crd.newY((y+1)*8));
 	for (ctr=0; ctr < len; ++ctr)
 	{
 		c = dod_to_ascii(*(str + ctr));
 		drawCharacter(c);
-		glTranslatef(crd.newXa(8), 0.0, 0.0);
+		_renderer->setTranslation(crd.newXa(8), 0.0);
 	}
 }
 
@@ -1909,11 +1910,11 @@ void Viewer::drawString(int x, int y, char * str, int len)
 {
 	int ctr;
 	_renderer->resetMatrix();
-	glTranslatef(crd.newX(x*8), crd.newY(((y+1)*8)), 0.0);
+	_renderer->setTranslation(crd.newX(x*8), crd.newY((y+1)*8));
 	for (ctr=0; ctr < len; ++ctr)
 	{
 		drawCharacter(*(str + ctr));
-		glTranslatef(crd.newXa(8), 0.0, 0.0);
+		_renderer->setTranslation(crd.newXa(8), 0.0);
 	}
 }
 

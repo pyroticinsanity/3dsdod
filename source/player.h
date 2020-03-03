@@ -91,6 +91,7 @@ public:
 	Mix_Chunk * bang;
 
 private:
+	Renderer* _renderer;
 };
 
 #endif // DOD_PLAYER_HEADER
