@@ -11,9 +11,31 @@ extern OS_Link                oslink;
 extern Viewer		viewer;
 extern Coordinate     crd;
 
+ CitroRenderer::CitroRenderer()
+ 	: Renderer(), _xOffset(0), _yOffset(0)
+{
+
+}
+
+void CitroRenderer::beginRendering()
+{
+	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+	clearBuffer();
+	C2D_SceneBegin(_top);
+}
+
 void CitroRenderer::clearBuffer(bool includeDepthBuffer)
 {
-	
+	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+	C2D_TargetClear(_top, _clearColor);
+	C2D_SceneBegin(_top);
+}
+
+void CitroRenderer::deinitialize()
+{
+	C2D_Fini();
+	C3D_Fini();
+	gfxExit();
 }
 
 void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
@@ -111,9 +133,23 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 	}
 }
 
+void CitroRenderer::endRendering()
+{
+	C3D_FrameEnd(0);
+}
+
 void CitroRenderer::initialize()
 {
 	// TODO
+		// Init libs
+	gfxInitDefault();
+	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
+	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
+	C2D_Prepare();
+	consoleInit(GFX_BOTTOM, NULL);
+
+	// Create screens
+	_top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 }
 
 void CitroRenderer::plotPoint(double X, double Y)
@@ -160,4 +196,5 @@ void CitroRenderer::setTranslation(float xOffset, float yOffset)
 void CitroRenderer::swapBuffers()
 {
 	gfxSwapBuffers();
+	C3D_FrameEnd(0);
 }

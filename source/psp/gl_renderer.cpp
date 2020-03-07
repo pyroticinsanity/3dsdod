@@ -1,8 +1,8 @@
 #ifdef PSP
 #include <SDL/SDL_opengl.h>
 
-#include "dod.h"
-#include "enhanced.h"
+#include "../dod.h"
+#include "../enhanced.h"
 
 #include "gl_renderer.h"
 
@@ -11,6 +11,11 @@
 void GlRenderer::clearBuffer(bool includeDepthBuffer)
 {
 	glClear(GL_COLOR_BUFFER_BIT | (includeDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
+}
+
+void GlRenderer::deinitialize()
+{
+
 }
 
 void GlRenderer::drawLine(float x0, float y0, float x1, float y1)
@@ -162,7 +167,7 @@ void GlRenderer::setColor(float color[3])
 	glColor3fv(color);
 }
 
-void GlRenderer::setColor(float red, float green, float blue, float alpha = 0.0f)
+void GlRenderer::setColor(float red, float green, float blue, float alpha)
 {
 	glColor4f(red, green, blue, alpha);
 }
