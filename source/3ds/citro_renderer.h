@@ -7,6 +7,10 @@
 class CitroRenderer: public Renderer
 {
 public:
+
+    static const int ScreenHeight;
+    static const int ScreenWidth;
+
    CitroRenderer();
 
    virtual ~CitroRenderer() {}
@@ -23,6 +27,17 @@ public:
     virtual void drawVector(float X0, float Y0, float X1, float Y1);
 
     virtual void endRendering();
+
+    virtual int getScreenHeight()
+    {
+        return ScreenHeight;
+    }
+
+    virtual int getScreenWidth()
+    {
+        return ScreenWidth;
+    }
+
     virtual void initialize();
 
     virtual void plotPoint(double X, double Y);

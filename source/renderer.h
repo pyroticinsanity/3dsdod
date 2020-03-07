@@ -19,6 +19,9 @@ public:
 
     virtual void endRendering() = 0;
     
+    virtual int getScreenHeight() = 0;
+    virtual int getScreenWidth() = 0;
+
     virtual void initialize() = 0;
     virtual void plotPoint(double X, double Y) = 0;
 

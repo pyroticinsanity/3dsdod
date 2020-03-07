@@ -8,6 +8,9 @@
 
 #define glColor3fv(x) glColor3f(x[0], x[1], x[2])
 
+const int GlRenderer::ScreenHeight = 272;
+const int GlRenderer::ScreenWidth = 480;
+
 void GlRenderer::clearBuffer(bool includeDepthBuffer)
 {
 	glClear(GL_COLOR_BUFFER_BIT | (includeDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));

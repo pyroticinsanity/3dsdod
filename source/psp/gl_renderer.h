@@ -7,6 +7,9 @@
 class GlRenderer: public Renderer
 {
 public:
+    static const int ScreenHeight;
+    static const int ScreenWidth;
+    
     GlRenderer() : Renderer() {}
 
     virtual void beginRendering() {}
@@ -18,6 +21,16 @@ public:
     virtual void drawVector(float X0, float Y0, float X1, float Y1);
 
     virtual void endRendering() {}
+
+    int void getScreenHeight()
+    {
+        return ScreenHeight;
+    }
+
+    int void getScreenWidth()
+    {
+        return ScreenWidth;
+    }
     virtual void initialize();
     
     virtual void plotPoint(double X, double Y);

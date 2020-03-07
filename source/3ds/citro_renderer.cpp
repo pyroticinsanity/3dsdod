@@ -11,6 +11,9 @@ extern OS_Link                oslink;
 extern Viewer		viewer;
 extern Coordinate     crd;
 
+const int CitroRenderer::ScreenHeight = 240;
+const int CitroRenderer::ScreenWidth = 400;
+
  CitroRenderer::CitroRenderer()
  	: Renderer(), _xOffset(0), _yOffset(0)
 {
@@ -40,11 +43,11 @@ void CitroRenderer::deinitialize()
 
 void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
 {
-	double width = 1;
+	float width = 1.0;
 
-	double slope = (x1 - x0) / (y1 - y0);
-	double yMod = width * sin(atan(slope));
-	double xMod = width * cos(atan(slope));
+	float slope = (x1 - x0) / (y1 - y0);
+	float yMod = width * sin(atan(slope));
+	float xMod = width * cos(atan(slope));
 
 	C2D_DrawTriangle(_xOffset + x0 - xMod, _yOffset + y0 + yMod, _color, 
 		_xOffset + x0 + xMod, _yOffset + y0 - yMod, _color,
