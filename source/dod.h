@@ -32,8 +32,7 @@ is held by Douglas J. Morgan.
 #include <string.h>
 #include <sys/stat.h>
 
-#define PSP_SCREEN_HEIGHT 	272
-#define PSP_SCREEN_WIDTH	480
+#include "renderer_factory.h"
 
 #define DISPLAY_STRETCHED	0
 #define DISPLAY_FIT			1
@@ -149,25 +148,27 @@ public:
 
 	void setDisplay(int mode)
 	{
+		Renderer* renderer = RendererFactory::GetRenderer();
+
 		switch(mode)
 		{
 			case DISPLAY_STRETCHED:
-				curWidth = PSP_SCREEN_WIDTH;
-				curHeight = PSP_SCREEN_HEIGHT;
+				curWidth = renderer->getScreenWidth();
+				curHeight = renderer->getScreenHeight();
 				offX = 0;
 				offY = 0;
 				break;
 			case DISPLAY_FIT: // Creates a 4/3 ratio
-				curWidth = PSP_SCREEN_HEIGHT/0.75;
-				curHeight = PSP_SCREEN_HEIGHT;
-				offX = (PSP_SCREEN_WIDTH - curWidth)/2;
+				curWidth = renderer->getScreenWidth()/0.75;
+				curHeight = renderer->getScreenHeight();
+				offX = (renderer->getScreenWidth() - curWidth)/2;
 				offY = 0;
 				break;
 			case DISPLAY_ORIGINAL:
 				curWidth = orgWidth;
 				curHeight = orgHeight;
-				offX = (PSP_SCREEN_WIDTH - curWidth)/2;
-				offY = (PSP_SCREEN_HEIGHT - curHeight)/2;
+				offX = (renderer->getScreenWidth() - curWidth)/2;
+				offY = (renderer->getScreenHeight() - curHeight)/2;
 				break;
 			default:
 				break;
