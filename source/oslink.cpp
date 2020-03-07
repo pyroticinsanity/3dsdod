@@ -16,6 +16,7 @@ is held by Douglas J. Morgan.
 
 #include <iostream>
 #include <fstream>
+#include <unistd.h>
 
 using namespace std;
 
@@ -74,11 +75,14 @@ void OS_Link::init()
 	fprintf(outputFile, "Initializing\n");
 	loadOptFile();
 
+	viewer.initialize();
+
 	Uint32 ticks1, ticks2;
-	const SDL_VideoInfo * info = SDL_GetVideoInfo();
+	const SDL_VideoInfo * info = NULL;
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 	{
-		fprintf(stderr, "Video initialization failed: %s\n", SDL_GetError());
+		printf( "Video initialization failed: %s\n", SDL_GetError());
+		sleep(1);
 		quitSDL(1);
 	}
 
@@ -93,7 +97,8 @@ void OS_Link::init()
 
 	if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
 	{
-		fprintf(stderr, "Unable to open audio!\n");
+		printf("Unable to open audio: %s!\n", Mix_GetError());
+		sleep(1);
 		quitSDL(1);
 	}
 
@@ -108,24 +113,17 @@ void OS_Link::init()
 	info = SDL_GetVideoInfo();
 	if(!info)
 	{
-		fprintf(stderr, "Video query failed: %s\n", SDL_GetError());
+		printf("Video query failed: %s\n", SDL_GetError());
+		sleep(1);
 		quitSDL(1);
 	}
 	bpp = info->vfmt->BitsPerPixel;
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	//flags = SDL_OPENGL;
 
-	changeVideoRes(videoMode); // All changing video res code was moved here
+	//	changeVideoRes(videoMode); // All changing video res code was moved here
 
-
-
-	// Couldn't do this until pspGL was initialized
 	viewer.Reset();
 
+	printf("Reset viewer\n");
 	memset(keys, parser.C_SP, keyLen);
 
 	if (keylayout == 0) // QWERTY
@@ -200,6 +198,7 @@ void OS_Link::init()
 	{
 		ticks2 = SDL_GetTicks();
 	} while (ticks2 < ticks1 + 2500);
+	
 	game.COMINI();
 }
 
@@ -2128,6 +2127,8 @@ void OS_Link::changeVideoRes(int mode)
  int newWidth;
  int newHeight;
 
+ Renderer* renderer = RendererFactory::GetRenderer();
+
  SDL_Surface * surface;
  const SDL_VideoInfo * info = NULL;
  surface = SDL_GetVideoSurface();
@@ -2139,15 +2140,15 @@ void OS_Link::changeVideoRes(int mode)
   quitSDL(1);
   }
 
- newHeight = PSP_SCREEN_HEIGHT;
- newWidth = PSP_SCREEN_WIDTH;
+ newHeight = renderer->getScreenHeight();
+ newWidth = renderer->getScreenWidth();
 
-//	flags = flags | SDL_FULLSCREEN | SDL_SWSURFACE|SDL_HWPALETTE|SDL_HWACCEL;
-flags = SDL_OPENGL;
+//	flags = flags | SDL_FULLSCREEN | SDL_SWSURFACE|SDL_HWPALETTE|SDL_HWACCEL; //PC Flags
+	flags = renderer->getVideoModeFlags();
  if((surface = SDL_SetVideoMode(newWidth, newHeight, bpp, flags)) == 0)
   {
   fprintf(stderr, "Video mode set failed: %s\nReturning to old mode\n", SDL_GetError());
-  if((surface = SDL_SetVideoMode(PSP_SCREEN_WIDTH, PSP_SCREEN_HEIGHT, bpp, flags)) == 0)
+  if((surface = SDL_SetVideoMode(renderer->getScreenWidth(), renderer->getScreenHeight(), bpp, flags)) == 0)
     {
     fprintf(stderr, "Video mode set failed, this should be impossible\n Debug OS_Link.changeVideoRes\nSDL Reported %s\n", SDL_GetError());
     exit(1);

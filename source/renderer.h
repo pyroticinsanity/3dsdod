@@ -22,6 +22,8 @@ public:
     virtual int getScreenHeight() = 0;
     virtual int getScreenWidth() = 0;
 
+    virtual unsigned int getVideoModeFlags() = 0;
+
     virtual void initialize() = 0;
     virtual void plotPoint(double X, double Y) = 0;
 

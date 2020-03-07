@@ -22,15 +22,21 @@ public:
 
     virtual void endRendering() {}
 
-    int void getScreenHeight()
+    virtual int void getScreenHeight()
     {
         return ScreenHeight;
     }
 
-    int void getScreenWidth()
+    virtual int void getScreenWidth()
     {
         return ScreenWidth;
     }
+
+    virtual unsigned int getVideoModeFlags()
+    {
+        return SDL_OPENGL;
+    }
+    
     virtual void initialize();
     
     virtual void plotPoint(double X, double Y);

@@ -38,6 +38,11 @@ public:
         return ScreenWidth;
     }
 
+    virtual unsigned int getVideoModeFlags()
+    {
+        return 0;
+    }
+
     virtual void initialize();
 
     virtual void plotPoint(double X, double Y);
