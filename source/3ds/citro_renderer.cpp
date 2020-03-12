@@ -17,13 +17,20 @@ const int CitroRenderer::ScreenWidth = 400;
  CitroRenderer::CitroRenderer()
  	: Renderer(), _xOffset(0), _yOffset(0)
 {
+		// Init libs
+	gfxInitDefault();
+	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
+	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
+	C2D_Prepare();
+	consoleInit(GFX_BOTTOM, NULL);
 
+	// Create screens
+	_top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 }
 
 void CitroRenderer::beginRendering()
 {
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-	clearBuffer();
 	C2D_SceneBegin(_top);
 }
 
@@ -46,16 +53,16 @@ void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
 	float width = 1.0;
 
 	float slope = (x1 - x0) / (y1 - y0);
-	float yMod = width * sin(atan(slope));
-	float xMod = width * cos(atan(slope));
+	float yWidth = width * sin(atan(slope));
+	float xWidth = width * cos(atan(slope));
 
-	C2D_DrawTriangle(_xOffset + x0 - xMod, _yOffset + y0 + yMod, _color, 
-		_xOffset + x0 + xMod, _yOffset + y0 - yMod, _color,
-		_xOffset + x1 - xMod, _yOffset + y1 + yMod, _color, 0);
+	C2D_DrawTriangle(_xOffset + x0 - xWidth, _yOffset + y0 + yWidth, _color, 
+		_xOffset + x0 + xWidth, _yOffset + y0 - yWidth, _color,
+		_xOffset + x1 - xWidth, _yOffset + y1 + yWidth, _color, 0);
 
-	C2D_DrawTriangle(_xOffset + x1 - xMod, _yOffset + y1 + yMod, _color, 
-		_xOffset + x0 + xMod, _yOffset + y0 - yMod, _color,
-		_xOffset + x1 + xMod, _yOffset + y1 - yMod, _color, 0);
+	C2D_DrawTriangle(_xOffset + x1 - xWidth, _yOffset + y1 + yWidth, _color, 
+		_xOffset + x0 + xWidth, _yOffset + y0 - yWidth, _color,
+		_xOffset + x1 + xWidth, _yOffset + y1 - yWidth, _color, 0);
 }
 
 void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3)
@@ -81,7 +88,7 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 		clrLine[1]=viewer.fgColor[1]*flBirghtness+viewer.bgColor[1]*(1.0f-flBirghtness);
 		clrLine[2]=viewer.fgColor[2]*flBirghtness+viewer.bgColor[2]*(1.0f-flBirghtness);
 
-        setColor(clrLine[0], clrLine[1], clrLine[2], 1.0);
+        setColor(clrLine[0], clrLine[1], clrLine[2]);
 		drawLine(X0, Y0, X1, Y1);
 		setColor(viewer.fgColor);
 	}
@@ -144,15 +151,6 @@ void CitroRenderer::endRendering()
 void CitroRenderer::initialize()
 {
 	// TODO
-		// Init libs
-	gfxInitDefault();
-	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
-	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
-	C2D_Prepare();
-	consoleInit(GFX_BOTTOM, NULL);
-
-	// Create screens
-	_top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 }
 
 void CitroRenderer::plotPoint(double X, double Y)
@@ -187,7 +185,7 @@ void CitroRenderer::setColor(float red, float green, float blue, float alpha)
 
 void CitroRenderer::setViewport(int x, int y, int width, int height)
 {
-	C3D_SetViewport(x, y, width, height);
+	C2D_SceneSize(width, height, false);
 }
 
 void CitroRenderer::setTranslation(float xOffset, float yOffset)
