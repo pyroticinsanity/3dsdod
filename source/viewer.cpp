@@ -348,9 +348,9 @@ void Viewer::initialize()
 {
 	_renderer = RendererFactory::GetRenderer();
 	_renderer->setClearColor(bgColor[0], bgColor[1], bgColor[2]);
-	_renderer->setClearColor(0.0f, 0.0f, 0.0f);
-	_renderer->setViewport(0, 20, oslink.width, oslink.height);
-	_renderer->initialize();	
+	
+	_renderer->setViewport(0, 0, _renderer->getScreenWidth(), _renderer->getScreenHeight());
+	_renderer->initialize();
 }
 
 void Viewer::setVidInv(bool inv)
