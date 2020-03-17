@@ -71,11 +71,19 @@ void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
 
 void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3)
 {
-	//TODO Probably a better way to do this with less triangles.
-	drawLine(x0, y0, x1, y1);
-	drawLine(x1, y1, x2, y2);
-	drawLine(x2, y2, x3, y3);
-	drawLine(x3, y3, x0, y0);
+	// TODO: Flip the y-axis for some reason.
+	y0 = ScreenHeight - y0;
+	y1 = ScreenHeight - y1;
+	y2 = ScreenHeight - y2;
+	y3 = ScreenHeight - y3;	
+
+	C2D_DrawTriangle(_xOffset + x0, _yOffset + y0, _color, 
+		_xOffset + x1, _yOffset + y1, _color,
+		_xOffset + x2, _yOffset + y2, _color, 0);
+
+	C2D_DrawTriangle(_xOffset + x2, _yOffset + y2, _color, 
+		_xOffset + x3, _yOffset + y3, _color,
+		_xOffset + x0, _yOffset + y0, _color, 0);
 }
 
 void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
@@ -192,14 +200,16 @@ void CitroRenderer::setViewport(int x, int y, int width, int height)
 	C2D_SceneSize(width, height, false);
 }
 
-void CitroRenderer::setTranslation(float xOffset, float yOffset)
-{
-	_xOffset = xOffset;
-	_yOffset = yOffset;
-}
-
 void CitroRenderer::swapBuffers()
 {
-	gfxSwapBuffers();
+	//gfxSwapBuffers();
 	C3D_FrameEnd(0);
+}
+
+void CitroRenderer::translateMatrix(float xOffset, float yOffset)
+{
+	_xOffset += xOffset;
+
+	// TODO: Flip the y-axis
+	_yOffset -= yOffset;
 }

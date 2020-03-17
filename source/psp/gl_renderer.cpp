@@ -181,11 +181,6 @@ void GlRenderer::setColor(float red, float green, float blue, float alpha)
 	glColor4f(red, green, blue, alpha);
 }
 
-void GlRenderer::setTranslation(float xOffset, float yOffset)
-{
-	glTranslatef(xOffset, yOffset, 0.0);
-}
-
 void GlRenderer::setViewport(int x, int y, int width, int height)
 {
 	glViewport(x, y, width, height);
@@ -195,4 +190,10 @@ void GlRenderer::swapBuffers()
 {
 	SDL_GL_SwapBuffers();
 }
+
+void GlRenderer::translateMatrix(float xOffset, float yOffset)
+{
+	glTranslatef(xOffset, yOffset, 0.0);
+}
+
 #endif //PSP

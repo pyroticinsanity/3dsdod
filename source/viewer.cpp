@@ -1883,12 +1883,12 @@ void Viewer::drawString_internal(int x, int y, dodBYTE * str, int len)
 	int ctr;
 	char c;
 	_renderer->resetMatrix();
-	_renderer->setTranslation(crd.newX(x*8), crd.newY((y+1)*8));
+	_renderer->translateMatrix(crd.newX(x*8), crd.newY((y+1)*8));
 	for (ctr=0; ctr < len; ++ctr)
 	{
 		c = dod_to_ascii(*(str + ctr));
 		drawCharacter(c);
-		_renderer->setTranslation(crd.newXa(8), 0.0);
+		_renderer->translateMatrix(crd.newXa(8), 0.0);
 	}
 }
 
@@ -1912,11 +1912,11 @@ void Viewer::drawString(int x, int y, const char * str, int len)
 {
 	int ctr;
 	_renderer->resetMatrix();
-	_renderer->setTranslation(crd.newX(x*8), crd.newY((y+1)*8));
+	_renderer->translateMatrix(crd.newX(x*8), crd.newY((y+1)*8));
 	for (ctr=0; ctr < len; ++ctr)
 	{
 		drawCharacter(*(str + ctr));
-		_renderer->setTranslation(crd.newXa(8), 0.0);
+		_renderer->translateMatrix(crd.newXa(8), 0.0);
 	}
 }
 

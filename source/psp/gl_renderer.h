@@ -48,11 +48,11 @@ public:
     virtual void setColor(float color[3]);
     virtual void setColor(float red, float green, float blue, float alpha = 1.0f);
 
-    virtual void setTranslation(float xOffset, float yOffset);
-
     virtual void setViewport(int x, int y, int width, int height);
 
     virtual void swapBuffers();
+
+    virtual void translateMatrix(float xOffset, float yOffset);
 };
 
 #endif //PSP
