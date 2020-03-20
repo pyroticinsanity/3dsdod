@@ -58,7 +58,11 @@ strcpy(pathSep,"/");
 #endif
 
 	strcpy(confDir, "conf");
+#ifdef _3DS
+	strcpy(soundDir, "romfs:/sound");
+#else
 	strcpy(soundDir, "sound");
+#endif
 	strcpy(savedDir, "saved");
 	memset(gamefile,0,gamefileLen);
 }
@@ -79,7 +83,7 @@ void OS_Link::init()
 
 	Uint32 ticks1, ticks2;
 	const SDL_VideoInfo * info = NULL;
-	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
+	if(SDL_Init(/*SDL_INIT_VIDEO | */SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 	{
 		printf( "Video initialization failed: %s\n", SDL_GetError());
 		sleep(1);
@@ -92,6 +96,7 @@ void OS_Link::init()
 	joystick = SDL_JoystickOpen(0);
 	if(joystick == NULL)
 	{
+		printf("Failed to initialize joystick\n");
 		return;
 	}
 
@@ -110,20 +115,19 @@ void OS_Link::init()
 	Mix_AllocateChannels(4);
 	Mix_Volume(-1, MIX_MAX_VOLUME);
 
-	info = SDL_GetVideoInfo();
+	/*info = SDL_GetVideoInfo();
 	if(!info)
 	{
 		printf("Video query failed: %s\n", SDL_GetError());
 		sleep(1);
 		quitSDL(1);
 	}
-	bpp = info->vfmt->BitsPerPixel;
+	bpp = info->vfmt->BitsPerPixel;*/
 
-	//	changeVideoRes(videoMode); // All changing video res code was moved here
+	changeVideoRes(videoMode); // All changing video res code was moved here
 
 	viewer.Reset();
 
-	printf("Reset viewer\n");
 	memset(keys, parser.C_SP, keyLen);
 
 	if (keylayout == 0) // QWERTY
@@ -245,9 +249,25 @@ void OS_Link::execute()
 // Used to check for keystrokes and application termination
 void OS_Link::process_events()
 {
+#ifdef _3DS
+	hidScanInput();
+	u32 kDown = hidKeysDown();
+	u32 keys[] = {KEY_START, KEY_SELECT, KEY_L, KEY_R, KEY_DLEFT, KEY_DRIGHT, KEY_DUP, KEY_DDOWN,
+				  KEY_A, KEY_B, KEY_X, KEY_Y};
+	int numKeys = sizeof(keys)/sizeof(u32);
+
+	for(int index = 0; index < numKeys; index++)
+	{
+		if(kDown & keys[index])
+		{
+			handle_joybutton_down(keys[index]);
+		}
+	}
+#endif
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
 	{
+		printf("Event type: %d\n", event.type);
 		switch(event.type)
 		{
 		case SDL_JOYBUTTONDOWN:
@@ -931,6 +951,46 @@ bool OS_Link::main_menu()
 
  do
    {
+#ifdef _3DS
+	hidScanInput();
+	u32 kDown = hidKeysDown();
+
+	if(kDown & SDL_PSP_CROSS)
+	{
+		end = menu_return(col, row, mainMenu);
+
+   		// Used for Wizard fade functions, if it's a new game, it will trigger a key press
+	 	if(col == FILE_MENU_SWITCH && row == FILE_MENU_NEW)
+	  		return true;
+	}
+	else if(kDown & SDL_PSP_UP)
+	{
+		(row < 1) ? row = mainMenu.getMenuSize(col) - 1 : row--;
+    }
+    else if(kDown & SDL_PSP_DOWN)
+	{
+	 		(row > mainMenu.getMenuSize(col) - 2) ? row = 0 : row++;
+   	}
+	else if(kDown & SDL_PSP_LEFT)
+	{
+	 		(col < 1) ? col = NUM_MENU - 1 : col--;
+	 		row = 0;
+	}
+	else if(kDown & SDL_PSP_RIGHT)
+	{
+		(col > 1) ? col = 0 : col++;
+		row = 0;
+	}
+	else if(kDown & SDL_PSP_CIRCLE)
+	{
+    	end = true;
+	}
+	if(kDown > 0)
+	{
+		viewer.drawMenu(mainMenu, col, row);
+	}
+
+#endif
    SDL_Event event;
    while(SDL_PollEvent(&event))
    {
@@ -1615,6 +1675,13 @@ switch(menu_id)
    viewer.aboutBox();
    while(true)
     {
+#ifdef _3DS
+		hidScanInput();
+		if(hidKeysDown() > 0)
+		{
+			return false;
+		}
+#endif
     while(SDL_PollEvent(&event))
      {
      switch(event.type)
@@ -1658,6 +1725,28 @@ int OS_Link::menu_list(int x, int y, char *title, char *list[], int listSize)
  while(true)
    {
    viewer.drawMenuList(x, y, title, list, listSize, currentChoice);
+#ifdef _3DS
+	hidScanInput();
+	u32 kDown = hidKeysDown();
+
+	if(kDown & SDL_PSP_CROSS)
+	{
+		return(currentChoice);
+	}
+	else if(kDown & SDL_PSP_UP)
+	{
+		(currentChoice < 1) ? currentChoice = listSize - 1 : currentChoice--;
+	}
+	else if(kDown & SDL_PSP_DOWN)
+	{
+		(currentChoice > listSize - 2) ? currentChoice = 0 : currentChoice++;
+	}
+	else if(kDown & SDL_PSP_CIRCLE)
+	{
+		return(-1);
+	}
+
+#endif
    SDL_Event event;
 	while(SDL_PollEvent(&event))
 	{
@@ -1748,6 +1837,29 @@ int OS_Link::menu_scrollbar(char *title, int min, int max, int current)
 
  while(true)
    {
+
+#ifdef _3DS
+	hidScanInput();
+	u32 kDown = hidKeysDown();
+
+	if(kDown & SDL_PSP_CROSS)
+	{
+		return(current + min);  // Readjust back to absolute value
+	}
+	else if(kDown & SDL_PSP_LEFT)
+	{
+		(current > newMin) ? current -= increment : current = newMin;
+	}
+	else if(kDown &  SDL_PSP_RIGHT)
+	{
+		(current < newMax) ? current += increment : current = newMax;
+	}
+	else if(kDown & SDL_PSP_CIRCLE)
+	{
+		return(oldvalue);
+	}
+	viewer.drawMenuScrollbar(title, (current - newMin) / increment);
+#endif
    SDL_Event event;
 
 	while(SDL_PollEvent(&event))
@@ -2129,7 +2241,7 @@ void OS_Link::changeVideoRes(int mode)
 
  Renderer* renderer = RendererFactory::GetRenderer();
 
- SDL_Surface * surface;
+ /*SDL_Surface * surface;
  const SDL_VideoInfo * info = NULL;
  surface = SDL_GetVideoSurface();
 
@@ -2138,14 +2250,14 @@ void OS_Link::changeVideoRes(int mode)
   {
   fprintf(stderr, "Video query failed: %s\n", SDL_GetError());
   quitSDL(1);
-  }
+  }*/
 
  newHeight = renderer->getScreenHeight();
  newWidth = renderer->getScreenWidth();
 
 //	flags = flags | SDL_FULLSCREEN | SDL_SWSURFACE|SDL_HWPALETTE|SDL_HWACCEL; //PC Flags
-	flags = renderer->getVideoModeFlags();
- if((surface = SDL_SetVideoMode(newWidth, newHeight, bpp, flags)) == 0)
+//	flags = renderer->getVideoModeFlags();
+ /*if((surface = SDL_SetVideoMode(newWidth, newHeight, bpp, flags)) == 0)
   {
   fprintf(stderr, "Video mode set failed: %s\nReturning to old mode\n", SDL_GetError());
   if((surface = SDL_SetVideoMode(renderer->getScreenWidth(), renderer->getScreenHeight(), bpp, flags)) == 0)
@@ -2155,12 +2267,12 @@ void OS_Link::changeVideoRes(int mode)
     }
   }
  else
-  {
+  {*/
   width  = newWidth;
   height = newHeight;
   //crd.setCurWH((double) width);
   crd.setDisplay(mode);
-  }
+ // }
 
  viewer.initialize();
  }

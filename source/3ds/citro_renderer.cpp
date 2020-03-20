@@ -58,17 +58,13 @@ void CitroRenderer::drawLine(float x0, float y0, float x1, float y1)
 	float yWidth = width * sin(atan(slope));
 	float xWidth = width * cos(atan(slope));
 
-	// Flip the Y-axis TODO: Not sure why this is needed but it isn't rendering properly.
-	y0 = ScreenHeight - y0;
-	y1 = ScreenHeight - y1;
+	C2D_DrawTriangle(x0 - xWidth, y0 + yWidth, _color, 
+		x0 + xWidth, y0 - yWidth, _color,
+		x1 - xWidth, y1 + yWidth, _color, 0);
 
-	C2D_DrawTriangle(_xOffset + x0 - xWidth, _yOffset + y0 + yWidth, _color, 
-		_xOffset + x0 + xWidth, _yOffset + y0 - yWidth, _color,
-		_xOffset + x1 - xWidth, _yOffset + y1 + yWidth, _color, 0);
-
-	C2D_DrawTriangle(_xOffset + x1 - xWidth, _yOffset + y1 + yWidth, _color, 
-		_xOffset + x0 + xWidth, _yOffset + y0 - yWidth, _color,
-		_xOffset + x1 + xWidth, _yOffset + y1 - yWidth, _color, 0);
+	C2D_DrawTriangle(x1 - xWidth, y1 + yWidth, _color, 
+		x0 + xWidth, y0 - yWidth, _color,
+		x1 + xWidth, y1 - yWidth, _color, 0);
 }
 
 void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3)
@@ -90,7 +86,7 @@ void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, f
 
 void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 {
-    	if (g_options&OPT_VECTOR) { // draw using GL vectors
+    	if (g_options&OPT_VECTOR) {
 		float		clrLine[3];
 
 		if (viewer.VCTFAD == 0xff) return; // do not draw lines with VCTFAD=255
@@ -205,7 +201,6 @@ void CitroRenderer::setViewport(int x, int y, int width, int height)
 
 void CitroRenderer::swapBuffers()
 {
-	//gfxSwapBuffers();
 	C3D_FrameEnd(0);
 }
 
@@ -213,6 +208,6 @@ void CitroRenderer::translateMatrix(float xOffset, float yOffset)
 {
 	_xOffset += xOffset;
 
-	// TODO: Flip the y-axis
+	// Flip the y-axis
 	_yOffset -= yOffset;
 }

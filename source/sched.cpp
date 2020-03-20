@@ -442,6 +442,15 @@ void Scheduler::winFadeLoop()
 // Used by wizard fade in/out function
 bool Scheduler::keyCheck()
 {
+#ifdef _3DS
+	hidScanInput();
+
+	if(hidKeysDown() > 0)
+	{
+		return true;
+	}
+#endif
+
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
 	{

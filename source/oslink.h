@@ -53,8 +53,8 @@ public:
 	char	gamefile[50];
 	char	pathSep[2];
 	FILE *	fptr;
-	char	confDir[5];
-	char	soundDir[6];
+	char	confDir[MAX_FILENAME_LENGTH + 1];
+	char	soundDir[MAX_FILENAME_LENGTH + 1];
 	char	savedDir[MAX_FILENAME_LENGTH + 1];
 	dodBYTE	keys[256];
 

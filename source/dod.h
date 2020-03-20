@@ -26,6 +26,10 @@ is held by Douglas J. Morgan.
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_image.h>
 
+#ifdef _3DS
+#include <3ds.h>
+#endif
+
 // Standard headers
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +42,20 @@ is held by Douglas J. Morgan.
 #define DISPLAY_FIT			1
 #define DISPLAY_ORIGINAL	2
 
+#ifdef _3DS
+#define SDL_PSP_UP			KEY_DUP//8
+#define SDL_PSP_DOWN		KEY_DDOWN//6
+#define SDL_PSP_LEFT		KEY_DLEFT//7
+#define SDL_PSP_RIGHT		KEY_DRIGHT//9
+#define SDL_PSP_CROSS		KEY_B//2
+#define SDL_PSP_TRIANGLE	KEY_X//0
+#define SDL_PSP_SQUARE		KEY_Y//3
+#define SDL_PSP_CIRCLE		KEY_A//1
+#define SDL_PSP_START		KEY_START//11
+#define SDL_PSP_SELECT		KEY_SELECT//10
+#define SDL_PSP_L_TRIGGER	KEY_L//4
+#define SDL_PSP_R_TRIGGER	KEY_R//5
+#else
 #define SDL_PSP_UP			8
 #define SDL_PSP_DOWN		6
 #define SDL_PSP_LEFT		7
@@ -50,6 +68,7 @@ is held by Douglas J. Morgan.
 #define SDL_PSP_SELECT		10
 #define SDL_PSP_L_TRIGGER	4
 #define SDL_PSP_R_TRIGGER	5
+#endif
 
 struct kbdKey{
 	int x;

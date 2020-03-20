@@ -23,7 +23,11 @@ is held by Douglas J. Morgan.
 // resolve to the declarations below.  This can
 // probably be simplified with some common mechanism.
 
+#ifdef _3DS
+#include <citro2d.h>
+#include <citro3d.h>
 #include <3ds.h>
+#endif
 
 #include "dod.h"
 
@@ -65,33 +69,28 @@ void quitGame()
 	{
 		fclose(oslink.outputFile);
 	}
-  gfxExit();
 }
 
 extern "C" int main(int argc, char * argv[])
 {
-	//printvls();
-	//exit(0);
-
-	gfxInitDefault();
-	consoleInit(GFX_TOP, NULL);
-
+	Renderer* renderer = RendererFactory::GetRenderer();
+#ifdef _3DS
+	romfsInit();
+#endif
 	oslink.init();
+
 	// Main loop
 	while (aptMainLoop())
 	{
-		gspWaitForVBlank();
-		gfxSwapBuffers();
-		hidScanInput();
-
-		// Your code goes here
-		u32 kDown = hidKeysDown();
-		if (kDown & KEY_START)
-			break; // break in order to return to hbmenu
-
+		renderer->beginRendering();
+		renderer->setColor(1.0f, 1.0f, 1.0f);
 		oslink.execute();
+		renderer->endRendering();
 	}
-
+	renderer->deinitialize();
+#ifdef _3DS
+	romfsExit();
+#endif
 	quitGame();
 	return 0;
 }
@@ -190,5 +189,11 @@ Mix_Chunk *Utils::LoadSound(const char *snd)
 {
 	char fn[256];
 	sprintf(fn, "%s%s%s", oslink.soundDir, oslink.pathSep, snd);
-	return Mix_LoadWAV(fn);
+	Mix_Chunk* chunk = Mix_LoadWAV(fn);
+	if(chunk == NULL)
+	{
+		printf("Failed to load chunk %s: %s\n", fn, Mix_GetError());
+	}
+
+	return chunk;
 }

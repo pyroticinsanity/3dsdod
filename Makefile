@@ -34,11 +34,11 @@ include $(DEVKITARM)/3ds_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source source/3ds
-DATA		:=	data
+#DATA		:=	data
 INCLUDES	:=	include
 GRAPHICS	:=	gfx
 GFXBUILD	:=	$(BUILD)
-#ROMFS		:=	romfs
+ROMFS		:=	data
 #GFXBUILD	:=	$(ROMFS)/gfx
 
 #---------------------------------------------------------------------------------
@@ -57,7 +57,8 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map) -L/opt/devkitpro/portlibs/3ds/lib
 
-LIBS	:= -lcitro2d -lcitro3d -lm -lstdc++ -lSDL_mixer -lvorbisidec -logg  -lmad -lSDL_image -lmikmod -lpng -lz -ljpeg -lSDL -lctru
+LIBS	:= -lcitro2d -lcitro3d -lm -lstdc++ -lSDL_image  -lSDL_mixer -lSDL -lctru \
+		   -lvorbisidec -logg -lmad -lmikmod -lpng -lz -ljpeg
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
