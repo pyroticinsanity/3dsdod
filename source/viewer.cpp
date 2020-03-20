@@ -2228,6 +2228,7 @@ void Viewer::aboutBox(void)
  drawString(0, i++, "ORIGINAL DESIGN. DOUGLAS MORGAN", 31);
  drawString(0, i++, "PC PORT BY RICHARD HUNERLACH", 28);
  drawString(0, i++, "PSP PORT BY TREVOR GERBRAND", 27);
+ drawString(0, i++, "3DS PORT BY TREVOR GERBRAND", 27);
  drawString(0, i++, "VARIOUS OTHER CONTRIBUTIONS BY", 30);
  drawString(1, i++, "TIM LINDNER", 11);
  drawString(1, i++, "AARON OLIVER", 12);
