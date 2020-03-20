@@ -30,6 +30,8 @@ const int CitroRenderer::ScreenWidth = 400;
 
 void CitroRenderer::beginRendering()
 {
+	
+	gspWaitForVBlank();
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 	C2D_SceneBegin(_top);
 }
@@ -158,6 +160,7 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 void CitroRenderer::endRendering()
 {
 	C3D_FrameEnd(0);
+	gfxSwapBuffers();
 }
 
 void CitroRenderer::initialize()
