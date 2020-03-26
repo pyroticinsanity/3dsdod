@@ -57,13 +57,23 @@ OS_Link::OS_Link() : width(0), height(0), bpp(0), flags(0),
 strcpy(pathSep,"/");
 #endif
 
+#ifdef _3DS
+	strcpy(confDir, "/3ds/3dsdod/conf");
+#else
 	strcpy(confDir, "conf");
+#endif
+
 #ifdef _3DS
 	strcpy(soundDir, "romfs:/sound");
 #else
 	strcpy(soundDir, "sound");
 #endif
+
+#ifdef _3DS
+	strcpy(savedDir, "/3ds/3dsdod/saved");
+#else
 	strcpy(savedDir, "saved");
+#endif
 	memset(gamefile,0,gamefileLen);
 }
 
@@ -80,6 +90,14 @@ void OS_Link::init()
 	loadOptFile();
 
 	viewer.initialize();
+
+#ifdef _3DS
+	// Create the directories for saving and loading if they don't exist.
+	mkdir("/3ds", 0755);
+	mkdir("/3ds/3dsdod", 0755);
+	mkdir(confDir, 0755);
+	mkdir(savedDir, 0755);
+#endif
 
 	Uint32 ticks1, ticks2;
 	const SDL_VideoInfo * info = NULL;
@@ -2086,7 +2104,11 @@ void OS_Link::loadOptFile(void)
     }
    else if(!strcmp(inputString, "saveDirectory"))
     {
-    strncpy(savedDir, "saved", MAX_FILENAME_LENGTH);
+#ifdef _3DS
+	strncpy(savedDir, "/3ds/3dsdod/saved", MAX_FILENAME_LENGTH);
+#else
+	strncpy(savedDir, "saved", MAX_FILENAME_LENGTH);
+#endif
     }
    else if(!strcmp(inputString, "fullScreen"))
     {
@@ -2206,7 +2228,11 @@ void OS_Link::loadDefaults(void)
  volumeLevel = MIX_MAX_VOLUME;
  creature.creSpeedMul = 200;
  creature.UpdateCreSpeed();
- strcpy(savedDir, "saved");
+#ifdef _3DS
+	strncpy(savedDir, "/3ds/3dsdod/saved", MAX_FILENAME_LENGTH);
+#else
+	strncpy(savedDir, "saved", MAX_FILENAME_LENGTH);
+#endif
  FullScreen = true;
  width = 1024;
  creatureRegen = 5;
