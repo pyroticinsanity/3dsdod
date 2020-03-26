@@ -65,10 +65,19 @@ void printthem(int *, int, char *);
 
 void quitGame()
 {
+	Renderer* renderer = RendererFactory::GetRenderer();
+
+	renderer->deinitialize();
+#ifdef _3DS
+	romfsExit();
+#endif
+
 	if(oslink.outputFile != NULL)
 	{
 		fclose(oslink.outputFile);
 	}
+
+	exit(0);
 }
 
 extern "C" int main(int argc, char * argv[])
@@ -87,10 +96,7 @@ extern "C" int main(int argc, char * argv[])
 		oslink.execute();
 		renderer->endRendering();
 	}
-	renderer->deinitialize();
-#ifdef _3DS
-	romfsExit();
-#endif
+
 	quitGame();
 	return 0;
 }
