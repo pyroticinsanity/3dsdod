@@ -41,6 +41,10 @@ GFXBUILD	:=	$(BUILD)
 ROMFS		:=	data
 #GFXBUILD	:=	$(ROMFS)/gfx
 
+APP_TITLE		:=	Dungeons of Daggorath
+APP_DESCRIPTION	:=	Dungeons of Daggorath for the 3DS
+APP_AUTHOR		:=	Ported by Darkweb
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
