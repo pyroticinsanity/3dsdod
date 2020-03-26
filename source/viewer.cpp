@@ -1921,63 +1921,21 @@ void Viewer::drawString(int x, int y, const char * str, int len)
 }
 
 
-/*void Viewer::drawKeyboard(struct kbdKey key)
+void Viewer::drawKeyboard(struct kbdKey key)
 {
-	int squareWidth = key.width;
-	int squareHeight = key.height;
-	int highlightX = key.x;
-	int highlightY = key.y;
+	_renderer->drawKeyboard(key);
 
-	glEnable(GL_TEXTURE_2D);
-	// Clear screen
-	_renderer->setColor(bgColor);
-	_renderer->clearBuffer(true);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-  	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
-  	_renderer->resetMatrix();
-
- 	glBegin(GL_QUADS);
-    	glTexCoord2f(0,1);
-    	glVertex2f(0, 0);
-
-    	glTexCoord2f(1,1);
-    	glVertex2f(480, 0);
-
-    	glTexCoord2f(1,0);
-    	glVertex2f(480, 272);
-
-    	glTexCoord2f(0,0);
-    	glVertex2f(0, 272);
-
-  	glEnd();
-  	glDisable(GL_TEXTURE_2D);
-
-	glBegin(GL_LINE_STRIP);
-		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-		glVertex2f(highlightX, highlightY);
-
-		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-		glVertex2f(highlightX + squareWidth, highlightY);
-
-		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-		glVertex2f(highlightX + squareWidth, highlightY + squareHeight);
-
-		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-		glVertex2f(highlightX, highlightY + squareHeight);
-
-		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
-		glVertex2f(highlightX, highlightY);
-	glEnd();
-
- 	// Draw Boxes for menu
- 	_renderer->setColor(fgColor);
- 	_renderer->resetMatrix();
-
-  	drawString(0, 0, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
+#ifdef _3DS
+	int x = 0;
+	int y = -16;
+#else
+	int x = 0;
+	int y = 0;
+#endif 
+	drawString(x, y, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
 
   	_renderer->swapBuffers();
-
-}*/
+}
 
 /****************************************************************
   Member: drawCommandMenu

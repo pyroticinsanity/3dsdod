@@ -11,6 +11,44 @@
 const int GlRenderer::ScreenHeight = 272;
 const int GlRenderer::ScreenWidth = 480;
 
+
+const struct kbdKey keyboardKeys[40] = { 
+
+													{103, 130, 23, 23, 'Q'},
+													{126, 130, 23, 23, 'W'},
+													{149, 130, 23, 23, 'E'},
+													{172, 130, 23, 23, 'R'},
+													{195, 130, 23, 23, 'T'},
+													{218, 130, 23, 23, 'Y'},
+													{241, 130, 23, 23, 'U'},
+													{264, 130, 23, 23, 'I'},
+													{287, 130, 23, 23, 'O'},
+													{310, 130, 23, 23, 'P'},
+
+													{107, 106, 23, 23, 'A'},
+													{130, 106, 23, 23, 'S'},
+													{153, 106, 23, 23, 'D'},
+													{176, 106, 23, 23, 'F'},
+													{199, 106, 23, 23, 'G'},
+													{222, 106, 23, 23, 'H'},
+													{245, 106, 23, 23, 'J'},
+													{268, 106, 23, 23, 'K'},
+													{291, 106, 23, 23, 'L'},
+													{339, 106, 35, 23, 0x0D},
+
+													{117,  80, 23, 23, 'Z'},
+													{140,  80, 23, 23, 'X'},
+													{163,  80, 23, 23, 'C'},
+													{186,  80, 23, 23, 'V'},
+													{211,  80, 23, 23, 'B'},
+													{235,  80, 23, 23, 'N'},
+													{258,  80, 23, 23, 'M'},
+													{281,  80, 23, 23, ','},
+													{304,  80, 23, 23, '.'},
+													{146,  57, 188, 23, ' '}
+
+												};
+
 void GlRenderer::clearBuffer(bool includeDepthBuffer)
 {
 	glClear(GL_COLOR_BUFFER_BIT | (includeDepthBuffer ? GL_DEPTH_BUFFER_BIT : 0));
@@ -37,6 +75,64 @@ void GlRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, floa
 		glVertex2f(x2, y2);
 		glVertex2f(x3, y3);
 	glEnd();
+}
+
+void GlRenderer::drawKeyboard(struct kbdKey key)
+{
+	int squareWidth = key.width;
+	int squareHeight = key.height;
+	int highlightX = key.x;
+	int highlightY = key.y;
+
+	glEnable(GL_TEXTURE_2D);
+	// Clear screen
+	_renderer->setColor(bgColor);
+	_renderer->clearBuffer(true);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+  	glBindTexture(GL_TEXTURE_2D, keyboardTexture);
+  	_renderer->resetMatrix();
+
+ 	glBegin(GL_QUADS);
+    	glTexCoord2f(0,1);
+    	glVertex2f(0, 0);
+
+    	glTexCoord2f(1,1);
+    	glVertex2f(480, 0);
+
+    	glTexCoord2f(1,0);
+    	glVertex2f(480, 272);
+
+    	glTexCoord2f(0,0);
+    	glVertex2f(0, 272);
+
+  	glEnd();
+  	glDisable(GL_TEXTURE_2D);
+
+	glBegin(GL_LINE_STRIP);
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+		glVertex2f(highlightX, highlightY);
+
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+		glVertex2f(highlightX + squareWidth, highlightY);
+
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+		glVertex2f(highlightX + squareWidth, highlightY + squareHeight);
+
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+		glVertex2f(highlightX, highlightY + squareHeight);
+
+		_renderer->setColor(0.0f, 1.0f, 0.0f, 1.0f);
+		glVertex2f(highlightX, highlightY);
+	glEnd();
+
+ 	// Draw Boxes for menu
+ 	_renderer->setColor(fgColor);
+ 	_renderer->resetMatrix();
+
+  	drawString(0, 0, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
+
+  	_renderer->swapBuffers();
+
 }
 
 // Draws a line

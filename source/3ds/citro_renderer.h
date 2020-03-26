@@ -19,6 +19,8 @@ public:
     virtual void clearBuffer(bool includeDepthBuffer = false);
 
     virtual void deinitialize();
+
+    virtual void drawKeyboard(struct kbdKey key);
     
     virtual void drawLine(float x0, float y0, float x1, float y1);
 
@@ -62,6 +64,8 @@ private:
     u32 _clearColor;
 
     u32 _color;
+
+    C2D_Image _keyboardImg;
 
     C3D_RenderTarget* _top;
 

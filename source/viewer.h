@@ -78,7 +78,7 @@ public:
 	void		drawVectorList(int VLA[]);
 	void		Reset();
 	bool		ShowFade(int fadeMode);
-	//void		drawKeyboard(struct kbdKey);
+	void		drawKeyboard(struct kbdKey);
 	void		drawCommandMenu(command_menu, int, int);
 	void        drawMenu(menu, int, int);
 	void		drawMenuList(int, int, char *, char *[], int, int);
@@ -187,7 +187,6 @@ private:
 	int			HLFSCL;
 	int			BAKSCL;
 	int			NORSCL;
-	//GLuint		keyboardTexture; TODO Figure out what to do with the keyboard.
 public:
 	int A_VLA[33];
 	int B_VLA[49];

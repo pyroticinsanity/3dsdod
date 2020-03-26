@@ -5,11 +5,48 @@
 #include "../viewer.h" // TODO Figure out how to decouple this
 #include "../oslink.h" // TODO Figure out how to decouple this
 
+#include "keyboard_t3x.h"
+
 #include "citro_renderer.h"
 
 extern OS_Link                oslink;
 extern Viewer		viewer;
 extern Coordinate     crd;
+
+const struct kbdKey keyboardKeys[40] = { 			{87, 105, 15, 15, 'Q'},
+													{107, 105, 15, 15, 'W'},
+													{127, 105, 15, 15, 'E'},
+													{144, 105, 15, 15, 'R'},
+													{163, 105, 15, 15, 'T'},
+													{183, 105, 15, 15, 'Y'},
+													{201, 105, 15, 15, 'U'},
+													{221, 105, 15, 15, 'I'},
+													{240, 105, 15, 15, 'O'},
+													{259, 105, 15, 15, 'P'},
+
+													{92, 128, 15, 15, 'A'},
+													{110, 128, 15, 15, 'S'},
+													{130, 128, 15, 15, 'D'},
+													{150, 128, 15, 15, 'F'},
+													{169, 128, 15, 15, 'G'},
+													{188, 128, 15, 15, 'H'},
+													{207, 128, 15, 15, 'J'},
+													{225, 128, 15, 15, 'K'},
+													{246, 128, 15, 15, 'L'},
+													{285, 128, 25, 15, 0x0D},
+
+													{99,  150, 15, 15, 'Z'},
+													{119,  150, 15, 15, 'X'},
+													{139,  150, 15, 15, 'C'},
+													{159,  150, 15, 15, 'V'},
+													{178,  150, 15, 15, 'B'},
+													{197,  150, 15, 15, 'N'},
+													{217,  150, 15, 15, 'M'},
+													{237,  150, 15, 15, ','},
+													{257,  150, 15, 15, '.'},
+													{125,  173, 150, 15, ' '}
+
+												};
 
 const int CitroRenderer::ScreenHeight = 240;
 const int CitroRenderer::ScreenWidth = 400;
@@ -26,12 +63,28 @@ const int CitroRenderer::ScreenWidth = 400;
 
 	// Create screens
 	_top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+
+	_keyboardImg.tex = new C3D_Tex();
+	Tex3DS_SubTexture* subtex = new Tex3DS_SubTexture();
+
+	subtex->left = 0;
+	subtex->top = 0; 
+	subtex->width = 400; 
+	subtex->height = 240;
+	subtex->right = 1;
+	subtex->bottom = 1;
+
+	_keyboardImg.subtex = subtex;
+
+	Tex3DS_Texture t3x = Tex3DS_TextureImport(keyboard_t3x, keyboard_t3x_size,
+		 _keyboardImg.tex, NULL, false);
+
+	// Delete the t3x object since we don't need it
+	Tex3DS_TextureFree(t3x);
 }
 
 void CitroRenderer::beginRendering()
-{
-	
-	gspWaitForVBlank();
+{	
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 	C2D_SceneBegin(_top);
 }
@@ -82,6 +135,26 @@ void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, f
 	C2D_DrawTriangle(_xOffset + x2, _yOffset + y2, _color, 
 		_xOffset + x3, _yOffset + y3, _color,
 		_xOffset + x0, _yOffset + y0, _color, 0);
+}
+
+void CitroRenderer::drawKeyboard(struct kbdKey key)
+{
+	clearBuffer();
+	int squareWidth = key.width;
+	int squareHeight = key.height;
+	int highlightX = key.x;
+	int highlightY = key.y;
+
+	C2D_DrawImageAt(_keyboardImg, 0, 0, 0);
+
+  	resetMatrix();
+
+	setColor(0.0f, 1.0f, 0.0f);
+	drawLine(highlightX, highlightY, highlightX + squareWidth, highlightY);
+	drawLine(highlightX + squareWidth, highlightY, highlightX + squareWidth, highlightY + squareHeight);
+	drawLine(highlightX + squareWidth, highlightY + squareHeight, highlightX, highlightY + squareHeight);
+	drawLine(highlightX, highlightY + squareWidth, highlightX, highlightY);
+	setColor(viewer.fgColor);
 }
 
 void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
@@ -156,7 +229,6 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1)
 void CitroRenderer::endRendering()
 {
 	C3D_FrameEnd(0);
-	gfxSwapBuffers();
 }
 
 void CitroRenderer::initialize()
