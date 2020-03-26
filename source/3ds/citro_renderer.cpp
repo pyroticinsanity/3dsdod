@@ -81,6 +81,22 @@ const int CitroRenderer::ScreenWidth = 400;
 
 	// Delete the t3x object since we don't need it
 	Tex3DS_TextureFree(t3x);
+
+	printf("3DS Dungeons of Daggorath - 0.7\n");
+	printf("---------------------------------------\n");
+	printf("Controls:\n");
+	printf("D-Pad Up - MOVE UP\n");
+	printf("D-Pad Down - MOVE DOWN\n");
+	printf("D-Pad Left - MOVE LEFT\n");
+	printf("D-Pad Right - MOVE RIGHT\n");
+	printf("A - Custom Command\n");
+	printf("B - ATTACK RIGHT\n");
+	printf("Y - ATTACK LEFT\n");
+	printf("X - EXAMINE / LOOK\n");
+	printf("L - Command Creator\n");
+	printf("R - TURN AROUND\n");
+	printf("Start - Main Menu\n");
+	printf("Select - Push Me First\n");
 }
 
 void CitroRenderer::beginRendering()
@@ -233,7 +249,7 @@ void CitroRenderer::endRendering()
 
 void CitroRenderer::initialize()
 {
-	// TODO
+
 }
 
 void CitroRenderer::plotPoint(double X, double Y)
