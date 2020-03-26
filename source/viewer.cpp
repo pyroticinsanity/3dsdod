@@ -1920,20 +1920,21 @@ void Viewer::drawString(int x, int y, const char * str, int len)
 	}
 }
 
-
 void Viewer::drawKeyboard(struct kbdKey key)
 {
 	_renderer->drawKeyboard(key);
 
 #ifdef _3DS
-	int x = 0;
-	int y = -16;
-#else
+	// Draw a box for the command buffer to appear in
+	_renderer->setColor(0, 0, 0);
+	_renderer->drawQuad(0, 220, 400, 220, 400, 200, 0, 200);
+	_renderer->setColor(fgColor);
+#endif
+
 	int x = 0;
 	int y = 0;
-#endif 
-	drawString(x, y, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
 
+	drawString(x, y, oslink.commandCreatorBuffer, strlen(oslink.commandCreatorBuffer));
   	_renderer->swapBuffers();
 }
 

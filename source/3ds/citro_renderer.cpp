@@ -153,7 +153,7 @@ void CitroRenderer::drawKeyboard(struct kbdKey key)
 	drawLine(highlightX, highlightY, highlightX + squareWidth, highlightY);
 	drawLine(highlightX + squareWidth, highlightY, highlightX + squareWidth, highlightY + squareHeight);
 	drawLine(highlightX + squareWidth, highlightY + squareHeight, highlightX, highlightY + squareHeight);
-	drawLine(highlightX, highlightY + squareWidth, highlightX, highlightY);
+	drawLine(highlightX, highlightY + squareHeight, highlightX, highlightY);
 	setColor(viewer.fgColor);
 }
 

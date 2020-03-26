@@ -4,8 +4,6 @@
 class Renderer
 {
 public:
-    Renderer() {}
-
     virtual ~Renderer() {}
 
     virtual void beginRendering() = 0;
@@ -41,6 +39,9 @@ public:
     virtual void swapBuffers() = 0;
 
     virtual void translateMatrix(float xOffset, float yOffset) = 0;
+
+protected:
+    Renderer() {}
 };
 
 #endif // DOD_RENDERER_HEADER
