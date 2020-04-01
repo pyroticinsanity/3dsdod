@@ -22,11 +22,12 @@ public:
 
     virtual void drawKeyboard(struct kbdKey key);
     
-    virtual void drawLine(float x0, float y0, float x1, float y1);
+    virtual void drawLine(float x0, float y0, float x1, float y1, Layers layer = LAYER_DEFAULT);
 
-    virtual void drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3);
+    virtual void drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3,
+                        Layers layer = LAYER_DEFAULT);
 
-    virtual void drawVector(float X0, float Y0, float X1, float Y1);
+    virtual void drawVector(float X0, float Y0, float X1, float Y1, Layers layer = LAYER_DEFAULT);
 
     virtual void endRendering();
 
@@ -47,7 +48,7 @@ public:
 
     virtual void initialize();
 
-    virtual void plotPoint(double X, double Y);
+    virtual void plotPoint(double X, double Y, Layers layer = LAYER_DEFAULT);
 
     virtual void resetMatrix();
 
@@ -61,13 +62,18 @@ public:
 
     virtual void translateMatrix(float xOffset, float yOffset);
 private:
+
+    void renderRightScreen();
+
     u32 _clearColor;
 
     u32 _color;
 
     C2D_Image _keyboardImg;
 
-    C3D_RenderTarget* _top;
+    C3D_RenderTarget* _left;
+
+    C3D_RenderTarget* _right;
 
     float _xOffset;
     float _yOffset;
