@@ -28,9 +28,6 @@ is held by Douglas J. Morgan.
  // Arbitrary Length of 80, maybe be changed if needed
 #define MAX_FILENAME_LENGTH 80
 
-
-
-
 class OS_Link
 {
 public:
