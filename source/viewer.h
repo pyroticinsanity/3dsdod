@@ -48,6 +48,10 @@ public:
 	void		displayPrepare();
 	void		drawArea(TXB * a);
 	void		clearArea(TXB * a);
+
+	/**
+	 * Highlights the torch in the EXAMINE inventory.
+	 */
 	void		drawTorchHighlite();
 	void		WIZIN0();
 	int			LUKNEW();

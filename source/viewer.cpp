@@ -917,7 +917,7 @@ void Viewer::drawTorchHighlite()
 		crd.newX(x1*8), crd.newY(y1*8),
 		crd.newX(x2*8), crd.newY(y1*8),
 		crd.newX(x2*8), crd.newY(y2*8),
-		crd.newX(x1*8), crd.newY(y2*8));
+		crd.newX(x1*8), crd.newY(y2*8), LAYER_UI);
 	_renderer->setColor(bgColor);
 	object.OBJNAM(player.PTORCH);
 	drawString_internal(x1, y1, parser.TOKEN, tlen);
