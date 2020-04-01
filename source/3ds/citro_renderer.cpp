@@ -72,7 +72,7 @@ const int CitroRenderer::ScreenHeight = 240;
 const int CitroRenderer::ScreenWidth = 400;
 
  CitroRenderer::CitroRenderer()
- 	: Renderer(), _xOffset(0), _yOffset(0)
+ 	: Renderer(), _currentImage(NULL), _xOffset(0), _yOffset(0)
 {
 		// Init libs
 	gfxInitDefault();
@@ -198,13 +198,15 @@ void CitroRenderer::drawKeyboard(struct kbdKey key)
 
 	C2D_DrawImageAt(_keyboardImg, 0, 0, 0);
 
+	_currentImage = &_keyboardImg;
+
   	resetMatrix();
 
 	setColor(0.0f, 1.0f, 0.0f);
-	drawLine(highlightX, highlightY, highlightX + squareWidth, highlightY);
-	drawLine(highlightX + squareWidth, highlightY, highlightX + squareWidth, highlightY + squareHeight);
-	drawLine(highlightX + squareWidth, highlightY + squareHeight, highlightX, highlightY + squareHeight);
-	drawLine(highlightX, highlightY + squareHeight, highlightX, highlightY);
+	drawLine(highlightX, highlightY, highlightX + squareWidth, highlightY, LAYER_UI);
+	drawLine(highlightX + squareWidth, highlightY, highlightX + squareWidth, highlightY + squareHeight, LAYER_UI);
+	drawLine(highlightX + squareWidth, highlightY + squareHeight, highlightX, highlightY + squareHeight, LAYER_UI);
+	drawLine(highlightX, highlightY + squareHeight, highlightX, highlightY, LAYER_UI);
 	setColor(viewer.fgColor);
 }
 
@@ -303,6 +305,12 @@ void CitroRenderer::renderRightScreen()
 	if(Triangles.size() > 0)
 	{
 		C2D_SceneBegin(_right);
+
+		if(_currentImage != NULL)
+		{
+			C2D_DrawImageAt(*_currentImage, 0, 0, 0);
+			_currentImage = NULL;
+		}
 
 		float slider = osGet3DSliderState();
 		while(!Triangles.empty())

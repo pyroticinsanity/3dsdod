@@ -69,6 +69,8 @@ private:
 
     u32 _color;
 
+    C2D_Image* _currentImage;
+
     C2D_Image _keyboardImg;
 
     C3D_RenderTarget* _left;
