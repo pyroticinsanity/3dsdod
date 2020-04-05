@@ -1929,7 +1929,7 @@ void Viewer::drawKeyboard(struct kbdKey key)
 	// Draw a box for the command buffer to appear in
 	_renderer->setColor(0, 0, 0);
 	_renderer->drawQuad(0, 220, 400, 220, 400, 200, 0, 200, LAYER_UI);
-	_renderer->setColor(fgColor);
+	_renderer->setColor(1.0, 1.0, 1.0);
 #endif
 
 	int x = 0;
