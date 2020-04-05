@@ -697,7 +697,6 @@ bool OS_Link::command_menu_return(int *menu_id, int *item, int *prev_menu_id, in
 					strcat(commandCreatorBuffer, " ");
 					*prev_menu_id = *menu_id;
 					*prev_item = *item;
-					*menu_id = INCANT_MENU_SWITCH;
 					viewer.display_mode = Viewer::MODE_KEYBOARD;
 					viewer.drawKeyboard(keyboardKeys[0]);
 					*item = 0;
@@ -849,33 +848,6 @@ bool OS_Link::command_menu_return(int *menu_id, int *item, int *prev_menu_id, in
 			*item = 0;
 			*prev_item = 0;
 			return true;
-			break;
-		case INCANT_MENU_SWITCH:
-			switch(*item)
-			{
-			case INCANT_MENU_END:
-				type_command(commandCreatorBuffer);
-				*menu_id = 0;
-				*prev_menu_id = 0;
-				*item = 0;
-				*prev_item = 0;
-				return true;
-				break;
-			case INCANT_MENU_BACK:
-				i = 0;
-				c = commandCreatorBuffer[i];
-
-				while(c != '\0')
-				{
-					i++;
-					c = commandCreatorBuffer[i];
-				}
-				commandCreatorBuffer[i-1] = '\0';
-				break;
-			default:
-				strcat(commandCreatorBuffer, commandMenu.getMenuItem(*menu_id, *item));
-				break;
-			}
 			break;
 		case TURN_MENU_SWITCH:
 
