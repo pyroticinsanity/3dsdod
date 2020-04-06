@@ -1464,7 +1464,7 @@ void Viewer::MAPPER()
 	RowCol rc;
 	dodBYTE a;
 	bool vftOnce;
-	Layers layer = LAYER_0;
+	Layers layer = LAYER_DEFAULT;
 
 	dungeon.DROW.row = 31;
 	dungeon.DROW.col = 31;
@@ -1610,7 +1610,7 @@ void Viewer::MAPPER()
 				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 2),
 				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 4),
 				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
-				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2), LAYER_UI);
+				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2), layer);
 		} while (true);
 
 		// Mark Creatures
@@ -1628,19 +1628,19 @@ void Viewer::MAPPER()
 				crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 2),
 				crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 4),
 				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4),
-				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2), LAYER_UI);
+				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2), layer);
 
 			_renderer->drawQuad(
 				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
 				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
 				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4),
-				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2), LAYER_UI);
+				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2), layer);
 
 			_renderer->drawQuad(
 				crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1),
 				crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
 				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 5),
-				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 1), LAYER_UI);
+				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 1), layer);
 		} while (true);
 	}
 
@@ -1651,31 +1651,31 @@ void Viewer::MAPPER()
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1),
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2),
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
-		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1), LAYER_UI);
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1),
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
 		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2),
-		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1), LAYER_UI);
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4),
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
-		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2), LAYER_UI);
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4),
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5),
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
-		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4), LAYER_UI);
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
 		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5),
-		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4), LAYER_UI);
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4), layer);
 
 	// Mark Vertical Features
 	vftIdx = dungeon.VFTPTR;
@@ -1702,25 +1702,25 @@ void Viewer::MAPPER()
 			crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1),
 			crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5),
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
-			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1), LAYER_UI);
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1), layer);
 
 		_renderer->drawQuad(
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1),
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
 			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5),
-			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1), LAYER_UI);
+			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1), layer);
 
 		_renderer->drawQuad(
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1),
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
-			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1), LAYER_UI);
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1), layer);
 
 		_renderer->drawQuad(
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4),
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
-			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4), LAYER_UI);
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4), layer);
 
 	} while (true);
 }
