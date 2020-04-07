@@ -1,7 +1,5 @@
 #include <3ds.h>
 
-#include <queue>
-
 #include "../dod.h"
 #include "../enhanced.h"
 #include "../viewer.h" // TODO Figure out how to decouple this
@@ -14,22 +12,6 @@
 extern OS_Link oslink;
 extern Viewer viewer;
 extern Coordinate crd;
-
-struct Triangle
-{
-	Triangle(float X0, float Y0, float X1, float Y1, float X2, float Y2, u32 Color, Layers Layer)
-		: x0(X0), y0(Y0), x1(X1), y1(Y1), x2(X2), y2(Y2), color(Color), layer(Layer){};
-	float x0;
-	float y0;
-	float x1;
-	float y1;
-	float x2;
-	float y2;
-	u32 color;
-	Layers layer;
-};
-
-std::queue<Triangle> Triangles;
 
 const struct kbdKey keyboardKeys[40] = {{87, 105, 15, 15, 'Q'},
 										{107, 105, 15, 15, 'W'},
@@ -149,14 +131,14 @@ void CitroRenderer::drawLine(float x0, float y0, float x1, float y1, Layers laye
 	float yWidth = width * sin(atan(slope));
 	float xWidth = width * cos(atan(slope));
 
-	Triangles.push(Triangle(x0 - xWidth, y0 + yWidth, x0 + xWidth, y0 - yWidth, x1 - xWidth, y1 + yWidth,
+	_triangles.push(Triangle(x0 - xWidth, y0 + yWidth, x0 + xWidth, y0 - yWidth, x1 - xWidth, y1 + yWidth,
 							_color, layer));
 
 	C2D_DrawTriangle(x0 - xWidth, y0 + yWidth, _color,
 					 x0 + xWidth, y0 - yWidth, _color,
 					 x1 - xWidth, y1 + yWidth, _color, 0);
 
-	Triangles.push(Triangle(x1 - xWidth, y1 + yWidth, x0 + xWidth, y0 - yWidth, x1 + xWidth, y1 - yWidth,
+	_triangles.push(Triangle(x1 - xWidth, y1 + yWidth, x0 + xWidth, y0 - yWidth, x1 + xWidth, y1 - yWidth,
 							_color, layer));
 
 	C2D_DrawTriangle(x1 - xWidth, y1 + yWidth, _color,
@@ -173,14 +155,14 @@ void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, f
 	y2 = ScreenHeight - y2;
 	y3 = ScreenHeight - y3;
 
-	Triangles.push(Triangle(_xOffset + x0, _yOffset + y0, _xOffset + x1, _yOffset + y1, _xOffset + x2,
+	_triangles.push(Triangle(_xOffset + x0, _yOffset + y0, _xOffset + x1, _yOffset + y1, _xOffset + x2,
 							_yOffset + y2, _color, layer));
 
 	C2D_DrawTriangle(_xOffset + x0, _yOffset + y0, _color,
 					 _xOffset + x1, _yOffset + y1, _color,
 					 _xOffset + x2, _yOffset + y2, _color, 0);
 
-	Triangles.push(Triangle(_xOffset + x2, _yOffset + y2, _xOffset + x3, _yOffset + y3, _xOffset + x0,
+	_triangles.push(Triangle(_xOffset + x2, _yOffset + y2, _xOffset + x3, _yOffset + y3, _xOffset + x0,
 							_yOffset + y0, _color, layer));
 
 	C2D_DrawTriangle(_xOffset + x2, _yOffset + y2, _color,
@@ -287,7 +269,6 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1, Layers la
 void CitroRenderer::endRendering()
 {
 	renderRightScreen();
-
 	C3D_FrameEnd(0);
 }
 
@@ -306,7 +287,7 @@ void CitroRenderer::plotPoint(double X, double Y, Layers layer)
 
 void CitroRenderer::renderRightScreen()
 {
-	if (Triangles.size() > 0)
+	if (_triangles.size() > 0)
 	{
 		C2D_SceneBegin(_right);
 
@@ -317,33 +298,32 @@ void CitroRenderer::renderRightScreen()
 		}
 
 		float slider = osGet3DSliderState();
-		while (!Triangles.empty())
+		while (!_triangles.empty())
 		{
-			Triangle triangle = Triangles.front();
-			Triangles.pop();
-			int xShift = 0;
-
-			switch (triangle.layer)
-			{
-			case LAYER_DEFAULT:
-				xShift = 0;
-				break;
-			case LAYER_0:
-				xShift = 4;
-				break;
-			case LAYER_FRONT:
-				xShift = -3;
-				break;
-			case LAYER_UI:
-				xShift = -4;
-				break;
-			default:
-				xShift = 0;
-				break;
-			}
+			Triangle triangle = _triangles.front();
+			_triangles.pop();
+			float xShift = 0;
 
 			if (slider > 0.0f)
 			{
+				switch (triangle.layer)
+				{
+				case LAYER_DEFAULT:
+					xShift = 0;
+					break;
+				case LAYER_0:
+					xShift = 4;
+					break;
+				case LAYER_FRONT:
+					xShift = -3;
+					break;
+				case LAYER_UI:
+					xShift = -4;
+					break;
+				default:
+					xShift = 0;
+					break;
+				}
 				xShift = xShift * slider;
 				C2D_DrawTriangle(triangle.x0 + xShift, triangle.y0, triangle.color,
 								 triangle.x1 + xShift, triangle.y1, triangle.color,

@@ -1,6 +1,8 @@
 #ifndef DOD_CITRO_RENDERER_HEADER
 #define DOD_CITRO_RENDERER_HEADER
 
+#include <queue>
+
 #include <citro2d.h>
 #include "../renderer.h"
 
@@ -12,6 +14,21 @@ class CitroRenderer : public Renderer
 public:
     static const int ScreenHeight;
     static const int ScreenWidth;
+
+    // Contains the information for rendering a triangle
+    struct Triangle
+    {
+        Triangle(float X0, float Y0, float X1, float Y1, float X2, float Y2, u32 Color, Layers Layer)
+            : x0(X0), y0(Y0), x1(X1), y1(Y1), x2(X2), y2(Y2), color(Color), layer(Layer){};
+        float x0;
+        float y0;
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        u32 color;
+        Layers layer;
+    };
 
     CitroRenderer();
 
@@ -188,6 +205,11 @@ private:
      * The right screen target for 3D mode.
      */
     C3D_RenderTarget *_right;
+
+    /**
+     * The list of triangles to render on the right screen.
+     */
+    std::queue<Triangle> _triangles;
 
     /**
      * x offset for translation.
