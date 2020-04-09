@@ -170,6 +170,14 @@ public:
     virtual void translateMatrix(float xOffset, float yOffset);
 
 private:
+
+    /**
+     * Returns the offset to shift the pixels by based on the layer.
+     * @param layer The layer to get the offset for.
+     * @param slider The stereoscopic level that the 3DS is set to
+     */
+    float getStereoscopicOffset(Layers layer, float slider);
+
     /**
      * Helper function to redraw all graphics on the right screen for stereoscopic mode.
      * It draws 

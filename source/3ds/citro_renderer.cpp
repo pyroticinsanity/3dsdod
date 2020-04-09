@@ -57,7 +57,9 @@ CitroRenderer::CitroRenderer()
 	// Init libs
 	gfxInitDefault();
 	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
-	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
+
+	// Need to increase this from the default to handle so many pixel based triangles.
+	C2D_Init(C2D_DEFAULT_MAX_OBJECTS * 2);
 	C2D_Prepare();
 	consoleInit(GFX_BOTTOM, NULL);
 
@@ -125,49 +127,63 @@ void CitroRenderer::deinitialize()
 
 void CitroRenderer::drawLine(float x0, float y0, float x1, float y1, Layers layer)
 {
-	float width = 1.0;
+	float width = 0.5;
+	float slider = osGet3DSliderState();
 
 	float slope = (x1 - x0) / (y1 - y0);
 	float yWidth = width * sin(atan(slope));
 	float xWidth = width * cos(atan(slope));
 
-	_triangles.push(Triangle(x0 - xWidth, y0 + yWidth, x0 + xWidth, y0 - yWidth, x1 - xWidth, y1 + yWidth,
+	float xShift = 0;
+	xShift = getStereoscopicOffset(layer, slider);
+
+	_triangles.push(Triangle(x0 - xWidth + xShift, y0 + yWidth,
+							 x0 + xWidth + xShift, y0 - yWidth, 
+							 x1 - xWidth + xShift, y1 + yWidth, _color, layer));
+
+	C2D_DrawTriangle(x0 - xWidth - xShift, y0 + yWidth, _color,
+					 x0 + xWidth - xShift, y0 - yWidth, _color,
+					 x1 - xWidth - xShift, y1 + yWidth, _color, 0);
+
+	_triangles.push(Triangle(x1 - xWidth + xShift, y1 + yWidth, 
+							 x0 + xWidth + xShift, y0 - yWidth,
+							 x1 + xWidth + xShift, y1 - yWidth,
 							_color, layer));
 
-	C2D_DrawTriangle(x0 - xWidth, y0 + yWidth, _color,
-					 x0 + xWidth, y0 - yWidth, _color,
-					 x1 - xWidth, y1 + yWidth, _color, 0);
-
-	_triangles.push(Triangle(x1 - xWidth, y1 + yWidth, x0 + xWidth, y0 - yWidth, x1 + xWidth, y1 - yWidth,
-							_color, layer));
-
-	C2D_DrawTriangle(x1 - xWidth, y1 + yWidth, _color,
-					 x0 + xWidth, y0 - yWidth, _color,
-					 x1 + xWidth, y1 - yWidth, _color, 0);
+	C2D_DrawTriangle(x1 - xWidth - xShift, y1 + yWidth, _color,
+					 x0 + xWidth - xShift, y0 - yWidth, _color,
+					 x1 + xWidth - xShift, y1 - yWidth, _color, 0);
 }
 
 void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3,
 							 Layers layer)
 {
-	// TODO: Flip the y-axis for some reason.
+	// We need to flip the y-axis because OpenGL's coordinate system has 0 at the bottom whereas
+	// the 3DS has 0 at the top
 	y0 = ScreenHeight - y0;
 	y1 = ScreenHeight - y1;
 	y2 = ScreenHeight - y2;
 	y3 = ScreenHeight - y3;
 
-	_triangles.push(Triangle(_xOffset + x0, _yOffset + y0, _xOffset + x1, _yOffset + y1, _xOffset + x2,
-							_yOffset + y2, _color, layer));
+	float slider = osGet3DSliderState();
+	float xShift = 0;
+	xShift = getStereoscopicOffset(layer, slider);
 
-	C2D_DrawTriangle(_xOffset + x0, _yOffset + y0, _color,
-					 _xOffset + x1, _yOffset + y1, _color,
-					 _xOffset + x2, _yOffset + y2, _color, 0);
+	_triangles.push(Triangle(_xOffset + x0 + xShift, _yOffset + y0,
+							 _xOffset + x1 + xShift, _yOffset + y1,
+							_xOffset + x2 + xShift,	_yOffset + y2, _color, layer));
 
-	_triangles.push(Triangle(_xOffset + x2, _yOffset + y2, _xOffset + x3, _yOffset + y3, _xOffset + x0,
-							_yOffset + y0, _color, layer));
+	C2D_DrawTriangle(_xOffset + x0 - xShift, _yOffset + y0, _color,
+					 _xOffset + x1 - xShift, _yOffset + y1, _color,
+					 _xOffset + x2 - xShift, _yOffset + y2, _color, 0);
 
-	C2D_DrawTriangle(_xOffset + x2, _yOffset + y2, _color,
-					 _xOffset + x3, _yOffset + y3, _color,
-					 _xOffset + x0, _yOffset + y0, _color, 0);
+	_triangles.push(Triangle(_xOffset + x2 + xShift, _yOffset + y2,
+							 _xOffset + x3 + xShift, _yOffset + y3,
+							_xOffset + x0 + xShift, _yOffset + y0, _color, layer));
+
+	C2D_DrawTriangle(_xOffset + x2 - xShift, _yOffset + y2, _color,
+					 _xOffset + x3 - xShift, _yOffset + y3, _color,
+					 _xOffset + x0 - xShift, _yOffset + y0, _color, 0);
 }
 
 void CitroRenderer::drawKeyboard(struct kbdKey key)
@@ -272,6 +288,35 @@ void CitroRenderer::endRendering()
 	C3D_FrameEnd(0);
 }
 
+float CitroRenderer::getStereoscopicOffset(Layers layer, float slider)
+{
+	float xShift = 0;
+	if (slider > 0.0f)
+	{
+		switch (layer)
+		{
+		case LAYER_DEFAULT:
+			xShift = 0;
+			break;
+		case LAYER_0:
+			xShift = 2.0f;
+			break;
+		case LAYER_FRONT:
+			xShift = -1.5f;
+			break;
+		case LAYER_UI:
+			xShift = -2.0f;
+			break;
+		default:
+			xShift = 0;
+			break;
+		}
+		xShift = xShift * slider;
+	}
+
+	return xShift;
+}
+
 void CitroRenderer::initialize()
 {
 }
@@ -287,48 +332,26 @@ void CitroRenderer::plotPoint(double X, double Y, Layers layer)
 
 void CitroRenderer::renderRightScreen()
 {
-	if (_triangles.size() > 0)
+	float slider = osGet3DSliderState();
+
+	C2D_SceneBegin(_right);
+
+	if (_currentImage != NULL)
 	{
-		C2D_SceneBegin(_right);
+		C2D_DrawImageAt(*_currentImage, 0, 0, 0);
+		_currentImage = NULL;
+	}
 
-		if (_currentImage != NULL)
+	while (!_triangles.empty())
+	{
+		Triangle triangle = _triangles.front();
+		_triangles.pop();
+
+		if (slider > 0.0f)
 		{
-			C2D_DrawImageAt(*_currentImage, 0, 0, 0);
-			_currentImage = NULL;
-		}
-
-		float slider = osGet3DSliderState();
-		while (!_triangles.empty())
-		{
-			Triangle triangle = _triangles.front();
-			_triangles.pop();
-			float xShift = 0;
-
-			if (slider > 0.0f)
-			{
-				switch (triangle.layer)
-				{
-				case LAYER_DEFAULT:
-					xShift = 0;
-					break;
-				case LAYER_0:
-					xShift = 4;
-					break;
-				case LAYER_FRONT:
-					xShift = -3;
-					break;
-				case LAYER_UI:
-					xShift = -4;
-					break;
-				default:
-					xShift = 0;
-					break;
-				}
-				xShift = xShift * slider;
-				C2D_DrawTriangle(triangle.x0 + xShift, triangle.y0, triangle.color,
-								 triangle.x1 + xShift, triangle.y1, triangle.color,
-								 triangle.x2 + xShift, triangle.y2, triangle.color, 0);
-			}
+			C2D_DrawTriangle(triangle.x0, triangle.y0, triangle.color,
+								triangle.x1, triangle.y1, triangle.color,
+								triangle.x2, triangle.y2, triangle.color, 0);
 		}
 	}
 }
