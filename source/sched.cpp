@@ -550,110 +550,110 @@ void Scheduler::SAVE()
 		return;
 	}
 
-	sprintf(outstr, "%d", game.LEVEL); fout << outstr << endl;
-	sprintf(outstr, "%d", dungeon.VFTPTR); fout << outstr << endl;
+	sprintf(outstr, "%d", game.LEVEL); fout << outstr << "\n";
+	sprintf(outstr, "%d", dungeon.VFTPTR); fout << outstr << "\n";
 
 	for (ctr = 0; ctr < 1024; ++ctr)
 	{
-		sprintf(outstr, "%d", dungeon.MAZLND[ctr]); fout << outstr << endl;
+		sprintf(outstr, "%d", dungeon.MAZLND[ctr]); fout << outstr << "\n";
 	}
 
-	sprintf(outstr, "%d", player.PROW); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PCOL); fout << outstr << endl;
-	sprintf(outstr, "%d", player.POBJWT); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PPOW); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PLHAND); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PRHAND); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PDAM); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PDIR); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PTORCH); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PRLITE); fout << outstr << endl;
-	sprintf(outstr, "%d", player.PMLITE); fout << outstr << endl;
-	sprintf(outstr, "%d", player.FAINT); fout << outstr << endl;
-	sprintf(outstr, "%d", player.BAGPTR); fout << outstr << endl;
-	sprintf(outstr, "%d", player.HEARTF); fout << outstr << endl;
-	sprintf(outstr, "%d", player.HEARTC); fout << outstr << endl;
-	sprintf(outstr, "%d", player.HEARTR); fout << outstr << endl;
-	sprintf(outstr, "%d", player.HEARTS); fout << outstr << endl;
-	sprintf(outstr, "%d", player.HBEATF); fout << outstr << endl;
-	sprintf(outstr, "%d", rng.SEED[0]); fout << outstr << endl;
-	sprintf(outstr, "%d", rng.SEED[1]); fout << outstr << endl;
-	sprintf(outstr, "%d", rng.SEED[2]); fout << outstr << endl;
-	sprintf(outstr, "%d", rng.carry); fout << outstr << endl;
-	sprintf(outstr, "%d", creature.FRZFLG); fout << outstr << endl;
-	sprintf(outstr, "%d", creature.CMXPTR); fout << outstr << endl;
+	sprintf(outstr, "%d", player.PROW); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PCOL); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.POBJWT); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PPOW); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PLHAND); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PRHAND); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PDAM); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PDIR); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PTORCH); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PRLITE); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.PMLITE); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.FAINT); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.BAGPTR); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.HEARTF); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.HEARTC); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.HEARTR); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.HEARTS); fout << outstr << "\n";
+	sprintf(outstr, "%d", player.HBEATF); fout << outstr << "\n";
+	sprintf(outstr, "%d", rng.SEED[0]); fout << outstr << "\n";
+	sprintf(outstr, "%d", rng.SEED[1]); fout << outstr << "\n";
+	sprintf(outstr, "%d", rng.SEED[2]); fout << outstr << "\n";
+	sprintf(outstr, "%d", rng.carry); fout << outstr << "\n";
+	sprintf(outstr, "%d", creature.FRZFLG); fout << outstr << "\n";
+	sprintf(outstr, "%d", creature.CMXPTR); fout << outstr << "\n";
 
 	for (ctr = 0; ctr < 60; ++ctr)
 	{
-		sprintf(outstr, "%d", creature.CMXLND[ctr]); fout << outstr << endl;
+		sprintf(outstr, "%d", creature.CMXLND[ctr]); fout << outstr << "\n";
 	}
 
 	for (ctr = 0; ctr < 32; ++ctr)
 	{
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCPOW); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCMGO); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCMGD); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCPHO); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCPHD); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCTMV); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCTAT); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCOBJ); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCDAM); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCUSE); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].creature_id); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCDIR); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCROW); fout << outstr << endl;
-		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCCOL); fout << outstr << endl;
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCPOW); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCMGO); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCMGD); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCPHO); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCPHD); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCTMV); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCTAT); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCOBJ); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCDAM); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCUSE); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].creature_id); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCDIR); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCROW); fout << outstr << "\n";
+		sprintf(outstr, "%d", creature.CCBLND[ctr].P_CCCOL); fout << outstr << "\n";
 	}
 
-	sprintf(outstr, "%d", object.OFINDF); fout << outstr << endl;
-	sprintf(outstr, "%d", object.OCBPTR); fout << outstr << endl;
-	sprintf(outstr, "%d", object.OFINDP); fout << outstr << endl;
+	sprintf(outstr, "%d", object.OFINDF); fout << outstr << "\n";
+	sprintf(outstr, "%d", object.OCBPTR); fout << outstr << "\n";
+	sprintf(outstr, "%d", object.OFINDP); fout << outstr << "\n";
 
 	for (ctr = 0; ctr < 72; ++ctr)
 	{
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCPTR); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCROW); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCCOL); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCLVL); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCOWN); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCXX0); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCXX1); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCXX2); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].obj_id); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].obj_type); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].obj_reveal_lvl); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCMGO); fout << outstr << endl;
-		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCPHO); fout << outstr << endl;
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCPTR); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCROW); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCCOL); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCLVL); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCOWN); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCXX0); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCXX1); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCXX2); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].obj_id); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].obj_type); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].obj_reveal_lvl); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCMGO); fout << outstr << "\n";
+		sprintf(outstr, "%d", object.OCBLND[ctr].P_OCPHO); fout << outstr << "\n";
 	}
 
-	sprintf(outstr, "%d", viewer.RLIGHT); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.MLIGHT); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.OLIGHT); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.VXSCAL); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.VYSCAL); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.TXBFLG); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.tcaret); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.tlen); fout << outstr << endl;
-	sprintf(outstr, "%d", viewer.NEWLIN); fout << outstr << endl;
+	sprintf(outstr, "%d", viewer.RLIGHT); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.MLIGHT); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.OLIGHT); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.VXSCAL); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.VYSCAL); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.TXBFLG); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.tcaret); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.tlen); fout << outstr << "\n";
+	sprintf(outstr, "%d", viewer.NEWLIN); fout << outstr << "\n";
 
 	//Save current game levels' rnd seeds, as they are no longer hard-coded.
 	for (ctr = 0; ctr <= 6; ++ctr)
 	{
-		sprintf(outstr, "%d", dungeon.LEVTAB[ctr]); fout << outstr << endl;
+		sprintf(outstr, "%d", dungeon.LEVTAB[ctr]); fout << outstr << "\n";
 	}
 	//Save vertical features table, as they are no longer hard-coded.
 
 	for (ctr = 0; ctr <= 41; ++ctr)
 	{
-		sprintf(outstr, "%d", dungeon.VFTTAB[ctr]); fout << outstr << endl;
+		sprintf(outstr, "%d", dungeon.VFTTAB[ctr]); fout << outstr << "\n";
 	}
-	sprintf(outstr, "%d", game.RandomMaze); fout << outstr << endl;
-	sprintf(outstr, "%d", game.ShieldFix); fout << outstr << endl;
-	sprintf(outstr, "%d", game.VisionScroll); fout << outstr << endl;
-	sprintf(outstr, "%d", game.CreaturesIgnoreObjects); fout << outstr << endl;
-	sprintf(outstr, "%d", game.CreaturesInstaRegen); fout << outstr << endl;
-	sprintf(outstr, "%d", game.MarkDoorsOnScrollMaps); fout << outstr << endl;
+	sprintf(outstr, "%d", game.RandomMaze); fout << outstr << "\n";
+	sprintf(outstr, "%d", game.ShieldFix); fout << outstr << "\n";
+	sprintf(outstr, "%d", game.VisionScroll); fout << outstr << "\n";
+	sprintf(outstr, "%d", game.CreaturesIgnoreObjects); fout << outstr << "\n";
+	sprintf(outstr, "%d", game.CreaturesInstaRegen); fout << outstr << "\n";
+	sprintf(outstr, "%d", game.MarkDoorsOnScrollMaps); fout << outstr << "\n";
 
 	fout.close();
 }
