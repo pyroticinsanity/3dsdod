@@ -1243,29 +1243,35 @@ switch(menu_id)
   }
     case FILE_MENU_LOAD:
   {
-	char *menuList[10] = {	"DEFAULT\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 3\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 4\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 6\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 7\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 8\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
-							"LOAD 9\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
+	char *menuList[10]; 
+
+	menuList[0] = new char[50];
+	memset(menuList[0], 0, 50);
+	
+	for(int i = 0; i < 10; i++)
+	{
+		menuList[i] = new char[50];
+		memset(menuList[0], 0, 50);
+	}
+	
 	int error;
 	struct stat fstats;
 	struct tm* time;
 	int year, month, day, hour, min;
 	bool pm;
 	char date[34];
-	char filename[34] = "saved/game.dod";
+	char filename[34];
+	memset(filename, 0, sizeof(filename));
+
+	sprintf(filename, "%s%sgame.dod", savedDir, pathSep);
+
 	error = stat(filename, &fstats);
 	memset(gamefile, 0, gamefileLen);
 	strcpy(gamefile,savedDir);
 	strcat(gamefile,pathSep);
 	if(error == 0)
 	{
+		printf("%d\n", fstats.st_mtime);
 		time = localtime(&fstats.st_mtime);
 		year = time->tm_year + 1905;
 		month = time->tm_mon + 5;
@@ -1291,11 +1297,15 @@ switch(menu_id)
 		sprintf(date, "DEFAULT - %d.%02d.%02d %d.%02d %s", year, month, day, hour, min, pm ? "PM" : "AM");
 		strncpy(menuList[0], date, 34);
 	}
+	else
+	{
+		strcpy(menuList[0], "DEFAULT");
+	}
 
-	strcpy(filename, "saved/game0.dod");
 	for(int i = 1; i < 10; i++)
 	{
-		filename[10] = filename[10] + 1;
+		printf("%d\n", fstats.st_mtime);
+		sprintf(filename, "%s%sgame%d.dod", savedDir, pathSep, i);
 		error = stat(filename, &fstats);
 
 		if(error == 0)
@@ -1324,6 +1334,11 @@ switch(menu_id)
 			}
 			sprintf(date, "LOAD %d  - %d.%02d.%02d %d.%02d %s", i, year, month, day, hour, min, pm ? "PM" : "AM");
 			strncpy(menuList[i], date, 34);
+		}
+		else
+		{
+			sprintf(date, "LOAD %d", i);
+			strcpy(menuList[i], date);
 		}
 	}
 
@@ -1364,6 +1379,13 @@ switch(menu_id)
 		strcat(gamefile, "game9.dod");
 		break;
 	}
+
+	for(int i = 0; i < 10; i++)
+	{
+		delete menuList[i];
+	}
+
+
 	if ((fptr = fopen(gamefile,"r")) != NULL)
 	{
 		fclose(fptr);
