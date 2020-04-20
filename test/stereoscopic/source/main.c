@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
 	gfxSet3D(true);
 
 	// Create screens
-	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+	C3D_RenderTarget* topLeft = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 	C3D_RenderTarget* topRight = C2D_CreateScreenTarget(GFX_TOP, GFX_RIGHT);
 
 	u32 clrClear = C2D_Color32(0x00, 0x00, 0x00, 0x00);
@@ -197,8 +197,8 @@ int main(int argc, char* argv[]) {
 		// Render the scene
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
-			C2D_TargetClear(top, clrClear);
-			C2D_SceneBegin(top);
+			C2D_TargetClear(topLeft, clrClear);
+			C2D_SceneBegin(topLeft);
 			drawVectorList(W1_VLA, -xOffset, -yOffset);
 
 			C2D_SceneBegin(topRight);
@@ -206,8 +206,6 @@ int main(int argc, char* argv[]) {
 			drawVectorList(W1_VLA, xOffset, yOffset);
 
 		C3D_FrameEnd(0);
-
-		gfxSwapBuffers();
 	}
 
 	// Deinit libs
