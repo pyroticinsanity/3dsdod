@@ -87,7 +87,7 @@ CitroRenderer::CitroRenderer()
 	// Delete the t3x object since we don't need it
 	Tex3DS_TextureFree(t3x);
 
-	printf("3DS Dungeons of Daggorath - 0.8\n");
+	printf("Dungeons of Daggorath 3D - 0.8\n");
 	printf("---------------------------------------\n");
 	printf("Controls:\n");
 	printf("D-Pad Up - MOVE UP\n");
@@ -224,8 +224,20 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1, Layers la
 		clrLine[1] = viewer.fgColor[1] * flBirghtness + viewer.bgColor[1] * (1.0f - flBirghtness);
 		clrLine[2] = viewer.fgColor[2] * flBirghtness + viewer.bgColor[2] * (1.0f - flBirghtness);
 
+		// Apply a bounding box around it
+		X0 = (X0 < 0) ? 0 : (X0 > 256) ? 256 : X0;
+		X1 = (X1 < 0) ? 0 : (X1 > 256) ? 256 : X1;
+		//Y0 = (Y0 < 0) ? 0 : (Y0 > 152) ? 152 : Y0;
+		//Y1 = (Y1 < 0) ? 0 : (Y1 > 152) ? 152 : Y1;
+
+		// We need to flip the y-axis because OpenGL's coordinate system has 0 at the bottom whereas
+		// the 3DS has 0 at the top
+		//Y0 = ScreenHeight - Y0;
+		//Y1 = ScreenHeight - Y1;
+
+
 		setColor(clrLine[0], clrLine[1], clrLine[2]);
-		drawLine(X0, Y0, X1, Y1, layer);
+		drawLine(crd.newX(X0), Y0, crd.newX(X1), Y1, layer);
 		setColor(viewer.fgColor);
 	}
 	else
@@ -361,6 +373,7 @@ void CitroRenderer::resetMatrix()
 	_xOffset = 0;
 	_yOffset = 0;
 }
+
 
 void CitroRenderer::setClearColor(float red, float green, float blue, float alpha)
 {
