@@ -77,6 +77,7 @@ void quitGame()
 		fclose(oslink.outputFile);
 	}
 
+	oslink.deinitialize();
 	exit(0);
 }
 

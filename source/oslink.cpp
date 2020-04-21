@@ -105,7 +105,7 @@ void OS_Link::init()
 	{
 		printf( "Video initialization failed: %s\n", SDL_GetError());
 		sleep(1);
-		quitSDL(1);
+		quitGame();
 	}
 
 	//Initialize joystick
@@ -122,7 +122,7 @@ void OS_Link::init()
 	{
 		printf("Unable to open audio: %s!\n", Mix_GetError());
 		sleep(1);
-		quitSDL(1);
+		quitGame();
 	}
 
 	creature.LoadSounds();
@@ -138,7 +138,7 @@ void OS_Link::init()
 	{
 		printf("Video query failed: %s\n", SDL_GetError());
 		sleep(1);
-		quitSDL(1);
+		quitGame();
 	}
 	bpp = info->vfmt->BitsPerPixel;*/
 
@@ -295,7 +295,7 @@ void OS_Link::process_events()
 			handle_key_down(&event.key.keysym);
 			break;
 		case SDL_QUIT:
-			quitSDL(0);
+			quitGame();
 			break;
 		case SDL_VIDEOEXPOSE:
 			SDL_GL_SwapBuffers();
@@ -305,12 +305,11 @@ void OS_Link::process_events()
 }
 
 // Quits application
-void OS_Link::quitSDL(int code)
+void OS_Link::deinitialize()
 {
 	Mix_CloseAudio();
 	SDL_JoystickClose(joystick);
 	SDL_Quit();
-	exit(code);
 }
 
 void OS_Link::type_command(char* command)
@@ -1050,7 +1049,7 @@ bool OS_Link::main_menu()
       viewer.drawMenu(mainMenu, col, row);
       break;
      case SDL_QUIT:
-      quitSDL(0);
+      quitGame();
       break;
      case SDL_VIDEOEXPOSE:
       SDL_GL_SwapBuffers();
@@ -1397,7 +1396,6 @@ switch(menu_id)
 
   case FILE_MENU_EXIT:
    //Exit
-   //quitSDL(0);
    quitGame();
   }
 
@@ -1682,7 +1680,7 @@ switch(menu_id)
        return false;
        break;
       case SDL_QUIT:
-       quitSDL(0);  // Quits SDL
+       quitGame();
        break;
       case SDL_VIDEOEXPOSE:
        SDL_GL_SwapBuffers();
@@ -1789,7 +1787,7 @@ int OS_Link::menu_list(int x, int y, char *title, char *list[], int listSize)
         }
       break;
      case SDL_QUIT:
-      quitSDL(0);
+      quitGame();
       break;
      case SDL_VIDEOEXPOSE:
       SDL_GL_SwapBuffers();
@@ -1903,7 +1901,7 @@ int OS_Link::menu_scrollbar(char *title, int min, int max, int current)
        viewer.drawMenuScrollbar(title, (current - newMin) / increment);
        break;
       case SDL_QUIT:
-       quitSDL(0);
+       quitGame();
        break;
       case SDL_VIDEOEXPOSE:
        SDL_GL_SwapBuffers();
@@ -1988,7 +1986,7 @@ void OS_Link::menu_string(char *newString, char *title, int maxLength)
         }
       break;
      case SDL_QUIT:
-      quitSDL(0);
+      quitGame();
       break;
      case SDL_VIDEOEXPOSE:
       SDL_GL_SwapBuffers();
@@ -2246,7 +2244,7 @@ void OS_Link::changeVideoRes(int mode)
  if(!info)
   {
   fprintf(stderr, "Video query failed: %s\n", SDL_GetError());
-  quitSDL(1);
+  quitGame(1);
   }*/
 
  newHeight = renderer->getScreenHeight();

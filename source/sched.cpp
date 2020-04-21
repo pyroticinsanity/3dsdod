@@ -39,6 +39,8 @@ extern Player	player;
 extern Viewer	viewer;
 extern OS_Link	oslink;
 
+extern void quitGame();
+
 // Constructor
 Scheduler::Scheduler()
 {
@@ -462,7 +464,7 @@ bool Scheduler::keyCheck()
 			return ( keyHandler(&event.key.keysym) );
 			break;
 		case SDL_QUIT:
-			oslink.quitSDL(0); // eventually change to meta-menu
+			quitGame(); // eventually change to meta-menu
 			break;
 		case SDL_VIDEOEXPOSE:
 			SDL_GL_SwapBuffers();
@@ -504,7 +506,7 @@ bool Scheduler::EscCheck()
 			return ( keyHandler(&event.key.keysym) );
 			break;
 		case SDL_QUIT:
-			oslink.quitSDL(0); // eventually change to meta-menu
+			quitGame(); // eventually change to meta-menu
 			break;
 		case SDL_VIDEOEXPOSE:
 			SDL_GL_SwapBuffers();
