@@ -1110,35 +1110,20 @@ switch(menu_id)
 
 	sprintf(filename, "%s%sgame.dod", savedDir, pathSep);
 
+#ifdef _3DS
+	u64 mtime;
+	error = sdmc_getmtime(filename, &mtime);
+	fstats.st_mtime = mtime;
+#else
 	error = stat(filename, &fstats);
+#endif
 	memset(gamefile, 0, gamefileLen);
 	strcpy(gamefile,savedDir);
 	strcat(gamefile,pathSep);
 	if(error == 0)
 	{
 		time = localtime(&fstats.st_mtime);
-		year = time->tm_year + 1905;
-		month = time->tm_mon + 5;
-		day = time->tm_mday + 4;
-		hour = time->tm_hour - 5;
-		min = time->tm_min - 24;
-		pm = false;
-		if(min < 0)
-		{
-			hour--;
-			min += 60;
-		}
-		if(hour < 0)
-		{
-			day--;
-			hour += 24;
-		}
-		if(hour >= 12)
-		{
-			hour -= 12;
-			pm = true;
-		}
-		sprintf(date, "DEFAULT - %d.%02d.%02d %d.%02d %s", year, month, day, hour, min, pm ? "PM" : "AM");
+		strftime(date, 34, "DEFAULT - %Y.%m.%d %I:%M %p", time);
 		strncpy(menuList[0], date, 34);
 	}
 	else
@@ -1149,34 +1134,20 @@ switch(menu_id)
 	for(int i = 1; i < 10; i++)
 	{
 		sprintf(filename, "%s%sgame%d.dod", savedDir, pathSep, i);
-		error = stat(filename, &fstats);
+#ifdef _3DS
+	u64 mtime;
+	error = sdmc_getmtime(filename, &mtime);
+	fstats.st_mtime = mtime;
+#else
+	error = stat(filename, &fstats);
+#endif
 
 		if(error == 0)
 		{
 			time = localtime(&fstats.st_mtime);
-			year = time->tm_year + 1905;
-			month = time->tm_mon + 5;
-			day = time->tm_mday + 4;
-			hour = time->tm_hour - 5;
-			min = time->tm_min - 24;
-			pm = false;
-			if(min < 0)
-			{
-				hour--;
-				min += 60;
-			}
-			if(hour < 0)
-			{
-				day--;
-				hour += 24;
-			}
-			if(hour >= 12)
-			{
-				hour -= 12;
-				pm = true;
-			}
-			sprintf(date, "SAVE %d  - %d.%02d.%02d %d.%02d %s", i, year, month, day, hour, min, pm ? "PM" : "AM");
-			strncpy(menuList[i], date, 34);
+			strftime(date, sizeof(date), "%Y.%m.%d %I:%M %p", time);
+
+			snprintf(menuList[i], 34, "SAVE %d  - %s", i, date);
 		}
 		else
 		{
@@ -1278,35 +1249,21 @@ switch(menu_id)
 
 	sprintf(filename, "%s%sgame.dod", savedDir, pathSep);
 
+#ifdef _3DS
+	u64 mtime;
+	error = sdmc_getmtime(filename, &mtime);
+	fstats.st_mtime = mtime;
+#else
 	error = stat(filename, &fstats);
+#endif
 	memset(gamefile, 0, gamefileLen);
 	strcpy(gamefile,savedDir);
 	strcat(gamefile,pathSep);
 	if(error == 0)
 	{
 		time = localtime(&fstats.st_mtime);
-		year = time->tm_year + 1905;
-		month = time->tm_mon + 5;
-		day = time->tm_mday + 4;
-		hour = time->tm_hour - 5;
-		min = time->tm_min - 24;
-		pm = false;
-		if(min < 0)
-		{
-			hour--;
-			min += 60;
-		}
-		if(hour < 0)
-		{
-			day--;
-			hour += 24;
-		}
-		if(hour >= 12)
-		{
-			hour -= 12;
-			pm = true;
-		}
-		sprintf(date, "DEFAULT - %d.%02d.%02d %d.%02d %s", year, month, day, hour, min, pm ? "PM" : "AM");
+		
+		strftime(date, sizeof(date), "DEFAULT - %Y.%m.%d %I:%M %p", time);
 		strncpy(menuList[0], date, 34);
 	}
 	else
@@ -1317,34 +1274,19 @@ switch(menu_id)
 	for(int i = 1; i < 10; i++)
 	{
 		sprintf(filename, "%s%sgame%d.dod", savedDir, pathSep, i);
-		error = stat(filename, &fstats);
+#ifdef _3DS
+	u64 mtime;
+	error = sdmc_getmtime(filename, &mtime);
+	fstats.st_mtime = mtime;
+#else
+	error = stat(filename, &fstats);
+#endif
 
 		if(error == 0)
 		{
 			time = localtime(&fstats.st_mtime);
-			year = time->tm_year + 1905;
-			month = time->tm_mon + 5;
-			day = time->tm_mday + 4;
-			hour = time->tm_hour - 5;
-			min = time->tm_min - 24;
-			pm = false;
-			if(min < 0)
-			{
-				hour--;
-				min += 60;
-			}
-			if(hour < 0)
-			{
-				day--;
-				hour += 24;
-			}
-			if(hour >= 12)
-			{
-				hour -= 12;
-				pm = true;
-			}
-			sprintf(date, "LOAD %d  - %d.%02d.%02d %d.%02d %s", i, year, month, day, hour, min, pm ? "PM" : "AM");
-			strncpy(menuList[i], date, 34);
+			strftime(date, sizeof(date), "%Y.%m.%d %I:%M %p", time);
+			snprintf(menuList[i], 34, "LOAD %d  - %s", i, date);
 		}
 		else
 		{
