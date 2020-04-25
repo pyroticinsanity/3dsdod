@@ -917,7 +917,7 @@ void Viewer::drawTorchHighlite()
 		crd.newX(x1*8), crd.newY(y1*8),
 		crd.newX(x2*8), crd.newY(y1*8),
 		crd.newX(x2*8), crd.newY(y2*8),
-		crd.newX(x1*8), crd.newY(y2*8));
+		crd.newX(x1*8), crd.newY(y2*8), LAYER_UI);
 	_renderer->setColor(bgColor);
 	object.OBJNAM(player.PTORCH);
 	drawString_internal(x1, y1, parser.TOKEN, tlen);
@@ -935,7 +935,7 @@ void Viewer::drawArea(TXB * a)
 			crd.newX(0*8), crd.newY(19*8),
 			crd.newX(32*8), crd.newY(19*8),
 			crd.newX(32*8), crd.newY(20*8),
-			crd.newX(0*8), crd.newY(20*8));
+			crd.newX(0*8), crd.newY(20*8), LAYER_UI);
 		_renderer->setColor(bgColor);
 	}
 	else
@@ -946,7 +946,7 @@ void Viewer::drawArea(TXB * a)
 			crd.newX(0*8), crd.newY(20*8),
 			crd.newX(33*8), crd.newY(20*8),
 			crd.newX(33*8), crd.newY(24*8),
-			crd.newX(0*8), crd.newY(24*8));
+			crd.newX(0*8), crd.newY(24*8), LAYER_UI);
 		_renderer->setColor(fgColor);
 	}
 
@@ -1464,6 +1464,7 @@ void Viewer::MAPPER()
 	RowCol rc;
 	dodBYTE a;
 	bool vftOnce;
+	Layers layer = LAYER_DEFAULT;
 
 	dungeon.DROW.row = 31;
 	dungeon.DROW.col = 31;
@@ -1477,7 +1478,7 @@ void Viewer::MAPPER()
 				crd.newX(dungeon.DROW.col * 8), crd.newY(dungeon.DROW.row * 6),
 				crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6),
 				crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6),
-				crd.newX((dungeon.DROW.col + 1) * 8), crd.newY(dungeon.DROW.row * 6));
+				crd.newX((dungeon.DROW.col + 1) * 8), crd.newY(dungeon.DROW.row * 6), layer);
 
 			if (game.MarkDoorsOnScrollMaps) {  //Do we need to mark the doors on the scroll maps?
 				if ((dungeon.MAZLND[mazIdx] & 0x0c) == (0x01 << 2) ||
@@ -1489,45 +1490,45 @@ void Viewer::MAPPER()
 					if ((dungeon.MAZLND[mazIdx] & 0x0c) == (0x01 << 2)) {  //Is this a regular door?  Yes:
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6),
-							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4),
-							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6));
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5),
-							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
+							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5),
-							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4),
-							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5));
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.5), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4),
-							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4), layer);
 						
 					} else {  //Is this a regular door?  No:
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6),
-							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 1.75));
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 1.75), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.5),
-							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6));
+							crd.newX((dungeon.DROW.col + 1) * 8 + DoorOffset), crd.newY((dungeon.DROW.row + 1) * 6), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25),
-							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25));
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 2.25),
-							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3));
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25),
-							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25));
+							crd.newX((dungeon.DROW.col + 1) * 8 - 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 3.25),
-							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4));
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.75 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4), layer);
 						_renderer->drawLine(
 							crd.newX((dungeon.DROW.col + 1) * 8 - 1 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25),
-							crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25));
+							crd.newX((dungeon.DROW.col + 1) * 8 + 0.5 + DoorOffset), crd.newY(dungeon.DROW.row * 6 + 4.25), layer);
 					}  //Is this a regular door?
 					_renderer->setColor(0.0,0.0,0.0);
 				}  //Do we have a east door or secret door?
@@ -1540,44 +1541,44 @@ void Viewer::MAPPER()
 					if ((dungeon.MAZLND[mazIdx] & 0x30) == (0x01 << 4)) {  //Is this a regular door?  Yes:
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
-							crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+							crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.75 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset), layer);
 					} else {  //Is this a regular door?  No:
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 2.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 2.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
-							crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+							crd.newX((dungeon.DROW.col + 1) * 8), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 1 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.25 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 - 0.25 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3.25), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.75), crd.newY((dungeon.DROW.row + 1) * 6 + 0.75 + DoorOffset), layer);
 						_renderer->drawLine(
 							crd.newX(dungeon.DROW.col * 8 + 3), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset),
-							crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset));
+							crd.newX(dungeon.DROW.col * 8 + 4.5), crd.newY((dungeon.DROW.row + 1) * 6 + 1 + DoorOffset), layer);
 					}
 					_renderer->setColor(0.0,0.0,0.0);
 				}  //Do we have a south door or secret door?
@@ -1609,7 +1610,7 @@ void Viewer::MAPPER()
 				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 2),
 				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 4),
 				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
-				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
+				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2), layer);
 		} while (true);
 
 		// Mark Creatures
@@ -1627,19 +1628,19 @@ void Viewer::MAPPER()
 				crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 2),
 				crd.newX((rc.col * 8) + 1), crd.newY((rc.row * 6) + 4),
 				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4),
-				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2));
+				crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2), layer);
 
 			_renderer->drawQuad(
 				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
 				crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
 				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4),
-				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2));
+				crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2), layer);
 
 			_renderer->drawQuad(
 				crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1),
 				crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
 				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 5),
-				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 1));
+				crd.newX((rc.col * 8) + 4), crd.newY((rc.row * 6) + 1), layer);
 		} while (true);
 	}
 
@@ -1650,31 +1651,31 @@ void Viewer::MAPPER()
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1),
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 2),
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
-		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1),
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
 		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 2),
-		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1));
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4),
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
-		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2));
+		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 4),
 		crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5),
 		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
-		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4));
+		crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4), layer);
 
 	_renderer->drawQuad(
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4),
 		crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
 		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5),
-		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4));
+		crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 4), layer);
 
 	// Mark Vertical Features
 	vftIdx = dungeon.VFTPTR;
@@ -1701,25 +1702,25 @@ void Viewer::MAPPER()
 			crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 1),
 			crd.newX((rc.col * 8) + 2), crd.newY((rc.row * 6) + 5),
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
-			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1));
+			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1), layer);
 
 		_renderer->drawQuad(
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1),
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
 			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 5),
-			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1));
+			crd.newX((rc.col * 8) + 6), crd.newY((rc.row * 6) + 1), layer);
 
 		_renderer->drawQuad(
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 1),
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 2),
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 2),
-			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1));
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 1), layer);
 
 		_renderer->drawQuad(
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 4),
 			crd.newX((rc.col * 8) + 3), crd.newY((rc.row * 6) + 5),
 			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 5),
-			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4));
+			crd.newX((rc.col * 8) + 5), crd.newY((rc.row * 6) + 4), layer);
 
 	} while (true);
 }
@@ -1751,7 +1752,7 @@ void Viewer::drawVectorList(int VLA[])
 				y0 = ScaleYf((float)VLA[ctr+1]) + (float)VCNTRY;
 				x1 = ScaleXf((float)VLA[ctr+2]) + (float)VCNTRX;
 				y1 = ScaleYf((float)VLA[ctr+3]) + (float)VCNTRY;
-				_renderer->drawVector(x0, y0, x1, y1);
+				_renderer->drawVector(x0, y0, x1, y1, LAYER_0);
 			}
 			else {
 				float x0, y0, x1, y1;
@@ -1760,7 +1761,7 @@ void Viewer::drawVectorList(int VLA[])
 				x1 = ScaleXf((float)VLA[ctr+2]) + (float)VCNTRX;
 				y1 = ScaleYf((float)VLA[ctr+3]) + (float)VCNTRY;
 
-				_renderer->drawVector((float)(int)x0, (float)(int)y0, (float)(int)x1, (float)(int)y1);
+				_renderer->drawVector((float)(int)x0, (float)(int)y0, (float)(int)x1, (float)(int)y1, LAYER_0);
 
 //				dodSHORT x0, y0, x1, y1;
 //				x0 = ScaleX(VLA[ctr]) + VCNTRX;
@@ -1813,7 +1814,7 @@ void Viewer::drawVectorListAQ(int VLA[])
 			crd.newXa((double) VLA[ctr]),crd.newYa((double) VLA[ctr+1]),
 			crd.newXa((double) VLA[ctr+2]),crd.newYa((double) VLA[ctr+3]),
 			crd.newXa((double) VLA[ctr+4]),crd.newYa((double) VLA[ctr+5]),
-			crd.newXa((double) VLA[ctr+6]),crd.newYa((double) VLA[ctr+7]));
+			crd.newXa((double) VLA[ctr+6]),crd.newYa((double) VLA[ctr+7]), LAYER_UI);
 		ctr += 8;
 		++curQuad;
 	}
@@ -1927,8 +1928,8 @@ void Viewer::drawKeyboard(struct kbdKey key)
 #ifdef _3DS
 	// Draw a box for the command buffer to appear in
 	_renderer->setColor(0, 0, 0);
-	_renderer->drawQuad(0, 220, 400, 220, 400, 200, 0, 200);
-	_renderer->setColor(fgColor);
+	_renderer->drawQuad(0, 220, 400, 220, 400, 200, 0, 200, LAYER_UI);
+	_renderer->setColor(1.0, 1.0, 1.0);
 #endif
 
 	int x = 0;
@@ -1979,7 +1980,7 @@ void Viewer::drawCommandMenu(command_menu commandMenu, int menu_id, int highligh
      	crd.newX(x * 8), crd.newY(y * 8),
     	crd.newX((x + length) * 8), crd.newY(y * 8),
      	crd.newX((x + length) * 8), crd.newY((y + 1) * 8),
-     	crd.newX(x * 8), crd.newY((y + 1) * 8));
+     	crd.newX(x * 8), crd.newY((y + 1) * 8), LAYER_UI);
      _renderer->setColor(bgColor);
      }
 
@@ -2030,7 +2031,7 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
      	crd.newX(x * 8), crd.newY(y * 8),
      	crd.newX((x + length) * 8), crd.newY(y * 8),
      	crd.newX((x + length) * 8), crd.newY((y + 1) * 8),
-     	crd.newX(x * 8), crd.newY((y + 1) * 8));
+     	crd.newX(x * 8), crd.newY((y + 1) * 8), LAYER_UI);
      _renderer->setColor(bgColor);
      }
 
@@ -2079,7 +2080,7 @@ void Viewer::drawMenuList(int x, int y, char *title, char *list[], int listSize,
      	crd.newX(x * 8), crd.newY(y * 8),
      	crd.newX((x + length) * 8), crd.newY(y * 8),
      	crd.newX((x + length) * 8), crd.newY((y + 1) * 8),
-     	crd.newX(x * 8), crd.newY((y + 1) * 8));
+     	crd.newX(x * 8), crd.newY((y + 1) * 8), LAYER_UI);
      _renderer->setColor(bgColor);
      }
 

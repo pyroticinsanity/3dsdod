@@ -28,9 +28,6 @@ is held by Douglas J. Morgan.
  // Arbitrary Length of 80, maybe be changed if needed
 #define MAX_FILENAME_LENGTH 80
 
-
-
-
 class OS_Link
 {
 public:
@@ -40,7 +37,7 @@ public:
 	// Public Interface
 	void init();			// main entry point for dod application
 	void execute();
-	void quitSDL(int code);	// shuts down SDL before exiting
+	void deinitialize();	// shuts down SDL
 	void process_events();	// used mainly to retrieve keystrokes
 	bool main_menu();       // used to implement the meta-menu
 	bool saveOptFile(void);

@@ -41,9 +41,11 @@ GFXBUILD	:=	$(BUILD)
 ROMFS		:=	data
 #GFXBUILD	:=	$(ROMFS)/gfx
 
-APP_TITLE		:=	Dungeons of Daggorath
+APP_TITLE		:=	Dungeons of Daggorath 3D
 APP_DESCRIPTION	:=	Dungeons of Daggorath for the 3DS
-APP_AUTHOR		:=	Ported by Darkweb
+APP_AUTHOR		:=	Darkweb
+APP_VER			:= 	0.8
+APP_TITLE_ID	:= 
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -185,7 +187,7 @@ endif
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(GFXBUILD)
+	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(GFXBUILD) $(TARGET)-strip.elf $(TARGET)-cia.bnr $(TARGET)-cia.smdh $(TARGET).cia
 
 #---------------------------------------------------------------------------------
 $(GFXBUILD)/%.t3x	$(BUILD)/%.h	:	%.t3s
@@ -193,6 +195,20 @@ $(GFXBUILD)/%.t3x	$(BUILD)/%.h	:	%.t3s
 	@echo $(notdir $<)
 	@tex3ds -i $< -H $(BUILD)/$*.h -d $(DEPSDIR)/$*.d -o $(GFXBUILD)/$*.t3x
 
+#---------------------------------------------------------------------------------
+$(TARGET)-strip.elf: $(BUILD)
+	@$(STRIP) $(TARGET).elf -o $(TARGET)-strip.elf
+#---------------------------------------------------------------------------------
+$(TARGET)-cia.bnr: banner/$(TARGET)-banner.png banner/$(TARGET).wav
+	@bannertool makebanner -i banner/$(TARGET)-banner.png -a banner/$(TARGET).wav -o $(TARGET)-cia.bnr
+#---------------------------------------------------------------------------------
+$(TARGET)-cia.smdh: banner/$(TARGET)-icon.png 
+	@bannertool makesmdh -s "$(TARGET)" -l "$(APP_TITLE)" -p "$(APP_AUTHOR)" -i banner/$(TARGET)-icon.png -o $(TARGET)-cia.smdh -r regionfree
+#---------------------------------------------------------------------------------
+cia: $(TARGET)-strip.elf $(TARGET)-cia.bnr $(TARGET)-cia.smdh banner/$(TARGET).rsf
+	@makerom -f cia -elf $(TARGET)-strip.elf -icon $(TARGET)-cia.smdh -banner $(TARGET)-cia.bnr -desc app:4 -v -o $(TARGET).cia -target t -exefslogo -rsf banner/$(TARGET).rsf
+	@echo "built cia"
+#---------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------
 else
 
@@ -252,6 +268,8 @@ endef
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	@tex3ds -i $< -H $*.h -d $*.d -o $*.t3x
+
+#---------------------------------------------------------------------------------
 
 -include $(DEPSDIR)/*.d
 

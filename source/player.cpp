@@ -1663,7 +1663,7 @@ void Player::ShowTurn(dodBYTE A)
 					_renderer->clearBuffer();
 					_renderer->resetMatrix();
 					viewer.drawVectorList(viewer.LINES);
-					_renderer->drawVector((x*inc*dir)+offset,y0,(x*inc*dir)+offset,y1);
+					_renderer->drawVector((x*inc*dir)+offset,y0,(x*inc*dir)+offset,y1, LAYER_FRONT);
 					viewer.drawArea(&viewer.TXTSTS);
 					viewer.drawArea(&viewer.TXTPRI);
 					_renderer->swapBuffers();
