@@ -1,15 +1,5 @@
 /*
-	Hello World example made by Aurelio Mannara for ctrulib
-	This code was modified for the last time on: 12/13/2014 01:00 UTC+1
-
-	This wouldn't be possible without the amazing work done by:
-	-Smealum
-	-fincs
-	-WinterMute
-	-yellows8
-	-plutoo
-	-mtheall
-	-Many others who worked on 3DS and I'm surely forgetting about
+ * Example code for reading a set of images like a manual from the SD card at /3ds/3dsdod/manual.
 */
 
 #include <3ds.h>
@@ -17,116 +7,180 @@
 #include <string.h>
 #include <citro2d.h>
 #include <citro3d.h>
+#include <png.h>
+#include <vector>
+#include <string>
+#include <dirent.h>
 
 #include "manual.h"
 
+std::vector<std::string> Pages;
 
-#include "dod01_t3x.h"
-#include "dod02_t3x.h"
-#include "dod03_t3x.h"
-#include "dod04_t3x.h"
-#include "dod05_t3x.h"
-#include "dod06_t3x.h"
-#include "dod07_t3x.h"
-#include "dod08_t3x.h"
-#include "dod09_t3x.h"
-#include "dod10_t3x.h"
-#include "dod11_t3x.h"
-#include "dod12_t3x.h"
-#include "dod13_t3x.h"
-#include "dod14_t3x.h"
-#include "dod15_t3x.h"
-#include "dod16_t3x.h"
-#include "dod17_t3x.h"
-#include "dod18_t3x.h"
-#include "dod19_t3x.h"
-#include "dod20_t3x.h"
-#include "dod21_t3x.h"
-#include "dod22_t3x.h"
-#include "dod23_t3x.h"
-#include "dod24_t3x.h"
-#include "dod25_t3x.h"
-#include "dod26_t3x.h"
-#include "dod27_t3x.h"
-#include "dod28_t3x.h"
-#include "dod29_t3x.h"
-#include "dod30_t3x.h"
-#include "dod31_t3x.h"
-#include "dod32_t3x.h"
-#include "dod33_t3x.h"
-#include "dod34_t3x.h"
-#include "dod35_t3x.h"
-#include "dod36_t3x.h"
-#include "dod37_t3x.h"
-#include "dod38_t3x.h"
-
-   struct Page
+#define TEX_MIN_SIZE 64
+#define TEX_MAX_SIZE 1024
+unsigned int nextPow2(unsigned int v)
 {
-	const u8* t3x;
-	const size_t size;
-};
-
-void loadImage(const u8* input, size_t insize, C3D_Tex* tex, C2D_Image* image)
-{
-	Tex3DS_SubTexture *subtex = new Tex3DS_SubTexture();
-	subtex->left=subtex->top=0; subtex->width=600; subtex->height=600;
-	subtex->right=subtex->bottom=1;
-	image->subtex = subtex;
-	image->tex = tex;
-
-   printf("Loading Image size: %d\n", insize);
-
-	Tex3DS_Texture t3x = Tex3DS_TextureImport(input, insize, tex, NULL, false);
-
-	C3D_TexSetFilter(tex, GPU_LINEAR, GPU_NEAREST);
-
-	// Delete the t3x object since we don't need it
-	Tex3DS_TextureFree(t3x);
+	v--;
+	v |= v >> 1;
+	v |= v >> 2;
+	v |= v >> 4;
+	v |= v >> 8;
+	v |= v >> 16;
+	v++;
+	return v >= TEX_MIN_SIZE ? v : TEX_MIN_SIZE;
 }
 
-struct Page Pages[] =
+// Taken from Anemone
+bool loadImageFromFile(const char *filename, C3D_Tex *tex, C2D_Image *image)
 {
-        {dod01_t3x, dod01_t3x_size},
-        {dod02_t3x, dod02_t3x_size},
-        {dod03_t3x, dod03_t3x_size},
-        {dod04_t3x, dod04_t3x_size},
-        {dod05_t3x, dod05_t3x_size},
-        {dod06_t3x, dod06_t3x_size},
-        {dod07_t3x, dod07_t3x_size},
-        {dod08_t3x, dod08_t3x_size},
-        {dod09_t3x, dod09_t3x_size},
-        {dod10_t3x, dod10_t3x_size},
-        {dod11_t3x, dod11_t3x_size},
-        {dod12_t3x, dod12_t3x_size},
-        {dod13_t3x, dod13_t3x_size},
-        {dod14_t3x, dod14_t3x_size},
-        {dod15_t3x, dod15_t3x_size},
-        {dod16_t3x, dod16_t3x_size},
-        {dod17_t3x, dod17_t3x_size},
-        {dod18_t3x, dod18_t3x_size},
-        {dod19_t3x, dod19_t3x_size},
-        {dod20_t3x, dod20_t3x_size},
-        {dod21_t3x, dod21_t3x_size},
-        {dod22_t3x, dod22_t3x_size},
-        {dod23_t3x, dod23_t3x_size},
-        {dod24_t3x, dod24_t3x_size},
-        {dod25_t3x, dod25_t3x_size},
-        {dod26_t3x, dod26_t3x_size},
-        {dod27_t3x, dod27_t3x_size},
-        {dod28_t3x, dod28_t3x_size},
-        {dod29_t3x, dod29_t3x_size},
-        {dod30_t3x, dod30_t3x_size},
-        {dod31_t3x, dod31_t3x_size},
-        {dod32_t3x, dod32_t3x_size},
-        {dod33_t3x, dod33_t3x_size},
-        {dod34_t3x, dod34_t3x_size},
-        {dod35_t3x, dod35_t3x_size},
-        {dod36_t3x, dod36_t3x_size},
-        {dod37_t3x, dod37_t3x_size},
-        {dod38_t3x, dod38_t3x_size}
-};
+	printf("Loading file %s\n", filename);
+	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
-#define NUMBER_OF_PAGES 38
+	png_infop info = png_create_info_struct(png);
+
+	if (setjmp(png_jmpbuf(png)))
+	{
+		png_destroy_read_struct(&png, &info, NULL);
+		return false;
+	}
+
+	FILE *fp = fopen(filename, "rb");
+
+	if (fp == NULL)
+	{
+		return false;
+	}
+
+	png_init_io(png, fp);
+	png_read_info(png, info);
+
+	int width = png_get_image_width(png, info);
+	int height = png_get_image_height(png, info);
+
+	png_byte color_type = png_get_color_type(png, info);
+	png_byte bit_depth = png_get_bit_depth(png, info);
+
+	// Read any color_type into 8bit depth, ABGR format.
+	// See http://www.libpng.org/pub/png/libpng-manual.txt
+
+	if (bit_depth == 16)
+		png_set_strip_16(png);
+
+	if (color_type == PNG_COLOR_TYPE_PALETTE)
+		png_set_palette_to_rgb(png);
+
+	// PNG_COLOR_TYPE_GRAY_ALPHA is always 8 or 16bit depth.
+	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
+		png_set_expand_gray_1_2_4_to_8(png);
+
+	if (png_get_valid(png, info, PNG_INFO_tRNS))
+		png_set_tRNS_to_alpha(png);
+
+	// These color_type don't have an alpha channel then fill it with 0xff.
+	if (color_type == PNG_COLOR_TYPE_RGB ||
+		color_type == PNG_COLOR_TYPE_GRAY ||
+		color_type == PNG_COLOR_TYPE_PALETTE)
+		png_set_filler(png, 0xFF, PNG_FILLER_AFTER);
+
+	if (color_type == PNG_COLOR_TYPE_GRAY ||
+		color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+		png_set_gray_to_rgb(png);
+
+	//output ABGR
+	// png_set_bgr(png); // Doesn't seem to do anything??
+	png_set_swap_alpha(png);
+
+	png_read_update_info(png, info);
+
+	png_bytep *row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * height);
+	for (int y = 0; y < height; y++)
+	{
+		row_pointers[y] = (png_byte *)malloc(png_get_rowbytes(png, info));
+	}
+
+	png_read_image(png, row_pointers);
+
+	fclose(fp);
+	png_destroy_read_struct(&png, &info, NULL);
+
+	image->tex = tex;
+
+	unsigned int texWidth = nextPow2(width);
+	unsigned int texHeight = nextPow2(height);
+
+	if (texWidth > TEX_MAX_SIZE || texHeight > TEX_MAX_SIZE)
+	{
+		printf("3DS only supports up to 1024x1024 textures. Reduce the image size.\n");
+
+		for (int y = 0; y < height; y++)
+		{
+			free(row_pointers[y]);
+		}
+		free(row_pointers);
+		return false;
+	}
+
+	Tex3DS_SubTexture *subt3x = new Tex3DS_SubTexture();
+	subt3x->width = 400;
+	subt3x->height = 400;
+	subt3x->left = 0.0f;
+	subt3x->top = 1.0f;
+	subt3x->right = width / (float)texWidth;
+	subt3x->bottom = 1.0 - (height / (float)texHeight);
+	image->subtex = subt3x;
+
+	C3D_TexInit(image->tex, texWidth, texHeight, GPU_RGBA8);
+	C3D_TexSetFilter(image->tex, GPU_LINEAR, GPU_NEAREST);
+
+	memset(image->tex->data, 0, image->tex->size);
+
+	for (int j = 0; j < height; j++)
+	{
+		png_bytep row = row_pointers[j];
+		for (int i = 0; i < width; i++)
+		{
+			png_bytep px = &(row[i * 4]);
+
+			// Swap the colours since png_set_bgr doesn't seem to work as expected
+			// Note: 0 - B, 1 - G, 2 - R, 3 - A
+			unsigned argb = (px[3]) + (px[2] << 8) + (px[1] << 16) + (px[0] << 24);
+
+			u32 dst = ((((j >> 3) * (texWidth >> 3) + (i >> 3)) << 6) + ((i & 1) | ((j & 1) << 1) | ((i & 2) << 1) | ((j & 2) << 2) | ((i & 4) << 2) | ((j & 4) << 3))) * 4;
+
+			memcpy(image->tex->data + dst, &argb, sizeof(u32));
+		}
+	}
+
+	for (int y = 0; y < height; y++)
+	{
+		free(row_pointers[y]);
+	}
+	free(row_pointers);
+
+	return true;
+}
+
+bool getManualPages()
+{
+	DIR *dir;
+	struct dirent *ent;
+	if ((dir = opendir("/3ds/3dsdod/manual")) != NULL)
+	{
+		/* print all the files and directories within directory */
+		while ((ent = readdir(dir)) != NULL)
+		{
+			Pages.push_back(std::string("/3ds/3dsdod/manual/") + ent->d_name);
+		}
+		closedir(dir);
+	}
+	else
+	{
+		/* could not open directory */
+		return false;
+	}
+
+	return true;
+}
 
 int main(int argc, char **argv)
 {
@@ -136,21 +190,23 @@ int main(int argc, char **argv)
 	C2D_Prepare();
 
 	// Create screens
-	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+	C3D_RenderTarget *top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 
 	consoleInit(GFX_BOTTOM, NULL);
 
-	C2D_Image img;	
+	C2D_Image img;
 	C3D_Tex tex;
 
-	loadImage(Pages[0].t3x, Pages[0].size, &tex, &img);
+	getManualPages();
+
+	loadImageFromFile(Pages[0].c_str(), &tex, &img);
 
 	u32 clrClear = C2D_Color32(255, 0, 0, 255);
 
 	int position = 0;
 	int xScroll = 0;
 	int scroll = 0;
-	float scale = 0.87;
+	float scale = 1;
 	// Main loop
 	while (aptMainLoop())
 	{
@@ -159,43 +215,48 @@ int main(int argc, char **argv)
 		u32 kDown = hidKeysDown();
 		u32 hDown = hidKeysHeld();
 
-		if (kDown & KEY_START) break; // break in order to return to hbmenu
+		if (kDown & KEY_START)
+			break; // break in order to return to hbmenu
 
-		if(kDown & KEY_R and position < NUMBER_OF_PAGES - 1)
+		if (kDown & KEY_R and position < Pages.size() - 1)
 		{
 			position++;
 			C3D_TexDelete(&tex);
-			loadImage(Pages[position].t3x, Pages[position].size, &tex, &img);
+			delete img.subtex;
+
+			loadImageFromFile(Pages[position].c_str(), &tex, &img);
 
 			scroll = 0;
 		}
 
-		if(kDown & KEY_L and position > 0)
+		if (kDown & KEY_L and position > 0)
 		{
 			position--;
 			scroll = 0;
 			C3D_TexDelete(&tex);
-			loadImage(Pages[position].t3x, Pages[position].size, &tex, &img);
+			delete img.subtex;
+			
+			loadImageFromFile(Pages[position].c_str(), &tex, &img);
 		}
 
-		if(hDown & KEY_DDOWN and scroll > -160)
+		if (hDown & KEY_DDOWN and scroll > -160)
 		{
-			scroll-=5;
+			scroll -= 5;
 		}
 
-		if(hDown & KEY_DUP and scroll < 0)
+		if (hDown & KEY_DUP and scroll < 0)
 		{
-			scroll+=5;
+			scroll += 5;
 		}
 
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, clrClear);
 		C2D_SceneBegin(top);
 
-		 C2D_DrawImageAt(img, -120, scroll, 0, NULL, scale, scale);
+		C2D_DrawImageAt(img, 0, scroll, 0, NULL, scale, scale);
 
 		printf("\x1b[1;1HPage: %d x: %d, y: %d, scale: %f", position, xScroll, scroll, scale);
-		
+
 		C3D_FrameEnd(0);
 	}
 
