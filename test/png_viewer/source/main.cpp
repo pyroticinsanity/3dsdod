@@ -9,6 +9,7 @@
 #include <png.h>
 
 #define TEX_MIN_SIZE 64
+#define TEX_MAX_SIZE 1024
 unsigned int mynext_pow2(unsigned int v)
 {
     v--;
@@ -19,6 +20,14 @@ unsigned int mynext_pow2(unsigned int v)
     v |= v >> 16;
     v++;
     return v >= TEX_MIN_SIZE ? v : TEX_MIN_SIZE;
+}
+
+void cleanup()
+{
+    // Exit services
+    C2D_Fini();
+    C3D_Fini();
+    gfxExit();
 }
 
 // Taken from Anemone
@@ -99,6 +108,12 @@ bool loadImageFromFile(const char *filename, C3D_Tex *tex, C2D_Image *image)
     unsigned int texWidth = mynext_pow2(width);
     unsigned int texHeight = mynext_pow2(height);
 
+    if(texWidth > TEX_MAX_SIZE || texHeight > TEX_MAX_SIZE)
+    {
+        printf("3DS only supports up to 1024x1024 textures. Reduce the image size.\n");
+        return false;
+    }
+    
     Tex3DS_SubTexture *subt3x = new Tex3DS_SubTexture();
     subt3x->width = 400;
     subt3x->height = 400;
@@ -133,6 +148,19 @@ bool loadImageFromFile(const char *filename, C3D_Tex *tex, C2D_Image *image)
     return true;
 }
 
+void waitForExit()
+{
+    while (aptMainLoop())
+    {
+        hidScanInput();
+
+        u32 kDown = hidKeysDown();
+
+        if (kDown & KEY_START)
+            break; // break in order to return to hbmenu
+    }
+}
+
 int main(int argc, char **argv)
 {
     gfxInitDefault();
@@ -153,15 +181,9 @@ int main(int argc, char **argv)
         printf("Failed to load file /3ds/3dsdod/manual/dod01.png\n");
         printf("Press start to exit\n");
 
-        while (aptMainLoop())
-        {
-            hidScanInput();
-
-            u32 kDown = hidKeysDown();
-
-            if (kDown & KEY_START)
-                break; // break in order to return to hbmenu
-        }
+        waitForExit();
+        cleanup();
+        return 1;
     }
 
     u32 clrClear = C2D_Color32(0, 0, 0, 255);
@@ -202,9 +224,6 @@ int main(int argc, char **argv)
         C3D_FrameEnd(0);
     }
 
-    // Exit services
-    C2D_Fini();
-    C3D_Fini();
-    gfxExit();
+    cleanup();
     return 0;
 }
