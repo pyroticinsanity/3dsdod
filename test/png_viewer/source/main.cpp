@@ -1,5 +1,5 @@
 /*
- * Example of loading a PNG file from /3ds/3dsdod/dod01.png of variable size
+ * Example of loading a PNG file from /3ds/3dsdod/manual/dod01.png
  */
 #include <3ds.h>
 #include <stdio.h>
