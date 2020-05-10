@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 			scroll = 0;
 			C3D_TexDelete(&tex);
 			delete img.subtex;
-			
+
 			loadImageFromFile(Pages[position].c_str(), &tex, &img);
 		}
 
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
 
 		C2D_DrawImageAt(img, 0, scroll, 0, NULL, scale, scale);
 
-		printf("\x1b[1;1HPage: %d x: %d, y: %d, scale: %f", position, xScroll, scroll, scale);
+		printf("\x1b[1;1HPage: %d x: %d, y: %d, scale: %f\n", position, xScroll, scroll, scale);
 
 		C3D_FrameEnd(0);
 	}
