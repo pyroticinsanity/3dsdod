@@ -169,7 +169,7 @@ bool getManualPages()
 		/* print all the files and directories within directory */
 		while ((ent = readdir(dir)) != NULL)
 		{
-			if(strstr(ent->d_name, ".png") || strstr(ent->d_name, ".PNG"))
+			if (strstr(ent->d_name, ".png") || strstr(ent->d_name, ".PNG"))
 			{
 				Pages.push_back(std::string("/3ds/3dsdod/manual/") + ent->d_name);
 			}
@@ -197,12 +197,7 @@ int main(int argc, char **argv)
 
 	consoleInit(GFX_BOTTOM, NULL);
 
-	C2D_Image img;
-	C3D_Tex tex;
-
-	getManualPages();
-
-	loadImageFromFile(Pages[0].c_str(), &tex, &img);
+	Manual manual("/3ds/3dsdod/manual");
 
 	u32 clrClear = C2D_Color32(255, 0, 0, 255);
 
@@ -221,44 +216,30 @@ int main(int argc, char **argv)
 		if (kDown & KEY_START)
 			break; // break in order to return to hbmenu
 
-		if (kDown & KEY_R and position < Pages.size() - 1)
+		if (kDown & KEY_R)
 		{
-			position++;
-			C3D_TexDelete(&tex);
-			delete img.subtex;
-
-			loadImageFromFile(Pages[position].c_str(), &tex, &img);
-
-			scroll = 0;
+			manual.nextPage();
 		}
 
-		if (kDown & KEY_L and position > 0)
+		if (kDown & KEY_L)
 		{
-			position--;
-			scroll = 0;
-			C3D_TexDelete(&tex);
-			delete img.subtex;
-
-			loadImageFromFile(Pages[position].c_str(), &tex, &img);
+			manual.previousPage();
 		}
 
-		if (hDown & KEY_DDOWN and scroll > -160)
+		if (hDown & KEY_DDOWN)
 		{
-			scroll -= 5;
+			manual.scrollDown();
 		}
 
-		if (hDown & KEY_DUP and scroll < 0)
+		if (hDown & KEY_DUP)
 		{
-			scroll += 5;
+			manual.scrollUp();
 		}
 
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, clrClear);
-		C2D_SceneBegin(top);
 
-		C2D_DrawImageAt(img, 0, scroll, 0, NULL, scale, scale);
-
-		printf("\x1b[1;1HPage: %d x: %d, y: %d, scale: %f\n", position, xScroll, scroll, scale);
+		manual.drawPage(top);
 
 		C3D_FrameEnd(0);
 	}
