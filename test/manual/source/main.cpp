@@ -33,7 +33,7 @@ unsigned int nextPow2(unsigned int v)
 // Taken from Anemone
 bool loadImageFromFile(const char *filename, C3D_Tex *tex, C2D_Image *image)
 {
-	printf("Loading file %s\n", filename);
+	printf("\x1b[2;1HLoading file %s\n", filename);
 	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
 	png_infop info = png_create_info_struct(png);
@@ -169,7 +169,10 @@ bool getManualPages()
 		/* print all the files and directories within directory */
 		while ((ent = readdir(dir)) != NULL)
 		{
-			Pages.push_back(std::string("/3ds/3dsdod/manual/") + ent->d_name);
+			if(strstr(ent->d_name, ".png") || strstr(ent->d_name, ".PNG"))
+			{
+				Pages.push_back(std::string("/3ds/3dsdod/manual/") + ent->d_name);
+			}
 		}
 		closedir(dir);
 	}
