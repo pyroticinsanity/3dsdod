@@ -1,7 +1,8 @@
 #ifndef MANUAL_HEADER
 #define MANUAL_HEADER
 
-#include <3ds.h>
+#include <string>
+#include <vector>
 
 #include <citro3d.h>
 #include <citro2d.h>
