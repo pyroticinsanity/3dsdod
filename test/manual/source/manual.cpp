@@ -8,6 +8,8 @@
 
 #include "manual.h"
 
+const int SCREEN_HEIGHT = 240;
+
 extern bool loadImageFromFile(const char *filename, C3D_Tex *tex, C2D_Image *image);
 
 Manual::Manual(std::string path)
@@ -74,9 +76,7 @@ void Manual::nextPage()
 
 void Manual::open()
 {
-   printf("Loading page 0\n");
    _currentPage = 0;
-   delete _img.subtex;
    loadImageFromFile(_pages[_currentPage].c_str(), &_tex, &_img);
 }
 
@@ -94,7 +94,8 @@ void Manual::previousPage()
 
 void Manual::scrollDown()
 {
-   if (_scroll > -160)
+   
+   if (_scroll > (SCREEN_HEIGHT - _img.subtex->height))
    {
       _scroll -= 5;
    }

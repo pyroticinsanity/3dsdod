@@ -201,10 +201,6 @@ int main(int argc, char **argv)
 
 	u32 clrClear = C2D_Color32(255, 0, 0, 255);
 
-	int position = 0;
-	int xScroll = 0;
-	int scroll = 0;
-	float scale = 1;
 	// Main loop
 	while (aptMainLoop())
 	{
