@@ -4,10 +4,8 @@
 
 #include <3ds.h>
 #include <stdio.h>
-#include <string.h>
 #include <citro2d.h>
 #include <citro3d.h>
-#include <dirent.h>
 
 #include "manual.h"
 
