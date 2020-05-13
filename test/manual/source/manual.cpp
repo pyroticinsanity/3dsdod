@@ -167,6 +167,7 @@ Manual::Manual(std::string path)
 void Manual::close()
 {
    C3D_TexDelete(&_tex);
+   delete _img.subtex;
 }
 
 void Manual::drawPage(C3D_RenderTarget *target)
