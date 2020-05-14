@@ -46,8 +46,8 @@ public:
 	bool	MarkDoorsOnScrollMaps;
 	bool	AUTFLG;	// Autoplay (demo) flag
 	bool	hasWon;
-	bool	demoRestart;
 	int		DEMOPTR;
+	bool	demoRestart;
 	dodBYTE DEMO_CMDS[256];
 
 private:

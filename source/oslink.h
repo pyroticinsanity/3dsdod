@@ -71,6 +71,11 @@ private:
 	void handle_key_down(SDL_keysym * keysym);	// keyboard handler
 	void handle_joybutton_down(int button); //joystick handler
 	void type_command(char* command);
+	/**
+	 * Loads the manual and manages its controls.
+	 * @return -1 when the user leaves.
+	 */
+	int load_manual();
 	bool menu_return(int, int, menu);		// Used by main menu
 	int  menu_list(int x, int y, char *title, char *list[], int listSize);
 	void menu_string(char *newString, char *title, int maxLength);

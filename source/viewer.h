@@ -26,6 +26,10 @@ is held by Douglas J. Morgan.
 #include "dodgame.h"
 #include "renderer_factory.h"
 
+#ifdef _3DS
+#include "3ds/manual.h"
+#endif
+
 extern dodGame	game;
 
 class Viewer
@@ -84,6 +88,11 @@ public:
 	bool		ShowFade(int fadeMode);
 	void		drawKeyboard(struct kbdKey);
 	void		drawCommandMenu(command_menu, int, int);
+
+	/**
+	 * Draws the manual onto the screen.
+	 */
+	void 		drawManual(Manual* manual);
 	void        drawMenu(menu, int, int);
 	void		drawMenuList(int, int, char *, char *[], int, int);
 	void		drawMenuScrollbar(char *, int);

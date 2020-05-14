@@ -31,6 +31,10 @@ using namespace std;
 #include "creature.h"
 #include "enhanced.h"
 
+#ifdef _3DS
+#include "3ds/manual.h"
+#endif
+
 extern Creature		creature;
 extern Object		object;
 extern Dungeon		dungeon;
@@ -610,8 +614,6 @@ void OS_Link::handle_key_down(SDL_keysym * keysym)
 
 bool OS_Link::command_menu_return(int *menu_id, int *item, int *prev_menu_id, int *prev_item, command_menu commandMenu)
 {
-	int i;
-	char c;
 	switch(*menu_id)
 	{
 		case ACTION_MENU_SWITCH:
@@ -1101,8 +1103,6 @@ switch(menu_id)
 	int error;
 	struct stat fstats;
 	struct tm* time;
-	int year, month, day, hour, min;
-	bool pm;
 	char date[34];
 	char filename[34];
 	memset(filename, 0, sizeof(filename));
@@ -1156,12 +1156,12 @@ switch(menu_id)
 	}
 
 	char *overwriteMenuList[]={ "YES", "NO" };
-
-   switch(menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 10))
-    {
 	memset(gamefile, 0, gamefileLen);
 	strcpy(gamefile,savedDir);
 	strcat(gamefile,pathSep);
+
+   switch(menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 10))
+    {
 	case 0:
 		strcat(gamefile, "game.dod");
 		break;
@@ -1240,8 +1240,6 @@ switch(menu_id)
 	int error;
 	struct stat fstats;
 	struct tm* time;
-	int year, month, day, hour, min;
-	bool pm;
 	char date[34];
 	char filename[34];
 	memset(filename, 0, sizeof(filename));
@@ -1612,9 +1610,13 @@ switch(menu_id)
   case HELP_MENU_HOWTOPLAY:
    // How to play
    {
+ #ifdef _3DS
+	   load_manual();
+#else
    char *menuList[]={ "SEE FILE HOWTOPLAY.TXT" };
 
    menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 1);
+#endif
    }
    return false;
    break;
@@ -1669,6 +1671,75 @@ switch(menu_id)
   }
  }
  return true;
+}
+
+int OS_Link::load_manual()
+{
+	Manual manual("/3ds/3dsdod/manual");
+
+	while(true)
+	{
+#ifdef _3DS
+		viewer.drawManual(&manual);
+		hidScanInput();
+		u32 kDown = hidKeysDown();
+		u32 hDown = hidKeysHeld();
+
+		if (kDown & SDL_PSP_RIGHT)
+		{
+			manual.nextPage();
+		}
+
+		if (kDown & SDL_PSP_LEFT)
+		{
+			manual.previousPage();
+		}
+
+		if(kDown & SDL_PSP_CIRCLE)
+		{
+			return -1;
+		}
+
+		if (hDown & SDL_PSP_DOWN)
+		{
+			manual.scrollDown();
+		}
+
+		if (hDown & SDL_PSP_UP)
+		{
+			manual.scrollUp();
+		}
+#endif
+		SDL_Event event;
+		while(SDL_PollEvent(&event))
+		{
+			switch(event.type)
+			{
+			case SDL_JOYBUTTONDOWN:
+				switch(event.jbutton.button)
+				{
+					case SDL_PSP_RIGHT:
+						manual.nextPage();
+						break;
+					case SDL_PSP_LEFT:
+						manual.previousPage();
+						break;
+
+					case SDL_PSP_CIRCLE:
+						return -1;
+					case SDL_PSP_DOWN:
+						manual.scrollDown();
+						break;
+
+					case SDL_PSP_UP:
+						manual.scrollUp();
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}
 }
 
 /*****************************************************************************

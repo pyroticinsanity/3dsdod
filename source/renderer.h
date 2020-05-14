@@ -13,6 +13,19 @@ enum Layers
 class Renderer
 {
 public:
+
+    struct Image
+    {
+        Image(void* iData, float iX, float iY, float iDepth)
+        : data(iData), x(iX), y(iY), depth(iDepth)
+        {
+        }
+        void* data;
+        float x;
+        float y;
+        float depth;
+    };
+
     virtual ~Renderer() {}
 
     virtual void beginRendering() = 0;
@@ -20,9 +33,12 @@ public:
     virtual void clearBuffer(bool includeDepthBuffer = false) = 0;
     virtual void deinitialize() = 0;
 
+    virtual void drawImage(Renderer::Image* image) = 0;
+
     virtual void drawKeyboard(struct kbdKey key) = 0;
 
     virtual void drawLine(float x0, float y0, float x1, float y1, Layers layer = LAYER_DEFAULT) = 0;
+
     virtual void drawQuad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, Layers layer = LAYER_DEFAULT) = 0;
     virtual void drawVector(float X0, float Y0, float X1, float Y1, Layers layer = LAYER_DEFAULT) = 0;
 

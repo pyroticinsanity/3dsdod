@@ -35,9 +35,8 @@ extern Player		player;
 extern Scheduler	scheduler;
 
 // Constructor
-Viewer::Viewer() : VCNTRX(128), VCNTRY(76),
-				   fadChannel(3), buzzStep(300), midPause(2500),
-				   prepPause(2500)
+Viewer::Viewer() : fadChannel(3), buzzStep(300), midPause(2500),
+				   prepPause(2500), VCNTRX(128), VCNTRY(76)
 {
 	Utils::LoadFromDecDigit(A_VLA, "411212717516167572757582823535424");
 	Utils::LoadFromDecDigit(B_VLA, "6112128182151522224545525275758285262645455656757");
@@ -511,7 +510,7 @@ bool Viewer::ShowFade(int fadeMode)
 		do
 		{
 			ticks2 = SDL_GetTicks();
-			if (fadeMode == 1 && scheduler.keyCheck())
+			if (scheduler.keyCheck())
 			{
 				Mix_HaltChannel(fadChannel);
 				clearArea(&TXTPRI);
@@ -2042,6 +2041,15 @@ void Viewer::drawMenu(menu mainMenu, int menu_id, int highlight)
   // Update the screen
  _renderer->swapBuffers();
  }
+
+#ifdef _3DS
+ void Viewer::drawManual(Manual* manual)
+ {
+	 _renderer->clearBuffer(true);
+	 _renderer->drawImage(manual->getCurrentImage());
+	 _renderer->swapBuffers();
+ }
+ #endif
 
 /****************************************************************
   Member: drawMenuList

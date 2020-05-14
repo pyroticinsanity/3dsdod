@@ -51,6 +51,12 @@ public:
     virtual void deinitialize();
 
     /**
+     * Draws an image on screen.
+     * @param img The image to draw
+     */
+    virtual void drawImage(Renderer::Image* img);
+    
+    /**
      * Draws the keyboard image onto the screen and highlights the specified key.
      * @param key - The key to highlight
      */

@@ -122,7 +122,7 @@ void printvls()
 	printalpha(viewer.SCRO_VLA, 12, "SCRO_VLA");
 	printalpha(viewer.FLAS_VLA, 10, "FLAS_VLA");
 
-/*
+
 	printalpha(viewer.SP_VLA, 39, "SP_VLA");
 	printalpha(viewer.WR_VLA, 42, "WR_VLA");
 	printalpha(viewer.SC_VLA, 41, "SC_VLA");

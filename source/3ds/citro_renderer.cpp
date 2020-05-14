@@ -61,6 +61,7 @@ CitroRenderer::CitroRenderer()
 	// Need to increase this from the default to handle so many pixel based triangles.
 	C2D_Init(C2D_DEFAULT_MAX_OBJECTS * 2);
 	C2D_Prepare();
+
 	consoleInit(GFX_BOTTOM, NULL);
 
 	gfxSet3D(true);
@@ -87,7 +88,7 @@ CitroRenderer::CitroRenderer()
 	// Delete the t3x object since we don't need it
 	Tex3DS_TextureFree(t3x);
 
-	printf("Dungeons of Daggorath 3D - 0.8\n");
+	printf("Dungeons of Daggorath 3D - 1.0\n");
 	printf("---------------------------------------\n");
 	printf("Controls:\n");
 	printf("D-Pad Up - MOVE UP\n");
@@ -184,6 +185,14 @@ void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, f
 	C2D_DrawTriangle(_xOffset + x2 - xShift, _yOffset + y2, _color,
 					 _xOffset + x3 - xShift, _yOffset + y3, _color,
 					 _xOffset + x0 - xShift, _yOffset + y0, _color, 0);
+}
+
+void CitroRenderer::drawImage(Renderer::Image* img)
+{
+	C2D_Image* data = (C2D_Image*)img->data;
+	  C2D_DrawImageAt(*data, img->x, img->y, img->depth);
+
+	  _currentImage = data;
 }
 
 void CitroRenderer::drawKeyboard(struct kbdKey key)
