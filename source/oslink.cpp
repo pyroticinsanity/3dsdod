@@ -1611,7 +1611,12 @@ switch(menu_id)
    // How to play
    {
  #ifdef _3DS
-	   load_manual();
+	   if(load_manual() == -1)
+	   {
+		    char *menuList[]={ "COULD NOT LOAD MANUAL" };
+
+   			menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 1);
+	   }
 #else
    char *menuList[]={ "SEE FILE HOWTOPLAY.TXT" };
 
@@ -1676,6 +1681,11 @@ switch(menu_id)
 int OS_Link::load_manual()
 {
 	Manual manual("/3ds/3dsdod/manual");
+
+	if(!manual.isInitialized())
+	{
+		return -1;
+	}
 
 	while(true)
 	{
