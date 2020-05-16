@@ -48,10 +48,12 @@ extern Parser		parser;
 extern void quitGame();
 
 // Constructor
-OS_Link::OS_Link() : width(0), height(0), bpp(0), flags(0),
+OS_Link::OS_Link() : width(0), height(0),
 					 audio_rate(44100), audio_format(AUDIO_S16),
 					 audio_channels(2), audio_buffers(512),
-					 gamefileLen(50), keylayout(0), keyLen(256)
+					 gamefileLen(50), keylayout(0), keyLen(256),
+					  bpp(0), flags(0)
+
 {
 #define MACOSX
 #ifdef MACOSX
@@ -104,13 +106,24 @@ void OS_Link::init()
 #endif
 
 	Uint32 ticks1, ticks2;
-	const SDL_VideoInfo * info = NULL;
-	if(SDL_Init(/*SDL_INIT_VIDEO | */SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
+
+#ifdef _3DS
+	// We use Citro for rendering instead of SDL.
+	if(SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
 	{
 		printf( "Video initialization failed: %s\n", SDL_GetError());
 		sleep(1);
 		quitGame();
 	}
+#else
+	const SDL_VideoInfo * info = NULL;
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
+	{
+		printf( "Video initialization failed: %s\n", SDL_GetError());
+		sleep(1);
+		quitGame();
+	}
+#endif
 
 	//Initialize joystick
 
@@ -137,14 +150,16 @@ void OS_Link::init()
 	Mix_AllocateChannels(4);
 	Mix_Volume(-1, MIX_MAX_VOLUME);
 
-	/*info = SDL_GetVideoInfo();
+#ifndef _3DS
+	info = SDL_GetVideoInfo();
 	if(!info)
 	{
 		printf("Video query failed: %s\n", SDL_GetError());
 		sleep(1);
 		quitGame();
 	}
-	bpp = info->vfmt->BitsPerPixel;*/
+	bpp = info->vfmt->BitsPerPixel;
+#endif
 
 	changeVideoRes(videoMode); // All changing video res code was moved here
 
@@ -1687,10 +1702,15 @@ int OS_Link::load_manual()
 		return -1;
 	}
 
+	bool redraw = true;
 	while(true)
 	{
+		if(redraw)
+		{
+			viewer.drawManual(&manual);
+			redraw = false;
+		}
 #ifdef _3DS
-		viewer.drawManual(&manual);
 		hidScanInput();
 		u32 kDown = hidKeysDown();
 		u32 hDown = hidKeysHeld();
@@ -1698,27 +1718,32 @@ int OS_Link::load_manual()
 		if (kDown & SDL_PSP_RIGHT)
 		{
 			manual.nextPage();
+			redraw = true;
 		}
 
 		if (kDown & SDL_PSP_LEFT)
 		{
 			manual.previousPage();
+			redraw = true;
 		}
 
 		if(kDown & SDL_PSP_CIRCLE)
 		{
-			return -1;
+			return 0;
 		}
 
 		if (hDown & SDL_PSP_DOWN)
 		{
 			manual.scrollDown();
+			redraw = true;
 		}
 
 		if (hDown & SDL_PSP_UP)
 		{
 			manual.scrollUp();
+			redraw = true;
 		}
+
 #endif
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
@@ -1730,19 +1755,23 @@ int OS_Link::load_manual()
 				{
 					case SDL_PSP_RIGHT:
 						manual.nextPage();
+						redraw = true;
 						break;
 					case SDL_PSP_LEFT:
 						manual.previousPage();
+						redraw = true;
 						break;
 
 					case SDL_PSP_CIRCLE:
-						return -1;
+						return 0;
 					case SDL_PSP_DOWN:
 						manual.scrollDown();
+						redraw = true;
 						break;
 
 					case SDL_PSP_UP:
 						manual.scrollUp();
+						redraw = true;
 						break;
 					default:
 						break;
@@ -2285,45 +2314,55 @@ void OS_Link::changeFullScreen(void)
 *
 *  Arguments: newWidth - The screen width to change to
 ******************************************************************************/
-void OS_Link::changeVideoRes(int mode)
+ void OS_Link::changeVideoRes(int mode)
  {
- int newWidth;
- int newHeight;
+	 int newWidth;
+	 int newHeight;
 
- Renderer* renderer = RendererFactory::GetRenderer();
+	 Renderer *renderer = RendererFactory::GetRenderer();
 
- /*SDL_Surface * surface;
- const SDL_VideoInfo * info = NULL;
- surface = SDL_GetVideoSurface();
+#ifdef _3DS
+	 newHeight = renderer->getScreenHeight();
+	 newWidth = renderer->getScreenWidth();
+	 width = newWidth;
+	 height = newHeight;
 
- info = SDL_GetVideoInfo();
- if(!info)
-  {
-  fprintf(stderr, "Video query failed: %s\n", SDL_GetError());
-  quitGame(1);
-  }*/
+	 crd.setDisplay(mode);
+#else
 
- newHeight = renderer->getScreenHeight();
- newWidth = renderer->getScreenWidth();
+	 SDL_Surface *surface;
+	 const SDL_VideoInfo *info = NULL;
+	 surface = SDL_GetVideoSurface();
 
-//	flags = flags | SDL_FULLSCREEN | SDL_SWSURFACE|SDL_HWPALETTE|SDL_HWACCEL; //PC Flags
-//	flags = renderer->getVideoModeFlags();
- /*if((surface = SDL_SetVideoMode(newWidth, newHeight, bpp, flags)) == 0)
-  {
-  fprintf(stderr, "Video mode set failed: %s\nReturning to old mode\n", SDL_GetError());
-  if((surface = SDL_SetVideoMode(renderer->getScreenWidth(), renderer->getScreenHeight(), bpp, flags)) == 0)
-    {
-    fprintf(stderr, "Video mode set failed, this should be impossible\n Debug OS_Link.changeVideoRes\nSDL Reported %s\n", SDL_GetError());
-    exit(1);
-    }
-  }
- else
-  {*/
-  width  = newWidth;
-  height = newHeight;
-  //crd.setCurWH((double) width);
-  crd.setDisplay(mode);
- // }
+	 info = SDL_GetVideoInfo();
+	 if (!info)
+	 {
+		 fprintf(stderr, "Video query failed: %s\n", SDL_GetError());
+		 quitGame();
+	 }
 
- viewer.initialize();
+	 newHeight = renderer->getScreenHeight();
+	 newWidth = renderer->getScreenWidth();
+
+	 //	flags = flags | SDL_FULLSCREEN | SDL_SWSURFACE|SDL_HWPALETTE|SDL_HWACCEL; //PC Flags
+	 flags = renderer->getVideoModeFlags();
+	 if ((surface = SDL_SetVideoMode(newWidth, newHeight, bpp, flags)) == 0)
+	 {
+		 fprintf(stderr, "Video mode set failed: %s\nReturning to old mode\n", SDL_GetError());
+		 if ((surface = SDL_SetVideoMode(renderer->getScreenWidth(), renderer->getScreenHeight(), bpp, flags)) == 0)
+		 {
+			 fprintf(stderr, "Video mode set failed, this should be impossible\n Debug OS_Link.changeVideoRes\nSDL Reported %s\n", SDL_GetError());
+			 exit(1);
+		 }
+	 }
+	 else
+	 {
+		 width = newWidth;
+		 height = newHeight;
+		 //crd.setCurWH((double) width);
+		 crd.setDisplay(mode);
+	 }
+#endif
+
+	 viewer.initialize();
  }
