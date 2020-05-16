@@ -482,6 +482,9 @@ bool Viewer::ShowFade(int fadeMode)
 		wiz = W2_VLA;
 		clearArea(&TXTSTS);
 		displayWinner();
+	default:
+		// Error
+		return false;
 	}
 
 	while(SDL_PollEvent(&event)) ; // clear event buffer
