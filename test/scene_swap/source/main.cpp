@@ -220,7 +220,10 @@ int main(int argc, char **argv)
         }
         else
         {
-            C2D_DrawTriangle(0, 0, clrWhite, 400, 0, clrWhite, 400, 240, clrWhite, 0);
+            if(!C2D_DrawTriangle(0, 0, clrWhite, 400, 0, clrWhite, 400, 240, clrWhite, 0))
+            {
+                printf("Failed to render triangle!\n");
+            }
         }
 
         C3D_FrameEnd(0);
