@@ -1126,7 +1126,7 @@ switch(menu_id)
 
 #ifdef _3DS
 	u64 mtime;
-	error = sdmc_getmtime(filename, &mtime);
+	error = archive_getmtime(filename, &mtime);
 	fstats.st_mtime = mtime;
 #else
 	error = stat(filename, &fstats);
@@ -1137,8 +1137,8 @@ switch(menu_id)
 	if(error == 0)
 	{
 		time = localtime(&fstats.st_mtime);
-		strftime(date, 34, "DEFAULT - %Y.%m.%d %I:%M %p", time);
-		strncpy(menuList[0], date, 34);
+		strftime(date, sizeof(date), "DEFAULT - %Y.%m.%d %I:%M %p", time);
+		strncpy(menuList[0], date, sizeof(date));
 	}
 	else
 	{
@@ -1150,7 +1150,7 @@ switch(menu_id)
 		sprintf(filename, "%s%sgame%d.dod", savedDir, pathSep, i);
 #ifdef _3DS
 	u64 mtime;
-	error = sdmc_getmtime(filename, &mtime);
+	error = archive_getmtime(filename, &mtime);
 	fstats.st_mtime = mtime;
 #else
 	error = stat(filename, &fstats);
@@ -1161,7 +1161,7 @@ switch(menu_id)
 			time = localtime(&fstats.st_mtime);
 			strftime(date, sizeof(date), "%Y.%m.%d %I:%M %p", time);
 
-			snprintf(menuList[i], 34, "SAVE %d  - %s", i, date);
+			snprintf(menuList[i], sizeof(date), "SAVE %d  - %s", i, date);
 		}
 		else
 		{
@@ -1263,7 +1263,7 @@ switch(menu_id)
 
 #ifdef _3DS
 	u64 mtime;
-	error = sdmc_getmtime(filename, &mtime);
+	error = archive_getmtime(filename, &mtime);
 	fstats.st_mtime = mtime;
 #else
 	error = stat(filename, &fstats);
@@ -1276,7 +1276,7 @@ switch(menu_id)
 		time = localtime(&fstats.st_mtime);
 		
 		strftime(date, sizeof(date), "DEFAULT - %Y.%m.%d %I:%M %p", time);
-		strncpy(menuList[0], date, 34);
+		strncpy(menuList[0], date, sizeof(date));
 	}
 	else
 	{
@@ -1288,7 +1288,7 @@ switch(menu_id)
 		sprintf(filename, "%s%sgame%d.dod", savedDir, pathSep, i);
 #ifdef _3DS
 	u64 mtime;
-	error = sdmc_getmtime(filename, &mtime);
+	error = archive_getmtime(filename, &mtime);
 	fstats.st_mtime = mtime;
 #else
 	error = stat(filename, &fstats);
@@ -1298,7 +1298,7 @@ switch(menu_id)
 		{
 			time = localtime(&fstats.st_mtime);
 			strftime(date, sizeof(date), "%Y.%m.%d %I:%M %p", time);
-			snprintf(menuList[i], 34, "LOAD %d  - %s", i, date);
+			snprintf(menuList[i], sizeof(date), "LOAD %d  - %s", i, date);
 		}
 		else
 		{
