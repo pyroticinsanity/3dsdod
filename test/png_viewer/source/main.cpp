@@ -141,7 +141,7 @@ bool loadImageFromFile(const char *filename, C3D_Tex *tex, C2D_Image *image)
 
             u32 dst = ((((j >> 3) * (texWidth >> 3) + (i >> 3)) << 6) + ((i & 1) | ((j & 1) << 1) | ((i & 2) << 1) | ((j & 2) << 2) | ((i & 4) << 2) | ((j & 4) << 3))) * 4;
 
-            memcpy(image->tex->data + dst, &argb, sizeof(u32));
+            memcpy((u8*)image->tex->data + dst, &argb, sizeof(u32));
         }
     }
 
