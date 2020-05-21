@@ -22,7 +22,7 @@ void waitForExit()
 	printf("Press START to Exit\n");
 	while (true)
 	{
-		svcSleepThread(1);
+		svcSleepThread(100000000);
 		hidScanInput();
 
 		// Respond to user input
