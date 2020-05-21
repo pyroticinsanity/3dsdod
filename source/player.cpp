@@ -576,7 +576,7 @@ void Player::setInitialObjects(bool isDemo)
 void Player::PATTK()
 {
 	int res, idx, cidx, optr, val;
-	OCB *U, *Y;
+	OCB *U;
 	dodBYTE r,c;
 	SDL_Event event;
 	Uint32 ticks1, ticks2;
@@ -612,7 +612,6 @@ void Player::PATTK()
 		}
 	}
 
-	Y = U;
 	PMGO = U->P_OCMGO;
 	PPHO = U->P_OCPHO;
 	PDAM += ((PPOW * (((int) PMGO + (int) PPHO) / 8)) >> 7);
