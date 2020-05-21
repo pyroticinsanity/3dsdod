@@ -33,6 +33,7 @@ using namespace std;
 
 #ifdef _3DS
 #include "3ds/manual.h"
+#include "3ds/ctr_utils.h"
 #endif
 
 extern Creature		creature;
@@ -287,7 +288,7 @@ void OS_Link::execute()
 void OS_Link::process_events()
 {
 #ifdef _3DS
-	hidScanInput();
+	CtrUtils::ScanInput();
 	u32 kDown = hidKeysDown();
 	u32 keys[] = {KEY_START, KEY_SELECT, KEY_L, KEY_R, KEY_DLEFT, KEY_DRIGHT, KEY_DUP, KEY_DDOWN,
 				  KEY_A, KEY_B, KEY_X, KEY_Y};
@@ -957,7 +958,7 @@ bool OS_Link::main_menu()
  do
    {
 #ifdef _3DS
-	hidScanInput();
+	CtrUtils::ScanInput();
 	u32 kDown = hidKeysDown();
 
 	if(kDown & SDL_PSP_CROSS)
@@ -1660,7 +1661,7 @@ switch(menu_id)
    while(true)
     {
 #ifdef _3DS
-		hidScanInput();
+		CtrUtils::ScanInput();
 		if(hidKeysDown() > 0)
 		{
 			return false;
@@ -1711,7 +1712,7 @@ int OS_Link::load_manual()
 			redraw = false;
 		}
 #ifdef _3DS
-		hidScanInput();
+		CtrUtils::ScanInput();
 		u32 kDown = hidKeysDown();
 		u32 hDown = hidKeysHeld();
 
@@ -1798,7 +1799,7 @@ int OS_Link::menu_list(int x, int y, char *title, char *list[], int listSize)
    {
    viewer.drawMenuList(x, y, title, list, listSize, currentChoice);
 #ifdef _3DS
-	hidScanInput();
+	CtrUtils::ScanInput();
 	u32 kDown = hidKeysDown();
 
 	if(kDown & SDL_PSP_CROSS)
@@ -1911,7 +1912,7 @@ int OS_Link::menu_scrollbar(char *title, int min, int max, int current)
    {
 
 #ifdef _3DS
-	hidScanInput();
+	CtrUtils::ScanInput();
 	u32 kDown = hidKeysDown();
 
 	if(kDown & SDL_PSP_CROSS)

@@ -105,12 +105,6 @@ CitroRenderer::CitroRenderer()
 	printf("Select - Push Me First\n");
 }
 
-void CitroRenderer::beginRendering()
-{
-	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-	C2D_SceneBegin(_left);
-}
-
 void CitroRenderer::clearBuffer(bool includeDepthBuffer)
 {
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -301,12 +295,6 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1, Layers la
 			--L;
 		} while (L > 0);
 	}
-}
-
-void CitroRenderer::endRendering()
-{
-	renderRightScreen();
-	C3D_FrameEnd(0);
 }
 
 float CitroRenderer::getStereoscopicOffset(Layers layer, float slider)

@@ -29,6 +29,10 @@ using namespace std;
 #include "dungeon.h"
 #include "object.h"
 
+#ifdef _3DS
+#include "3ds/ctr_utils.h"
+#endif
+
 extern Object	object;
 extern RNG		rng;
 extern Dungeon	dungeon;
@@ -445,7 +449,7 @@ void Scheduler::winFadeLoop()
 bool Scheduler::keyCheck()
 {
 #ifdef _3DS
-	hidScanInput();
+	CtrUtils::ScanInput();
 
 	if(hidKeysDown() > 0)
 	{

@@ -35,11 +35,6 @@ public:
     virtual ~CitroRenderer() {}
 
     /**
-     * Needs to be called before any rendering has begun
-     */
-    virtual void beginRendering();
-
-    /**
      * Clears the screen with the clear color that has been set by setClearColor.
      * @param includeDepthBuffer - Unused for the 3DS
      */
@@ -97,11 +92,6 @@ public:
      * @param layer - The layer to draw on (Used for stereoscopic 3D)
      */
     virtual void drawVector(float X0, float Y0, float X1, float Y1, Layers layer = LAYER_DEFAULT);
-
-    /**
-     * Must be called after rendering has completed.
-     */
-    virtual void endRendering();
 
     /**
      * Returns the screen height.
