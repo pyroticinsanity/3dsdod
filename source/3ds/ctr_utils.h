@@ -4,7 +4,7 @@
 namespace CtrUtils
 {
 	/**
-	 * Wrapper function for scanning the input on the 3DS
+	 * Wrapper function for scanning the input on the 3DS and management for the home button
 	 */
 	void ScanInput();
 }

@@ -70,6 +70,9 @@ int main(int argc, char* argv[]) {
 	strftime(date, sizeof(date), "%Y.%m.%d %I:%M %p", time);
 
 	// piepie62 confirmed that stat does nothing to mtime
+	// It appears that it won't be fixed either:
+	// https://github.com/smealum/ctrulib/pull/458#issuecomment-631587673
+	// https://github.com/devkitPro/newlib/issues/21
 	printf("Stat: %s\n", date);
 
 	stats.st_mtime = mtime;
