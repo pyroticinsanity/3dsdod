@@ -1696,7 +1696,7 @@ switch(menu_id)
 
 int OS_Link::load_manual()
 {
-	Manual manual("/3ds/3dsdod/manual");
+	Manual manual("romfs:/manual");
 
 	if(!manual.isInitialized())
 	{
