@@ -4,8 +4,11 @@
 #include "../enhanced.h"
 #include "../viewer.h" // TODO Figure out how to decouple this
 #include "../oslink.h" // TODO Figure out how to decouple this
+#include "../version.h"
 
 #include "keyboard_t3x.h"
+
+#include "ctr_utils.h"
 
 #include "citro_renderer.h"
 
@@ -62,13 +65,12 @@ CitroRenderer::CitroRenderer()
 	C2D_Init(C2D_DEFAULT_MAX_OBJECTS * 2);
 	C2D_Prepare();
 
-	consoleInit(GFX_BOTTOM, NULL);
-
 	gfxSet3D(true);
 
 	// Create screens
 	_left = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 	_right = C2D_CreateScreenTarget(GFX_TOP, GFX_RIGHT);
+	_bottom = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
 	_keyboardImg.tex = new C3D_Tex();
 	Tex3DS_SubTexture *subtex = new Tex3DS_SubTexture();
@@ -87,22 +89,15 @@ CitroRenderer::CitroRenderer()
 
 	// Delete the t3x object since we don't need it
 	Tex3DS_TextureFree(t3x);
+}
 
-	printf("Dungeons of Daggorath 3D - 1.0\n");
-	printf("---------------------------------------\n");
-	printf("Controls:\n");
-	printf("D-Pad Up - MOVE UP\n");
-	printf("D-Pad Down - MOVE DOWN\n");
-	printf("D-Pad Left - MOVE LEFT\n");
-	printf("D-Pad Right - MOVE RIGHT\n");
-	printf("B - Custom Command\n");
-	printf("A - ATTACK RIGHT\n");
-	printf("Y - ATTACK LEFT\n");
-	printf("X - EXAMINE / LOOK\n");
-	printf("L - Command Creator\n");
-	printf("R - TURN AROUND\n");
-	printf("Start - Main Menu\n");
-	printf("Select - Push Me First\n");
+CitroRenderer::~CitroRenderer()
+{
+	C3D_TexDelete(_keyboardImg.tex);
+	delete _keyboardImg.subtex;
+
+	C3D_TexDelete(_controlsImg.tex);
+	delete _controlsImg.subtex;
 }
 
 void CitroRenderer::clearBuffer(bool includeDepthBuffer)
@@ -115,6 +110,7 @@ void CitroRenderer::clearBuffer(bool includeDepthBuffer)
 
 void CitroRenderer::deinitialize()
 {
+	C2D_TextBufDelete(_versionBuf);
 	C2D_Fini();
 	C3D_Fini();
 	gfxExit();
@@ -133,17 +129,17 @@ void CitroRenderer::drawLine(float x0, float y0, float x1, float y1, Layers laye
 	xShift = getStereoscopicOffset(layer, slider);
 
 	_triangles.push(Triangle(x0 - xWidth + xShift, y0 + yWidth,
-							 x0 + xWidth + xShift, y0 - yWidth, 
+							 x0 + xWidth + xShift, y0 - yWidth,
 							 x1 - xWidth + xShift, y1 + yWidth, _color, layer));
 
 	C2D_DrawTriangle(x0 - xWidth - xShift, y0 + yWidth, _color,
 					 x0 + xWidth - xShift, y0 - yWidth, _color,
 					 x1 - xWidth - xShift, y1 + yWidth, _color, 0);
 
-	_triangles.push(Triangle(x1 - xWidth + xShift, y1 + yWidth, 
+	_triangles.push(Triangle(x1 - xWidth + xShift, y1 + yWidth,
 							 x0 + xWidth + xShift, y0 - yWidth,
 							 x1 + xWidth + xShift, y1 - yWidth,
-							_color, layer));
+							 _color, layer));
 
 	C2D_DrawTriangle(x1 - xWidth - xShift, y1 + yWidth, _color,
 					 x0 + xWidth - xShift, y0 - yWidth, _color,
@@ -166,7 +162,7 @@ void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, f
 
 	_triangles.push(Triangle(_xOffset + x0 + xShift, _yOffset + y0,
 							 _xOffset + x1 + xShift, _yOffset + y1,
-							_xOffset + x2 + xShift,	_yOffset + y2, _color, layer));
+							 _xOffset + x2 + xShift, _yOffset + y2, _color, layer));
 
 	C2D_DrawTriangle(_xOffset + x0 - xShift, _yOffset + y0, _color,
 					 _xOffset + x1 - xShift, _yOffset + y1, _color,
@@ -174,19 +170,19 @@ void CitroRenderer::drawQuad(float x0, float y0, float x1, float y1, float x2, f
 
 	_triangles.push(Triangle(_xOffset + x2 + xShift, _yOffset + y2,
 							 _xOffset + x3 + xShift, _yOffset + y3,
-							_xOffset + x0 + xShift, _yOffset + y0, _color, layer));
+							 _xOffset + x0 + xShift, _yOffset + y0, _color, layer));
 
 	C2D_DrawTriangle(_xOffset + x2 - xShift, _yOffset + y2, _color,
 					 _xOffset + x3 - xShift, _yOffset + y3, _color,
 					 _xOffset + x0 - xShift, _yOffset + y0, _color, 0);
 }
 
-void CitroRenderer::drawImage(Renderer::Image* img)
+void CitroRenderer::drawImage(Renderer::Image *img)
 {
-	C2D_Image* data = (C2D_Image*)img->data;
-	  C2D_DrawImageAt(*data, img->x, img->y, img->depth);
+	C2D_Image *data = (C2D_Image *)img->data;
+	C2D_DrawImageAt(*data, img->x, img->y, img->depth);
 
-	  _currentImage = data;
+	_currentImage = data;
 }
 
 void CitroRenderer::drawKeyboard(struct kbdKey key)
@@ -237,7 +233,6 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1, Layers la
 		// the 3DS has 0 at the top
 		//Y0 = ScreenHeight - Y0;
 		//Y1 = ScreenHeight - Y1;
-
 
 		setColor(clrLine[0], clrLine[1], clrLine[2]);
 		drawLine(crd.newX(X0), Y0, crd.newX(X1), Y1, layer);
@@ -328,6 +323,19 @@ float CitroRenderer::getStereoscopicOffset(Layers layer, float slider)
 
 void CitroRenderer::initialize()
 {
+	CtrUtils::LoadImageFromFile("romfs:/images/controls.png", 320, 240, &_controlsTex, &_controlsImg);
+
+	_versionBuf = C2D_TextBufNew(4096);
+
+	C2D_TextParse(&_versionText, _versionBuf, VersionString);
+	C2D_TextOptimize(&_versionText);
+
+	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+	C2D_TargetClear(_bottom, _clearColor);
+	C2D_SceneBegin(_bottom);
+	C2D_DrawImageAt(_controlsImg, 0, 0, 0);
+	C2D_DrawText(&_versionText, C2D_AtBaseline | C2D_WithColor, 145.0f, 90.0f, 1.0f, 0.5f, 0.5f, C2D_Color32f(1.0f, 1.0f, 0.0f, 1.0f));
+	C3D_FrameEnd(0);
 }
 
 void CitroRenderer::plotPoint(double X, double Y, Layers layer)
@@ -359,8 +367,8 @@ void CitroRenderer::renderRightScreen()
 		if (slider > 0.0f)
 		{
 			C2D_DrawTriangle(triangle.x0, triangle.y0, triangle.color,
-								triangle.x1, triangle.y1, triangle.color,
-								triangle.x2, triangle.y2, triangle.color, 0);
+							 triangle.x1, triangle.y1, triangle.color,
+							 triangle.x2, triangle.y2, triangle.color, 0);
 		}
 	}
 }
@@ -370,7 +378,6 @@ void CitroRenderer::resetMatrix()
 	_xOffset = 0;
 	_yOffset = 0;
 }
-
 
 void CitroRenderer::setClearColor(float red, float green, float blue, float alpha)
 {

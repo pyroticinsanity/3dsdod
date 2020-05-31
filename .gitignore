@@ -5,3 +5,4 @@ build
 *.cia
 *cia.bnr
 *.zip
+version.h

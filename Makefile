@@ -44,7 +44,7 @@ ROMFS		:=	data
 APP_TITLE		:=	Dungeons of Daggorath 3D
 APP_DESCRIPTION	:=	Dungeons of Daggorath for the 3DS
 APP_AUTHOR		:=	Darkweb
-APP_VER			:= 	0.8
+APP_VER			:= 	1.0
 APP_TITLE_ID	:= 
 
 #---------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ endif
 .PHONY: all clean
 
 #---------------------------------------------------------------------------------
-all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
+all: source/version.h $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 $(BUILD):
@@ -189,6 +189,13 @@ clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(GFXBUILD) $(TARGET)-strip.elf $(TARGET)-cia.bnr $(TARGET)-cia.smdh $(TARGET).cia
 
+#---------------------------------------------------------------------------------
+source/version.h: Makefile
+	@echo version.h
+	@echo "#ifndef DOD_VERSION_H" > source/version.h
+	@echo "#define DOD_VERSION_H" >> source/version.h
+	@echo "const char* VersionString = \"v$(APP_VER)\";" >> source/version.h
+	@echo "#endif" >> source/version.h 
 #---------------------------------------------------------------------------------
 $(GFXBUILD)/%.t3x	$(BUILD)/%.h	:	%.t3s
 #---------------------------------------------------------------------------------

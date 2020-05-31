@@ -83,11 +83,12 @@ void quitGame()
 
 extern "C" int main(int argc, char * argv[])
 {
-	Renderer* renderer = RendererFactory::GetRenderer();
-	renderer->setColor(1.0f, 1.0f, 1.0f);
 #ifdef _3DS
 	romfsInit();
 #endif
+
+	Renderer* renderer = RendererFactory::GetRenderer();
+	renderer->setColor(1.0f, 1.0f, 1.0f);
 
 	oslink.init();
 

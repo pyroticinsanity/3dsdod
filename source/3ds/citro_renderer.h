@@ -32,7 +32,7 @@ public:
 
     CitroRenderer();
 
-    virtual ~CitroRenderer() {}
+    virtual ~CitroRenderer();
 
     /**
      * Clears the screen with the clear color that has been set by setClearColor.
@@ -49,8 +49,8 @@ public:
      * Draws an image on screen.
      * @param img The image to draw
      */
-    virtual void drawImage(Renderer::Image* img);
-    
+    virtual void drawImage(Renderer::Image *img);
+
     /**
      * Draws the keyboard image onto the screen and highlights the specified key.
      * @param key - The key to highlight
@@ -166,7 +166,6 @@ public:
     virtual void translateMatrix(float xOffset, float yOffset);
 
 private:
-
     /**
      * Returns the offset to shift the pixels by based on the layer.
      * @param layer The layer to get the offset for.
@@ -176,9 +175,13 @@ private:
 
     /**
      * Helper function to redraw all graphics on the right screen for stereoscopic mode.
-     * It draws 
      */
     void renderRightScreen();
+
+    /**
+     * The bottom screen target.
+     */
+    C3D_RenderTarget *_bottom;
 
     /**
      * The color to clear the screen with.
@@ -189,6 +192,16 @@ private:
      * The color to draw with.
      */
     u32 _color;
+
+    /**
+     * The controls image.
+     */
+    C2D_Image _controlsImg;
+
+    /**
+     * Texture for the controls.
+     */
+    C3D_Tex _controlsTex;
 
     /**
      * If not NULL then it tells the right screen to render the image.
@@ -224,5 +237,15 @@ private:
      * y offset for translation.
      */
     float _yOffset;
+
+    /**
+     * Buffer for the version string.
+     */
+    C2D_TextBuf _versionBuf;
+
+    /**
+     * Version text to render.
+     */
+    C2D_Text _versionText;
 };
 #endif // DOD_CITRO_RENDERER_HEADER
