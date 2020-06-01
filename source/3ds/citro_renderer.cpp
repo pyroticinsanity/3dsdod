@@ -226,13 +226,13 @@ void CitroRenderer::drawVector(float X0, float Y0, float X1, float Y1, Layers la
 		// Apply a bounding box around it
 		X0 = (X0 < 0) ? 0 : (X0 > 256) ? 256 : X0;
 		X1 = (X1 < 0) ? 0 : (X1 > 256) ? 256 : X1;
-		//Y0 = (Y0 < 0) ? 0 : (Y0 > 152) ? 152 : Y0;
-		//Y1 = (Y1 < 0) ? 0 : (Y1 > 152) ? 152 : Y1;
+		Y0 = (Y0 < 0) ? 0 : (Y0 > 152) ? 152 : Y0;
+		Y1 = (Y1 < 0) ? 0 : (Y1 > 152) ? 152 : Y1;
 
 		// We need to flip the y-axis because OpenGL's coordinate system has 0 at the bottom whereas
 		// the 3DS has 0 at the top
-		//Y0 = ScreenHeight - Y0;
-		//Y1 = ScreenHeight - Y1;
+		Y0 = ScreenHeight - crd.newY(Y0);
+		Y1 = ScreenHeight - crd.newY(Y1);
 
 		setColor(clrLine[0], clrLine[1], clrLine[2]);
 		drawLine(crd.newX(X0), Y0, crd.newX(X1), Y1, layer);
