@@ -1,0 +1,60 @@
+3dsdod - Dungeons of Daggorath 3DS
+Version 1.0
+By darkweb
+
+Enhancements:
+- Added Button Layout Image
+- Added the Game Manual
+
+Bugs Fixed:
+- Fixed an issue where the 3DS would lock up if you closed the lid
+- Corrected the Vector Mode graphics mode
+
+--------------------------------------------------------------------------
+3dsdod - Dungeons of Daggorath 3DS
+Version 0.8
+By darkweb
+
+Enhancements:
+- Support Stereoscopic View
+- Create a CIA build
+- Saving Takes a Long Time
+- Buttons Should Be Changed to Be More Intuitive
+
+Bugs Fixed:
+- The Save File Date Isn't Showing Up
+- Keyboard Characters Don't Show Up on Level 2
+
+--------------------------------------------------------------------------
+3dsdod - Dungeons of Daggorath 3DS
+Version 0.7
+By darkweb
+March 27, 2020
+
+- Ported the game to the 3DS. There are no major advancements at this time.
+
+--------------------------------------------------------------------------
+pspdod - "Daggorath PC-Port" PSP Port
+Version 0.7
+By darkweb
+http://darkweb.retroemu.com
+December 12, 2008
+
+-Works for the psp slim
+-Implemented Command Creator
+-Implemented Keyboard
+-Added screen resolution changes
+-Added save menu
+
+--------------------------------------------------------------------------
+Based off of Daggorath PC-Port
+Version 0.3
+By Richard Hunerlach
+May 16, 2003
+
+Other contributors:
+Dan Gendreau: Graphics, sound, and cheat enhancements
+Tim Lindner: WAV files
+Michael Spencer: Discussion Forum Host
+Louis Jordan: Inspirer of the 'Adventure Survivors'
+Sputnik: Additional enhancements & bug fixes
