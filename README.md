@@ -18,18 +18,18 @@ beating the game (I've done it so I know it can be done!).
 
 3DS	|	TRS-80
 ------------ | -------------
-UP: 	|	MOVE
-DOWN: |		MOVE BACKWARD
-LEFT:	|	TURN LEFT
-RIGHT:|		TURN RIGHT
-A:		|	ATTACK RIGHT
-X:		|	ATTACK LEFT
-B:		|	Brings up the keyboard
-Y:		|	EXAMINE / LOOK (depending on what mode you're in)
-L TRIGGER:	|Brings up the command creator menu
-R TRIGGER:	|TURN AROUND
-START:	|	Brings up the game menu
-SELECT:	|	Executes P L T, U L, P R SW (only good for getting started)
+UP 	|	MOVE
+DOWN |		MOVE BACKWARD
+LEFT	|	TURN LEFT
+RIGHT|		TURN RIGHT
+A		|	ATTACK RIGHT
+X		|	ATTACK LEFT
+B		|	Brings up the keyboard
+Y		|	EXAMINE / LOOK (depending on what mode you're in)
+L TRIGGER	|Brings up the command creator menu
+R TRIGGER	|TURN AROUND
+START	|	Brings up the game menu
+SELECT	|	Executes P L T, U L, P R SW (only good for getting started)
 
 ## Command Creator Menu
 This menu allows you to create all combinations of commands you will ever need.  
