@@ -92,7 +92,11 @@ extern "C" int main(int argc, char * argv[])
 
 	oslink.init();
 
-	oslink.execute();
+	while(true)
+	{
+		oslink.execute();
+
+	}
 
 	quitGame();
 	return 0;
