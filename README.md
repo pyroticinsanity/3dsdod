@@ -10,7 +10,7 @@ The copyright for Dungeons of Daggorath is still held by the original author, Do
 but he has granted a non-exclusive permanent world-wide license to reproduce it - See GRANT.
 (c) 1982, DynaMicro
 
-## Playing the Game
+# Playing the Game
 
 So how do you play a game that was originally text based? With an awesome UI created 
 by yours truly! Every command is executable so there are no problems
