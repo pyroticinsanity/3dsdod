@@ -1645,7 +1645,7 @@ switch(menu_id)
   case HELP_MENU_LICENSE:
    // License
    {
-   char *menuList[]={ "SEE FILE README.TXT" };
+   char *menuList[]={ "SEE FILE README.MD" };
 
    menu_list(menu_id * 5, item + 2, Menu.getMenuItem(menu_id, item), menuList, 1);
    }
