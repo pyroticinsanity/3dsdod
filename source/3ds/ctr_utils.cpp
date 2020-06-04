@@ -4,6 +4,8 @@
 
 #include "ctr_utils.h"
 
+extern void quitGame();
+
 #define TEX_MIN_SIZE 64
 #define TEX_MAX_SIZE 1024
 unsigned int nextPow2(unsigned int v)
@@ -151,7 +153,12 @@ bool CtrUtils::LoadImageFromFile(const char *filename, float imgWidth, float img
 
 void CtrUtils::ScanInput()
 {
-	aptMainLoop();
+	bool result = aptMainLoop();
+	if(!result)
+	{
+		quitGame();
+	}
+
 	hidScanInput();
 	svcSleepThread(1);
 }
