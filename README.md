@@ -1,3 +1,9 @@
+# Dungeons of Daggorath 3DS
+
+<p align="center">
+<img src="https://github.com/pyroticinsanity/3dsdod/blob/master/screenshots/screenshot1.png" />
+</p>
+
 # Introduction
 
 For those of you that don't know, Dungeons of Daggorath is a "3D" dungeon 
@@ -15,6 +21,10 @@ but he has granted a non-exclusive permanent world-wide license to reproduce it 
 So how do you play a game that was originally text based? With an awesome UI created 
 by yours truly! Every command is executable so there are no problems
 beating the game (I've done it so I know it can be done!).
+
+<p align="center">
+  <img src="https://github.com/pyroticinsanity/3dsdod/blob/master/screenshots/screenshot2.png" />
+</p>
 
 3DS	|	TRS-80
 ------------ | -------------
