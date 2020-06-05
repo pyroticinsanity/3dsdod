@@ -44,7 +44,7 @@ ROMFS		:=	data
 APP_TITLE		:=	Dungeons of Daggorath 3D
 APP_DESCRIPTION	:=	Dungeons of Daggorath for the 3DS
 APP_AUTHOR		:=	Darkweb
-APP_VER			:= 	1.0
+APP_VER			:= 	1.1
 APP_TITLE_ID	:= 
 
 #---------------------------------------------------------------------------------
